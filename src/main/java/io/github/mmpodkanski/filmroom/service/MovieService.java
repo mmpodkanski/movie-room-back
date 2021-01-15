@@ -1,10 +1,11 @@
 package io.github.mmpodkanski.filmroom.service;
 
-import io.github.mmpodkanski.filmroom.entity.DTO.*;
-import io.github.mmpodkanski.filmroom.entity.Actor;
-import io.github.mmpodkanski.filmroom.entity.Category;
-import io.github.mmpodkanski.filmroom.entity.Movie;
+import io.github.mmpodkanski.filmroom.models.Actor;
+import io.github.mmpodkanski.filmroom.models.Category;
+import io.github.mmpodkanski.filmroom.models.Movie;
 import io.github.mmpodkanski.filmroom.repository.MovieRepository;
+import io.github.mmpodkanski.filmroom.models.request.MovieWriteModel;
+import io.github.mmpodkanski.filmroom.models.response.MovieReadModel;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;

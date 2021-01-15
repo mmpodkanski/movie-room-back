@@ -1,7 +1,7 @@
-package io.github.mmpodkanski.filmroom.entity.DTO;
+package io.github.mmpodkanski.filmroom.models.response;
 
-import io.github.mmpodkanski.filmroom.entity.Actor;
-import io.github.mmpodkanski.filmroom.entity.Movie;
+import io.github.mmpodkanski.filmroom.models.Actor;
+import io.github.mmpodkanski.filmroom.models.Movie;
 import lombok.Data;
 
 import java.util.HashSet;

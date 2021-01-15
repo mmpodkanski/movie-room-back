@@ -1,7 +1,7 @@
 package io.github.mmpodkanski.filmroom.service;
 
-import io.github.mmpodkanski.filmroom.entity.DTO.AwardWriteModel;
-import io.github.mmpodkanski.filmroom.entity.Award;
+import io.github.mmpodkanski.filmroom.models.request.AwardWriteModel;
+import io.github.mmpodkanski.filmroom.models.Award;
 import io.github.mmpodkanski.filmroom.repository.AwardRepository;
 import org.springframework.stereotype.Service;
 

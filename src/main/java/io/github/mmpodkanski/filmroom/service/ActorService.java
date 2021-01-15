@@ -1,7 +1,7 @@
 package io.github.mmpodkanski.filmroom.service;
 
-import io.github.mmpodkanski.filmroom.entity.Actor;
-import io.github.mmpodkanski.filmroom.entity.Movie;
+import io.github.mmpodkanski.filmroom.models.Actor;
+import io.github.mmpodkanski.filmroom.models.Movie;
 import io.github.mmpodkanski.filmroom.repository.ActorRepository;
 import org.springframework.stereotype.Service;
 

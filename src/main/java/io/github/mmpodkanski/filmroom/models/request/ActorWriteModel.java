@@ -1,4 +1,4 @@
-package io.github.mmpodkanski.filmroom.entity.DTO;
+package io.github.mmpodkanski.filmroom.models.request;
 
 import lombok.Data;
 

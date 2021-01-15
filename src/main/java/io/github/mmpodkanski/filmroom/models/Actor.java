@@ -1,4 +1,4 @@
-package io.github.mmpodkanski.filmroom.entity;
+package io.github.mmpodkanski.filmroom.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;

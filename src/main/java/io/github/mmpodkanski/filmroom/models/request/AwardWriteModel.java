@@ -1,6 +1,6 @@
-package io.github.mmpodkanski.filmroom.entity.DTO;
+package io.github.mmpodkanski.filmroom.models.request;
 
-import io.github.mmpodkanski.filmroom.entity.Award;
+import io.github.mmpodkanski.filmroom.models.Award;
 import lombok.Data;
 
 @Data

@@ -1,7 +1,7 @@
 package io.github.mmpodkanski.filmroom.service;
 
-import io.github.mmpodkanski.filmroom.entity.Category;
-import io.github.mmpodkanski.filmroom.entity.Movie;
+import io.github.mmpodkanski.filmroom.models.Category;
+import io.github.mmpodkanski.filmroom.models.Movie;
 import io.github.mmpodkanski.filmroom.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,8 @@
 package io.github.mmpodkanski.filmroom.controller;
 
-import io.github.mmpodkanski.filmroom.entity.DTO.MovieReadModel;
-import io.github.mmpodkanski.filmroom.entity.DTO.MovieWriteModel;
-import io.github.mmpodkanski.filmroom.entity.Movie;
+import io.github.mmpodkanski.filmroom.models.response.MovieReadModel;
+import io.github.mmpodkanski.filmroom.models.request.MovieWriteModel;
+import io.github.mmpodkanski.filmroom.models.Movie;
 import io.github.mmpodkanski.filmroom.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

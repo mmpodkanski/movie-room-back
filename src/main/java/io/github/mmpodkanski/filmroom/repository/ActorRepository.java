@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.filmroom.repository;
 
-import io.github.mmpodkanski.filmroom.entity.Actor;
+import io.github.mmpodkanski.filmroom.models.Actor;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
-package io.github.mmpodkanski.filmroom.entity.DTO;
+package io.github.mmpodkanski.filmroom.models.request;
 
-import io.github.mmpodkanski.filmroom.entity.Movie;
+import io.github.mmpodkanski.filmroom.models.Movie;
 import lombok.Data;
 
 import javax.validation.constraints.Digits;
