@@ -13,7 +13,7 @@ public class MovieReadModel {
     private String description;
     private String director;
     private String producer;
-    private Set<Category> categories;
+    private String category;
     // TODO: maybe ActorReadModel
     private Set<Actor> actors;
     //    private Set<AwardWriteModel> awards = new HashSet<>();
@@ -25,7 +25,7 @@ public class MovieReadModel {
         description = source.getDescription();
         director = source.getDirector();
         producer = source.getProducer();
-        categories = source.getCategories();
+        category = source.getCategory().name();
         actors = source.getActors();
         releaseDate = source.getReleaseDate();
         comments = source.getComments();

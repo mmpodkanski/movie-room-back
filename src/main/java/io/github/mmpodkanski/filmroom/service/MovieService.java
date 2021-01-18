@@ -1,7 +1,6 @@
 package io.github.mmpodkanski.filmroom.service;
 
 import io.github.mmpodkanski.filmroom.models.Actor;
-import io.github.mmpodkanski.filmroom.models.Category;
 import io.github.mmpodkanski.filmroom.models.ECategory;
 import io.github.mmpodkanski.filmroom.models.Movie;
 import io.github.mmpodkanski.filmroom.repository.MovieRepository;
