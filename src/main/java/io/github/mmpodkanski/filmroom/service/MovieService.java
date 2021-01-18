@@ -2,6 +2,7 @@ package io.github.mmpodkanski.filmroom.service;
 
 import io.github.mmpodkanski.filmroom.models.Actor;
 import io.github.mmpodkanski.filmroom.models.Category;
+import io.github.mmpodkanski.filmroom.models.ECategory;
 import io.github.mmpodkanski.filmroom.models.Movie;
 import io.github.mmpodkanski.filmroom.repository.MovieRepository;
 import io.github.mmpodkanski.filmroom.models.request.MovieWriteModel;
@@ -66,11 +67,11 @@ public class MovieService {
         var createdAt = OffsetDateTime.now();
         Movie newMovie = movieToSave.toMovie(createdAt);
 
-        Category category = categoryService.returnExistsOrCreateNew(movieToSave.getCategory(), newMovie);
+        Set<Category> categories = categoryService.checkCategories(movieToSave.getCategories());
         Set<Actor> actors = actorService.checkActors(movieToSave.getActors(), newMovie);
         // TODO: awards
 
-        newMovie.setCategory(category);
+        newMovie.setCategories(categories);
         newMovie.setActors(actors);
 
         return repository.save(newMovie);
@@ -94,26 +95,26 @@ public class MovieService {
         repository.deleteByTitle(title);
     }
 
-    public void updateMovie(
-            final MovieWriteModel updatedMovie,
-            final int id
-    ) {
-        // FIXME: maybe no message from exception
-        Movie movieToUpdate = repository
-                .findById(id)
-                .orElseThrow(IllegalArgumentException::new);
-
-        Category category = categoryService.returnExistsOrCreateNew(updatedMovie.getCategory(), movieToUpdate);
-        Set<Actor> actors = actorService.checkActors(updatedMovie.getActors(), movieToUpdate);
-        // TODO: awards
-
-        movieToUpdate.setDescription(movieToUpdate.getDescription());
-        movieToUpdate.setProducer(movieToUpdate.getProducer());
-        movieToUpdate.setDirector(movieToUpdate.getDirector());
-        movieToUpdate.setTitle(movieToUpdate.getTitle());
-        movieToUpdate.setCategory(category);
-        movieToUpdate.setActors(actors);
-        repository.save(movieToUpdate);
-
-    }
+//    public void updateMovie(
+//            final MovieWriteModel updatedMovie,
+//            final int id
+//    ) {
+//        // FIXME: maybe no message from exception
+//        Movie movieToUpdate = repository
+//                .findById(id)
+//                .orElseThrow(IllegalArgumentException::new);
+//
+//        Category categories = categoryService.returnExistsOrCreateNew(updatedMovie.getCategory(), movieToUpdate);
+//        Set<Actor> actors = actorService.checkActors(updatedMovie.getActors(), movieToUpdate);
+//        // TODO: awards
+//
+//        movieToUpdate.setDescription(movieToUpdate.getDescription());
+//        movieToUpdate.setProducer(movieToUpdate.getProducer());
+//        movieToUpdate.setDirector(movieToUpdate.getDirector());
+//        movieToUpdate.setTitle(movieToUpdate.getTitle());
+//        movieToUpdate.setCategory(category);
+//        movieToUpdate.setActors(actors);
+//        repository.save(movieToUpdate);
+//
+//    }
 }
