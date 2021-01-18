@@ -7,12 +7,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "category")
+
 public class Category {
-    @Id
-    @GeneratedValue(generator = "inc")
-    @GenericGenerator(name = "inc", strategy = "increment")
     private int id;
     @Enumerated(EnumType.STRING)
     private ECategory name;

@@ -29,12 +29,8 @@ public class Movie {
     private OffsetDateTime createdAt;
     @Digits(integer = 4, fraction = 0, message = "Invalid date (expected: xxxx)")
     private String releaseDate;
-    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(	name = "movie_categories",
-//            joinColumns = @JoinColumn(name = "movie_id"),
-//            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    @JoinColumn(name = "category_id")
-    private Set<Category> categories = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private ECategory category;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "actors_id")
     private Set<Actor> actors = new HashSet<>();

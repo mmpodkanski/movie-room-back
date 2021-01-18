@@ -67,11 +67,11 @@ public class MovieService {
         var createdAt = OffsetDateTime.now();
         Movie newMovie = movieToSave.toMovie(createdAt);
 
-        Set<Category> categories = categoryService.checkCategories(movieToSave.getCategories());
+        ECategory categories = categoryService.checkCategory(movieToSave.getCategory());
         Set<Actor> actors = actorService.checkActors(movieToSave.getActors(), newMovie);
         // TODO: awards
 
-        newMovie.setCategories(categories);
+        newMovie.setCategory(categories);
         newMovie.setActors(actors);
 
         return repository.save(newMovie);

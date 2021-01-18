@@ -9,4 +9,5 @@ public enum ECategory {
     HORROR,
     ROMANCE,
     THRILLER
+
 }
