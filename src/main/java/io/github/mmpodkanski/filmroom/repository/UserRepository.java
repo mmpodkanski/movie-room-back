@@ -12,6 +12,8 @@ public interface UserRepository {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findById(int id);
+
     boolean existsById(int id);
 
     boolean existsByUsername(String username);
