@@ -1,12 +1,15 @@
 package io.github.mmpodkanski.filmroom.controller;
 
-import io.github.mmpodkanski.filmroom.models.response.MovieReadModel;
-import io.github.mmpodkanski.filmroom.models.request.MovieWriteModel;
 import io.github.mmpodkanski.filmroom.models.Movie;
+import io.github.mmpodkanski.filmroom.models.request.CommentDTO;
+import io.github.mmpodkanski.filmroom.models.request.MovieWriteModel;
+import io.github.mmpodkanski.filmroom.models.response.MovieReadModel;
+import io.github.mmpodkanski.filmroom.service.CommentService;
 import io.github.mmpodkanski.filmroom.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,9 +23,11 @@ import java.util.Set;
 public class MovieController {
     private final Logger logger = LoggerFactory.getLogger(MovieController.class);
     private final MovieService service;
+    private final CommentService commentService;
 
-    MovieController(final MovieService service) {
+    MovieController(final MovieService service, final CommentService commentService) {
         this.service = service;
+        this.commentService = commentService;
     }
 
     @GetMapping
@@ -34,6 +39,22 @@ public class MovieController {
     @GetMapping("/{id}")
     ResponseEntity<MovieReadModel> getMovieById(@PathVariable int id) {
         return ResponseEntity.ok(service.readMovieById(id));
+    }
+
+    @PostMapping("/{id}")
+    ResponseEntity<MovieReadModel> addCommentToMovie(
+            @PathVariable int id,
+            @RequestBody CommentDTO comment
+    ) {
+        commentService.createComment(comment, id);
+        return ResponseEntity.ok().build();
+    }
+
+    // FIXME: only owner of comment can delete !!!
+    @DeleteMapping("/{id}")
+    ResponseEntity<MovieReadModel> deleteCommentFromMovie(@PathVariable int id) {
+        commentService.removeComment(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(params = "title")
@@ -58,11 +79,9 @@ public class MovieController {
 //    }
 
     // only for admin
-    // TODO: principal
     @PostMapping("/add")
-    ResponseEntity<Movie> addMovie(
-            @Valid @RequestBody MovieWriteModel newMovie
-    ) {
+    @PreAuthorize("hasRole('ADMIN')")
+    ResponseEntity<Movie> addMovie(@Valid @RequestBody MovieWriteModel newMovie) {
         // TODO: if principal != admin -> MovieToAccept !
         logger.warn("Adding a new movie!");
         var result = service.createMovie(newMovie);
@@ -70,18 +89,18 @@ public class MovieController {
     }
 
 
-    @PutMapping("/movie/update/{id}")
-    ResponseEntity<?> upgradeMovie(
-            @RequestBody MovieWriteModel updatedMovie,
-            @PathVariable int id
-    ) {
-       service.updateMovie(updatedMovie, id);
-       return ResponseEntity.noContent().build();
-    }
+//    @PutMapping("/movie/update/{id}")
+//    ResponseEntity<?> upgradeMovie(
+//            @RequestBody MovieWriteModel updatedMovie,
+//            @PathVariable int id
+//    ) {
+//       service.updateMovie(updatedMovie, id);
+//       return ResponseEntity.noContent().build();
+//    }
 
-    // only for admin
     //FIXME: not found
     @PatchMapping("/movie/add/actor/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<Integer> addActorById(
             @RequestBody @NotBlank String name,
             @PathVariable int id
@@ -90,10 +109,10 @@ public class MovieController {
         return ResponseEntity.noContent().build();
     }
 
-    // only for admin
-    //FIXME: not found
 
+    //FIXME: not found
     @PatchMapping("/movie/add/actors/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<Integer> addActorsById(
             @RequestBody @NotBlank Set<String> names,
             @PathVariable int id
@@ -112,17 +131,18 @@ public class MovieController {
 //    }
 //    return movie.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 
-    // only for admin
+
     // FIXME: spring don't know whose do (String or int)
     @DeleteMapping("/remove/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<Integer> removeMovieById(@PathVariable int id) {
         service.deleteMovieById(id);
         return ResponseEntity.noContent().build();
     }
 
-    // only for admin
     // FIXME: spring don't know whose do (String or int)
     @DeleteMapping("/remove/{title}")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<String> removeMovieByTitle(@PathVariable String title) {
         service.deleteMovieByTitle(title);
         return ResponseEntity.noContent().build();
