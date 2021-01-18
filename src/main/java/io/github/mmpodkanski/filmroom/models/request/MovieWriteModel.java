@@ -19,10 +19,9 @@ public class MovieWriteModel {
     private String director;
     @NotBlank(message = "Movie's producer must not be empty ")
     private String producer;
-    @NotBlank(message = "Movie's category must not be empty")
-    private String category;
+    private Set<String> categories = new HashSet<>();
     private Set<String> actors = new HashSet<>();
-//    private Set<AwardWriteModel> awards = new HashSet<>();
+    //    private Set<AwardWriteModel> awards = new HashSet<>();
     @Digits(integer = 4, fraction = 0, message = "Invalid date (expected: xxxx)")
     private String releaseDate;
 

@@ -4,7 +4,7 @@ import io.github.mmpodkanski.filmroom.models.Award;
 import lombok.Data;
 
 @Data
-public class AwardWriteModel {
+public class AwardDTO {
     private String name;
 
     public Award toAward() {

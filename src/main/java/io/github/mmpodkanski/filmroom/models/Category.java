@@ -14,18 +14,16 @@ public class Category {
     @GeneratedValue(generator = "inc")
     @GenericGenerator(name = "inc", strategy = "increment")
     private int id;
-//    @NotBlank(message = "Category name must not be empty")
-    private String name;
-    private boolean forAdults;
+    @Enumerated(EnumType.STRING)
+    private ECategory name;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL)
     private Set<Movie> movies = new HashSet<>();
 
     public Category() {
     }
 
-    public Category(final String name, final boolean forAdults) {
+    public Category(final ECategory name) {
         this.name = name;
-        this.forAdults = forAdults;
     }
 
     int getId() {
@@ -37,21 +35,9 @@ public class Category {
     }
 
     public String getName() {
-        return name;
+        return name.toString();
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    boolean isForAdults() {
-        return forAdults;
-    }
-
-    void setForAdults(final boolean forAdults) {
-
-        this.forAdults = forAdults;
-    }
 
     @JsonIgnore
     public Set<Movie> getMovies() {

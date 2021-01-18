@@ -1,10 +1,10 @@
 package io.github.mmpodkanski.filmroom.models.response;
 
 import io.github.mmpodkanski.filmroom.models.Actor;
+import io.github.mmpodkanski.filmroom.models.Comment;
 import io.github.mmpodkanski.filmroom.models.Movie;
 import lombok.Data;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -13,20 +13,22 @@ public class MovieReadModel {
     private String description;
     private String director;
     private String producer;
-    private String category;
+    private Set<Category> categories;
     // TODO: maybe ActorReadModel
-    private Set<Actor> actors = new HashSet<>();
+    private Set<Actor> actors;
     //    private Set<AwardWriteModel> awards = new HashSet<>();
     private String releaseDate;
+    private Set<Comment> comments;
 
     public MovieReadModel(Movie source) {
         title = source.getTitle();
         description = source.getDescription();
         director = source.getDirector();
         producer = source.getProducer();
-        category = source.getCategory().getName();
-        actors.addAll(source.getActors());
+        categories = source.getCategories();
+        actors = source.getActors();
         releaseDate = source.getReleaseDate();
+        comments = source.getComments();
     }
 }
 

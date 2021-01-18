@@ -4,17 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "award")
+@Table(name = "awards")
 public class Award {
     @Id
     @GeneratedValue(generator = "inc")
     @GenericGenerator(name = "inc", strategy = "increment")
     private int id;
-//    @NotBlank(message = "Award's name must not be empty")
+    @NotBlank(message = "Award's name must not be empty")
     private String name;
     private String description = "No updated";
     // TODO: aspect - count uses

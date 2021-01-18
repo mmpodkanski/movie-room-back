@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "actor")
+@Table(name = "actors")
 public class Actor {
     @Id
     @GeneratedValue(generator = "inc")

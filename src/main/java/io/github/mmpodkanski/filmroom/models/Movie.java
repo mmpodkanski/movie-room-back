@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,28 +18,35 @@ public class Movie {
     @GeneratedValue(generator = "inc")
     @GenericGenerator(name = "inc", strategy = "increment")
     private int id;
-//    @NotBlank(message = "Movie's title must not be empty")
+    @NotBlank(message = "Movie's title must not be empty")
     private String title;
-//    @NotBlank(message = "Movie's description must not be empty")
+    @NotBlank(message = "Movie's description must not be empty")
     private String description;
-//    @NotBlank(message = "Movie has to have director")
+    @NotBlank(message = "Movie has to have director")
     private String director;
     private String producer;
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private OffsetDateTime createdAt;
     @Digits(integer = 4, fraction = 0, message = "Invalid date (expected: xxxx)")
     private String releaseDate;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(	name = "movie_categories",
+//            joinColumns = @JoinColumn(name = "movie_id"),
+//            inverseJoinColumns = @JoinColumn(name = "category_id"))
     @JoinColumn(name = "category_id")
-    private Category category;
+    private Set<Category> categories = new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "actors_id")
     private Set<Actor> actors = new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "awards_id")
     private Set<Award> awards = new HashSet<>();
-    // TODO: comments
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie")
+//    @JoinTable(name = "movie_comments",
+//            joinColumns = @JoinColumn(name = "movie_id"),
+//            inverseJoinColumns = @JoinColumn(name = "comment_id")
+//    )
+    private Set<Comment> comments;
 
 
 }

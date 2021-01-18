@@ -3,23 +3,28 @@ package io.github.mmpodkanski.filmroom.models.response;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
-@Getter @Setter
+@Getter
+@Setter
 public class JwtResponse {
+    private int id;
     private String token;
     private String type = "Bearer";
-    private int id;
     private String username;
     private String email;
-    private List<String> roles;
+    private String role;
 
-    public JwtResponse(String accessToken, int id, String username, String email, List<String> roles) {
-        this.token = accessToken;
+    public JwtResponse(
+            int id,
+            String accessToken,
+            String username,
+            String email,
+            String role
+    ) {
         this.id = id;
+        this.token = accessToken;
         this.username = username;
         this.email = email;
-        this.roles = roles;
+        this.role = role;
     }
 
 }
