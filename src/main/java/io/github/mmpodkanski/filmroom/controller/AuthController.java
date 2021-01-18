@@ -1,5 +1,6 @@
 package io.github.mmpodkanski.filmroom.controller;
 
+import com.fasterxml.jackson.databind.node.TextNode;
 import io.github.mmpodkanski.filmroom.models.request.LoginRequest;
 import io.github.mmpodkanski.filmroom.models.request.RegisterRequest;
 import io.github.mmpodkanski.filmroom.models.response.JwtResponse;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -28,6 +28,15 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest signUpRequest) {
         service.signup(signUpRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/upgrade/{id}")
+    public ResponseEntity<?> upgradeUser(
+            @PathVariable int id,
+            @RequestBody TextNode key
+    ) {
+        service.addAdminRole(id, key.asText());
         return ResponseEntity.ok().build();
     }
 }

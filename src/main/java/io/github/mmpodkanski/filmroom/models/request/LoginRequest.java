@@ -1,16 +1,18 @@
 package io.github.mmpodkanski.filmroom.models.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter @Setter
+@Getter
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class LoginRequest {
     @NotBlank
-    private String username;
+    private final String username;
 
     @NotBlank
-    private String password;
+    private final String password;
 
 }
