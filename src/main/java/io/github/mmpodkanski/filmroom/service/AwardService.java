@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.filmroom.service;
 
-import io.github.mmpodkanski.filmroom.models.request.AwardWriteModel;
+import io.github.mmpodkanski.filmroom.models.request.AwardDTO;
 import io.github.mmpodkanski.filmroom.models.Award;
 import io.github.mmpodkanski.filmroom.repository.AwardRepository;
 import org.springframework.stereotype.Service;
@@ -16,15 +16,15 @@ public class AwardService {
         this.repository = repository;
     }
 
-    public Set<Award> returnAwards(Set<AwardWriteModel> awardsToCheck) {
+    public Set<Award> returnAwards(Set<AwardDTO> awardsToCheck) {
         Set<Award> result = new HashSet<>();
-        for (AwardWriteModel actor : awardsToCheck) {
+        for (AwardDTO actor : awardsToCheck) {
             result.add(returnExistsOrCreateNew(actor));
         }
         return result;
     }
 
-    Award returnExistsOrCreateNew(AwardWriteModel award) {
+    Award returnExistsOrCreateNew(AwardDTO award) {
         return repository
                 .findByName(award.getName())
                 .orElse(saveAward(award.toAward()));
