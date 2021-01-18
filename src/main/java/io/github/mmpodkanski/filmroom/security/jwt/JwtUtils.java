@@ -1,6 +1,7 @@
 package io.github.mmpodkanski.filmroom.security.jwt;
 
-import io.github.mmpodkanski.filmroom.security.services.UserDetailsImpl;
+import io.github.mmpodkanski.filmroom.models.User;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import io.jsonwebtoken.*;
 
 @Component
 public class JwtUtils {
@@ -22,7 +22,7 @@ public class JwtUtils {
 
     public String generateJwtToken(Authentication authentication) {
 
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        User userPrincipal = (User) authentication.getPrincipal();
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
