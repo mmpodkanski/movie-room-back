@@ -33,23 +33,22 @@ public class CommentService {
         User owner = userRepository
                 .findById(newComment.getOwnerId())
                 .orElseThrow(() -> new IllegalStateException("User with that id not exists!"));
-//        var movieToUpdate = newComment.getMovie();
 
-
-        var comment = new Comment();
-        comment.setTitle(newComment.getTitle());
-        comment.setDescription(newComment.getDescription());
-        comment.setAuthor(owner.getUsername());
-        comment.setOwner(owner);
-        comment.setMovie(movieToUpdate);
+        var comment = new Comment(
+                newComment.getTitle(),
+                newComment.getDescription(),
+                owner.getUsername(),
+                owner,
+                movieToUpdate);
 
         movieToUpdate.getComments().add(comment);
-
         movieRepository.save(movieToUpdate);
-        repository.save(comment);
     }
 
     public void removeComment(int idComment) {
+        if (!repository.existsById(idComment)) {
+            throw new IllegalStateException("Comment with that id not exists!");
+        }
         repository.deleteById(idComment);
     }
 }

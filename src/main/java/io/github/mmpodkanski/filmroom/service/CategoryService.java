@@ -3,10 +3,6 @@ package io.github.mmpodkanski.filmroom.service;
 import io.github.mmpodkanski.filmroom.models.ECategory;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
-import java.util.HashSet;
-import java.util.Set;
-
 @Service
 class CategoryService {
 

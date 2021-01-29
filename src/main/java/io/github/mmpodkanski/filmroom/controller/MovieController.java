@@ -1,5 +1,6 @@
 package io.github.mmpodkanski.filmroom.controller;
 
+import com.fasterxml.jackson.databind.node.TextNode;
 import io.github.mmpodkanski.filmroom.models.Movie;
 import io.github.mmpodkanski.filmroom.models.request.CommentDTO;
 import io.github.mmpodkanski.filmroom.models.request.MovieWriteModel;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/movies")
+@CrossOrigin(origins = "http://localhost:8081")
 public class MovieController {
     private final Logger logger = LoggerFactory.getLogger(MovieController.class);
     private final MovieService service;
@@ -41,7 +43,7 @@ public class MovieController {
         return ResponseEntity.ok(service.readMovieById(id));
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/comments/add")
     ResponseEntity<MovieReadModel> addCommentToMovie(
             @PathVariable int id,
             @RequestBody CommentDTO comment
@@ -51,9 +53,12 @@ public class MovieController {
     }
 
     // FIXME: only owner of comment can delete !!!
-    @DeleteMapping("/{id}")
-    ResponseEntity<MovieReadModel> deleteCommentFromMovie(@PathVariable int id) {
-        commentService.removeComment(id);
+    @DeleteMapping("/{id}/comments/{commentId}")
+    ResponseEntity<MovieReadModel> deleteCommentFromMovie(
+            @PathVariable int id,
+            @PathVariable int commentId
+    ) {
+        commentService.removeComment(commentId);
         return ResponseEntity.ok().build();
     }
 
@@ -68,16 +73,6 @@ public class MovieController {
 
     }
 
-//    @PostMapping
-//    ResponseEntity<MovieWriteModel> addClearMovie(
-//            @Valid @RequestBody MovieWriteModel newMovie
-//    ) {
-//        logger.warn("Adding a new movie!");
-//        var result = service.createClearMovie(newMovie);
-//        // TODO: do smth with getId
-//        return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
-//    }
-
     // only for admin
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
@@ -90,7 +85,7 @@ public class MovieController {
 
 
 //    @PutMapping("/movie/update/{id}")
-//    ResponseEntity<?> upgradeMovie(
+//    ResponseEntity<?> updateMovie(
 //            @RequestBody MovieWriteModel updatedMovie,
 //            @PathVariable int id
 //    ) {
@@ -99,19 +94,19 @@ public class MovieController {
 //    }
 
     //FIXME: not found
-    @PatchMapping("/movie/add/actor/{id}")
+    @PatchMapping("/add/actor/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<Integer> addActorById(
-            @RequestBody @NotBlank String name,
+            @RequestBody @NotBlank TextNode name,
             @PathVariable int id
     ) {
-        service.insertActorToMovie(Set.of(name), id);
+        service.insertActorToMovie(Set.of(name.asText()), id);
         return ResponseEntity.noContent().build();
     }
 
 
     //FIXME: not found
-    @PatchMapping("/movie/add/actors/{id}")
+    @PatchMapping("/add/actors/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<Integer> addActorsById(
             @RequestBody @NotBlank Set<String> names,
@@ -120,16 +115,6 @@ public class MovieController {
         service.insertActorToMovie(names, id);
         return ResponseEntity.noContent().build();
     }
-
-    // TODO: add actor by - title - of movie
-//    @PatchMapping("/movie/{title}/actor")
-//    ResponseEntity<?> addActor(@RequestBody @NotBlank String name, @PathVariable String title) {
-//        service.readMovieByTittle(title).
-//        var movie = service.readMovieById(id);
-//        service.insertActorToMovie(Set.of(name), movie);
-//
-//    }
-//    return movie.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 
 
     // FIXME: spring don't know whose do (String or int)

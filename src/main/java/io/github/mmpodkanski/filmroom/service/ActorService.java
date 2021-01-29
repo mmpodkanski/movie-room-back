@@ -47,7 +47,7 @@ class ActorService {
                     return repository.save(newActor);
                 });
 
-        actor.getMovies().add(movie);
+        actor.addMovie(movie);
 
         return actor;
 

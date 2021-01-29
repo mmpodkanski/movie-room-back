@@ -8,4 +8,6 @@ public interface CommentRepository {
     boolean existsByTitle(String title);
 
     void deleteById(int id);
+
+    boolean existsById(int id);
 }

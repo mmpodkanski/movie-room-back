@@ -43,6 +43,7 @@ public class Movie {
 //            inverseJoinColumns = @JoinColumn(name = "comment_id")
 //    )
     private Set<Comment> comments;
+    // TODO: add method: addComment
 
 
 }

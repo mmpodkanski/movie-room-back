@@ -41,9 +41,11 @@ public class MovieService {
 
     public MovieReadModel readMovieByTittle(String movieTitle) {
         return repository
-                .findByTitle(movieTitle.substring(0, 1).toUpperCase() + movieTitle.substring(1))
-                .map(MovieReadModel::new)
-                .orElseThrow(() -> new IllegalArgumentException("No movie exists with that title"));
+                        .findByTitle(movieTitle.substring(0, 1)
+                        .toUpperCase() + movieTitle.substring(1))
+                        .map(MovieReadModel::new)
+                        .orElseThrow(() ->
+                                new IllegalArgumentException("No movie exists with that title"));
 
     }
 
@@ -81,9 +83,12 @@ public class MovieService {
             int id
     ) {
         // FIXME: maybe no message from exception
-        var movie = repository.findById(id).orElseThrow(IllegalArgumentException::new);
+        var movie = repository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Movie with that id not exists!"));
+
         Set<Actor> actors = actorService.checkActors(newActors, movie);
         actors.forEach(actor -> movie.getActors().add(actor));
+        repository.save(movie);
     }
 
     public void deleteMovieById(int movieId) {
