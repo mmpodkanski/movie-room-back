@@ -2,6 +2,7 @@ package io.github.mmpodkanski.filmroom.models;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -34,15 +35,9 @@ public class Movie {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "actors_id")
     private Set<Actor> actors = new HashSet<>();
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "awards_id")
-    private Set<Award> awards = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie")
-//    @JoinTable(name = "movie_comments",
-//            joinColumns = @JoinColumn(name = "movie_id"),
-//            inverseJoinColumns = @JoinColumn(name = "comment_id")
-//    )
     private Set<Comment> comments;
+    private Boolean acceptedByAdmin = false;
     // TODO: add method: addComment
 
 

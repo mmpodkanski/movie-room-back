@@ -14,6 +14,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -36,6 +38,8 @@ public class User implements UserDetails {
     private ERole role;
     private Boolean locked = false;
     private Boolean enabled = true;
+    @OneToMany
+    private Set<Movie> favourites = new HashSet<>();
 
     public User(
             @NotBlank final String username,

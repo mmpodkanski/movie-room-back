@@ -1,11 +1,14 @@
 package io.github.mmpodkanski.filmroom.repository;
 
+import io.github.mmpodkanski.filmroom.models.Movie;
 import io.github.mmpodkanski.filmroom.models.User;
+import io.github.mmpodkanski.filmroom.models.response.MovieReadModel;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository {
+public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findAll();
 
     Optional<User> findByUsername(String username);

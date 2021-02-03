@@ -1,11 +1,12 @@
 package io.github.mmpodkanski.filmroom.repository;
 
 import io.github.mmpodkanski.filmroom.models.Movie;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface MovieRepository {
+public interface MovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> findAll();
 
     Optional<Movie> findById(int id);
