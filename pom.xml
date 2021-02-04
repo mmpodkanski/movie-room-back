@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.github.mmpodkanski</groupId>
-    <artifactId>filmroom</artifactId>
+    <artifactId>movieroom</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>movieroom</name>
     <description>movie service</description>
