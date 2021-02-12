@@ -1,6 +1,5 @@
 package io.github.mmpodkanski.movieroom.controller;
 
-import com.fasterxml.jackson.databind.node.TextNode;
 import io.github.mmpodkanski.movieroom.models.Movie;
 import io.github.mmpodkanski.movieroom.models.request.CommentRequest;
 import io.github.mmpodkanski.movieroom.models.request.MovieRequest;
@@ -42,24 +41,30 @@ public class MovieController {
 
     @GetMapping("/{id}")
     ResponseEntity<MovieResponse> getMovieById(@PathVariable int id) {
+        logger.info("Exposing a movie!");
         var movie = movieService.readMovieById(id);
         return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 
     @GetMapping(params = "title")
     ResponseEntity<MovieResponse> getMovieByTitle(@RequestParam String title) {
+        logger.info("Exposing a movie!");
         var movie = movieService.readMovieByTittle(title);
         return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 
     @GetMapping(params = "year")
     ResponseEntity<List<MovieResponse>> getMoviesByYear(@RequestParam String year) {
+        logger.info("Exposing a movie!");
         var movieList = movieService.readMoviesByYear(year);
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    ResponseEntity<Movie> addMovie(@Valid @RequestBody MovieRequest newMovie, int userId) {
+    ResponseEntity<Movie> addMovie(
+            @Valid @RequestBody MovieRequest newMovie,
+            int userId
+    ) {
         logger.warn("Adding a new movie!");
         var result = movieService.createMovie(newMovie, userId);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
@@ -76,37 +81,30 @@ public class MovieController {
     }
 
     @Transactional
-    @PostMapping("/{id}")
-    ResponseEntity<?> addToFavourites(@PathVariable("id") int movieId, @RequestBody int userId) {
-        logger.info("User(id): " + userId + " added movie(id): " + movieId + "to favourites");
+    @PostMapping(value = "/{id}", params = "add-fav")
+    ResponseEntity<?> addToFavourites(
+            @PathVariable("id") int movieId,
+            @RequestBody int userId
+    ) {
+        logger.info("User(id): " + userId + " added movie(id): " + movieId + " to favourites");
         movieService.giveStar(userId, movieId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
-    @PostMapping("/{id}")
-    ResponseEntity<?> removeFromFavourites(@PathVariable("id") int movieId, @RequestBody int userId) {
+    @PostMapping(value = "/{id}", params = "remove-fav")
+    ResponseEntity<?> removeFromFavourites(
+            @PathVariable("id") int movieId,
+            @RequestBody int userId
+    ) {
+        logger.info("User(id): " + userId + " removed movie(id): " + movieId + " from favourites");
         movieService.deleteStar(userId, movieId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //FIXME: not found
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PatchMapping("/add/actor/{id}")
-    public ResponseEntity<Integer> addActor(
-            @RequestBody @NotBlank TextNode name,
-            @PathVariable int id
-    ) {
-        logger.info("[ADMIN] Adding a new actor");
-        movieService.insertActorToMovie(Set.of(name.asText()), id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    //FIXME: not found
-    @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PatchMapping("/add/actors/{id}")
+    @PatchMapping("/{id}/actors/add")
     public ResponseEntity<Integer> addActors(
             @RequestBody @NotBlank Set<String> names,
             @PathVariable int id
@@ -118,14 +116,13 @@ public class MovieController {
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/remove/{id}")
+    @DeleteMapping(value = "/{id}", params = "remove")
     public ResponseEntity<Integer> removeMovieById(@PathVariable int id) {
         logger.warn("[ADMIN] Removing movie with id: " + id);
         movieService.deleteMovieById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    // FIXME: spring doesn't know whose do (String or int)
 //    @Transactional
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    @DeleteMapping("/remove/{title}")
@@ -141,7 +138,7 @@ public class MovieController {
             @PathVariable("id") int movieId,
             @PathVariable int commentId
     ) {
-        logger.warn("[ADMIN] Removing comment with id: " + commentId + "from movie(id): " + movieId);
+        logger.warn("[ADMIN] Removing comment(id): " + commentId + " from movie(id): " + movieId);
         commentService.removeComment(commentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -42,9 +42,10 @@ public class MovieService {
         if (movieRepository.existsByTitle(movieReq.getTitle())) {
             throw new ApiBadRequestException("Movie with that title already exists!");
         }
-        boolean createdByAdmin = userService.loadUserById(userId)
-                                            .getRole()
-                                            .equals(ERole.ROLE_ADMIN);
+        boolean createdByAdmin = userService
+                .loadUserById(userId)
+                .getRole()
+                .equals(ERole.ROLE_ADMIN);
 
         var newMovie = mapMovieRequest(movieReq, createdByAdmin);
         return movieRepository.save(newMovie);

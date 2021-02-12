@@ -23,8 +23,10 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
 
-    WebSecurityConfig(final UserService userDetailsService,
-                      final AuthEntryPointJwt unauthorizedHandler) {
+    WebSecurityConfig(
+            final UserService userDetailsService,
+            final AuthEntryPointJwt unauthorizedHandler
+    ) {
         this.userDetailsService = userDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
     }
@@ -59,7 +61,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/auth/**").permitAll()
                 .antMatchers("/movies").permitAll()
                 .anyRequest().authenticated()
                 .and()
