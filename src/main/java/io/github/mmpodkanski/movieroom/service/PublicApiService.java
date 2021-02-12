@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.movieroom.service;
 
-import io.github.mmpodkanski.movieroom.exception.ApiRequestException;
+import io.github.mmpodkanski.movieroom.exception.ApiBadRequestException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class PublicApiService {
         var jsonObject = new JSONObject(response.body());
 
         if (!jsonObject.getString("status").equals("ok")) {
-            throw new ApiRequestException("No news today!");
+            throw new ApiBadRequestException("No news today!");
         }
 
         JSONArray news = jsonObject.getJSONArray("news");

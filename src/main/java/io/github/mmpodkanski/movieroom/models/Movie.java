@@ -1,18 +1,21 @@
 package io.github.mmpodkanski.movieroom.models;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.github.mmpodkanski.movieroom.exception.ApiBadRequestException;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import java.time.OffsetDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "movie")
-@Data
+@Getter
+@Setter
 public class Movie {
     @Id
     @GeneratedValue(generator = "inc")
@@ -20,24 +23,42 @@ public class Movie {
     private int id;
     @NotBlank(message = "Movie's title must not be empty")
     private String title;
-    @NotBlank(message = "Movie's description must not be empty")
-    private String description;
     @NotBlank(message = "Movie has to have director")
     private String director;
     private String producer;
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP")
-    private OffsetDateTime createdAt;
+    @NotBlank(message = "Movie's description must not be empty")
+    private String description;
     @Digits(integer = 4, fraction = 0, message = "Invalid date (expected: xxxx)")
     private String releaseDate;
     @Enumerated(EnumType.STRING)
     private ECategory category;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "actors_id")
-    private Set<Actor> actors = new HashSet<>();
+    private Set<Actor> actors;
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie")
     private Set<Comment> comments;
-    private Boolean acceptedByAdmin = false;
-    // TODO: add method: addComment
+    private int stars;
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP")
+    private OffsetDateTime createdAt;
+    private String imageUrl;
+    private boolean acceptedByAdmin;
 
+    public Movie() {
+    }
 
+    public void addActors(Set<Actor> actors) {
+        this.actors.addAll(actors);
+    }
+
+    void addStar() {
+        ++stars;
+    }
+
+    void removeStar() {
+        if (stars < 1) {
+            throw new ApiBadRequestException("Movie doesn't has stars!");
+        }
+        --stars;
+    }
 }

@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
-    List<Movie> findAll();
-
-    Optional<Movie> findById(int id);
-
-    List<Movie> findAllByReleaseDate(String year);
-
     boolean existsById(int id);
 
     boolean existsByTitle(String title);
+
+    List<Movie> findAll();
+
+    List<Movie> findAllByReleaseDate(String year);
+
+    Optional<Movie> findById(int id);
 
     Optional<Movie> findByTitle(String title);
 

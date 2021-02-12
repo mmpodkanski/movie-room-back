@@ -1,54 +1,64 @@
 package io.github.mmpodkanski.movieroom.service;
 
+import io.github.mmpodkanski.movieroom.exception.ApiBadRequestException;
+import io.github.mmpodkanski.movieroom.exception.ApiNotFoundException;
 import io.github.mmpodkanski.movieroom.models.Comment;
 import io.github.mmpodkanski.movieroom.models.Movie;
 import io.github.mmpodkanski.movieroom.models.User;
-import io.github.mmpodkanski.movieroom.models.request.CommentDTO;
+import io.github.mmpodkanski.movieroom.models.request.CommentRequest;
 import io.github.mmpodkanski.movieroom.repository.CommentRepository;
 import io.github.mmpodkanski.movieroom.repository.MovieRepository;
-import io.github.mmpodkanski.movieroom.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.time.OffsetDateTime;
 
 @Service
 public class CommentService {
-    private final CommentRepository repository;
+    private final CommentRepository commentRepository;
     private final MovieRepository movieRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    CommentService(final CommentRepository repository, final MovieRepository movieRepository, final UserRepository userRepository) {
-        this.repository = repository;
+    CommentService(
+            final CommentRepository commentRepository,
+            final MovieRepository movieRepository,
+            final UserService userService
+    ) {
+        this.commentRepository = commentRepository;
         this.movieRepository = movieRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
-    public void createComment(CommentDTO newComment, int movieId) {
-        if (repository.existsByTitle(newComment.getTitle())) {
-            throw new IllegalStateException("Error: Comment with that title already exists!");
+    public void createComment(CommentRequest commentReq, int movieId) {
+        if (commentRepository.existsByTitle(commentReq.getTitle())) {
+            throw new ApiBadRequestException("Comment with that title already exists!");
         }
+        var movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
-        // FIXME: check if frontend give movie or movieId
-        Movie movieToUpdate = movieRepository
-                .findById(movieId)
-                .orElseThrow(() -> new IllegalStateException("Movie with that id not exists!"));
-        User owner = userRepository
-                .findById(newComment.getOwnerId())
-                .orElseThrow(() -> new IllegalStateException("User with that id not exists!"));
+        User owner = userService.loadUserById(commentReq.getOwnerId());
+        var commentToSave = mapCommentDTO(commentReq, movie, owner);
 
-        var comment = new Comment(
-                newComment.getTitle(),
-                newComment.getDescription(),
-                owner.getUsername(),
-                owner,
-                movieToUpdate);
-
-        movieToUpdate.getComments().add(comment);
-        movieRepository.save(movieToUpdate);
+        commentRepository.save(commentToSave);
     }
 
     public void removeComment(int idComment) {
-        if (!repository.existsById(idComment)) {
-            throw new IllegalStateException("Comment with that id not exists!");
+        if (!commentRepository.existsById(idComment)) {
+            throw new ApiBadRequestException("Comment with that id not exists!");
         }
-        repository.deleteById(idComment);
+        commentRepository.deleteById(idComment);
+    }
+
+    private Comment mapCommentDTO(CommentRequest commentRequest, Movie movieToUpdate, User owner) {
+        var modelMapper = new ModelMapper();
+        var createdAt = OffsetDateTime.now();
+
+        Comment comment = modelMapper.map(commentRequest, Comment.class);
+
+        comment.setCreatedAt(createdAt);
+        comment.setAuthor(owner.getUsername());
+        comment.setOwner(owner);
+        comment.setMovie(movieToUpdate);
+        return comment;
     }
 }

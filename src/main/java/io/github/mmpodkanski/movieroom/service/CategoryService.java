@@ -1,5 +1,6 @@
 package io.github.mmpodkanski.movieroom.service;
 
+import io.github.mmpodkanski.movieroom.exception.ApiBadRequestException;
 import io.github.mmpodkanski.movieroom.models.ECategory;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ class CategoryService {
                 return cat;
             }
         }
-        throw new IllegalStateException("That category not exists!");
+
+        throw new ApiBadRequestException("That category not exists!");
     }
 }

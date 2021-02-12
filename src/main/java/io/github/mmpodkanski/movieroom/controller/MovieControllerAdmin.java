@@ -2,19 +2,20 @@ package io.github.mmpodkanski.movieroom.controller;
 
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.github.mmpodkanski.movieroom.models.Movie;
-import io.github.mmpodkanski.movieroom.models.request.MovieWriteModel;
-import io.github.mmpodkanski.movieroom.models.response.MovieReadModel;
+import io.github.mmpodkanski.movieroom.models.request.MovieRequest;
+import io.github.mmpodkanski.movieroom.models.response.MovieResponse;
 import io.github.mmpodkanski.movieroom.service.CommentService;
 import io.github.mmpodkanski.movieroom.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
@@ -27,83 +28,78 @@ public class MovieControllerAdmin {
     private final MovieService service;
     private final CommentService commentService;
 
-
     MovieControllerAdmin(MovieService service, CommentService commentService) {
         this.service = service;
         this.commentService = commentService;
     }
 
-    // only for admin
     @PostMapping("/add")
-    ResponseEntity<Movie> addMovie(@Valid @RequestBody MovieWriteModel newMovie) {
-        // TODO: if principal != admin -> MovieToAccept !
-        var result = service.createMovie(newMovie, true);
+    ResponseEntity<Movie> addMovie(@Valid @RequestBody MovieRequest newMovie) {
         logger.warn("Adding a new movie!");
-        return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
+        var result = service.createMovie(newMovie, true);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
+    @GetMapping("/accept")
+    ResponseEntity<List<MovieResponse>> getAllMoviesToAccept() {
+        logger.warn("Exposing all the movies to accept!");
+        List<MovieResponse> movieList = service.readAllMoviesToAccept();
+        return new ResponseEntity<>(movieList, HttpStatus.OK);
+    }
+
+    @Transactional
     @PatchMapping("/accept/{id}")
-    ResponseEntity<?> acceptMovie(@PathVariable int id) {
+    public ResponseEntity<?> acceptMovie(@PathVariable int id) {
+        logger.info("Movie with id: " + id + " has been accepted");
         service.changeStatusOfMovie(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //FIXME: not found
+    @Transactional
     @PatchMapping("/add/actor/{id}")
-    ResponseEntity<Integer> addActor(
+    public ResponseEntity<Integer> addActor(
             @RequestBody @NotBlank TextNode name,
             @PathVariable int id
     ) {
         service.insertActorToMovie(Set.of(name.asText()), id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //FIXME: not found
+    @Transactional
     @PatchMapping("/add/actors/{id}")
-    ResponseEntity<Integer> addActors(
+    public ResponseEntity<Integer> addActors(
             @RequestBody @NotBlank Set<String> names,
             @PathVariable int id
     ) {
         service.insertActorToMovie(names, id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //    @PutMapping("/movie/update/{id}")
-//    ResponseEntity<?> updateMovie(
-//            @RequestBody MovieWriteModel updatedMovie,
-//            @PathVariable int id
-//    ) {
-//       service.updateMovie(updatedMovie, id);
-//       return ResponseEntity.noContent().build();
+    @Transactional
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<Integer> removeMovieById(@PathVariable int id) {
+        service.deleteMovieById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+//    // FIXME: spring doesn't know whose do (String or int)
+//    @Transactional
+//    @DeleteMapping("/remove/{title}")
+//    public ResponseEntity<String> removeMovieByTitle(@PathVariable String title) {
+//        service.deleteMovieByTitle(title);
+//        return ResponseEntity.noContent().build();
 //    }
 
-    @GetMapping("/accept")
-    ResponseEntity<List<MovieReadModel>> getAllMoviesToAccept() {
-        logger.warn("Exposing all the movies to accept!");
-        return ResponseEntity.ok(service.readAllMoviesToAccept());
-    }
-
-    // FIXME: spring doesn't know whose do (String or int)
-    @DeleteMapping("/remove/{id}")
-    ResponseEntity<Integer> removeMovieById(@PathVariable int id) {
-        service.deleteMovieById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    // FIXME: spring doesn't know whose do (String or int)
-    @DeleteMapping("/remove/{title}")
-    ResponseEntity<String> removeMovieByTitle(@PathVariable String title) {
-        service.deleteMovieByTitle(title);
-        return ResponseEntity.noContent().build();
-    }
-
+    @Transactional
     @DeleteMapping("/{id}/comments/{commentId}")
-    ResponseEntity<MovieReadModel> deleteCommentFromMovie(
+    public ResponseEntity<MovieResponse> deleteCommentFromMovie(
             @PathVariable int id,
             @PathVariable int commentId
     ) {
         commentService.removeComment(commentId);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

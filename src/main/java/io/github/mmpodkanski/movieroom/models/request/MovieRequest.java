@@ -1,5 +1,7 @@
 package io.github.mmpodkanski.movieroom.models.request;
 
+import io.github.mmpodkanski.movieroom.models.Actor;
+import io.github.mmpodkanski.movieroom.models.ECategory;
 import io.github.mmpodkanski.movieroom.models.Movie;
 import lombok.Data;
 
@@ -11,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class MovieWriteModel {
+public class MovieRequest {
     @NotBlank(message = "Movie's title can not be empty!")
     private String title;
     @NotBlank(message = "Movie's description can not be empty!")
@@ -24,11 +26,10 @@ public class MovieWriteModel {
     private String category;
     @NotEmpty(message = "Please add some actors!")
     private Set<String> actors = new HashSet<>();
-    //    private Set<AwardWriteModel> awards = new HashSet<>();
     @Digits(integer = 4, fraction = 0, message = "Invalid date (expected: xxxx)")
     private String releaseDate;
 
-    public Movie toMovie(OffsetDateTime time) {
+    public Movie toMovie(OffsetDateTime time, boolean createdByAdmin, Set<Actor> actors, ECategory category) {
         var movie = new Movie();
         movie.setTitle(title);
         movie.setDescription(description);
@@ -36,6 +37,10 @@ public class MovieWriteModel {
         movie.setProducer(producer);
         movie.setReleaseDate(releaseDate);
         movie.setCreatedAt(time);
+        movie.setAcceptedByAdmin(createdByAdmin);
+        movie.setCategory(category);
+        movie.addActors(actors);
+
         return movie;
     }
 

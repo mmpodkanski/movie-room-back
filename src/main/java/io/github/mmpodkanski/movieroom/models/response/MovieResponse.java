@@ -5,31 +5,35 @@ import io.github.mmpodkanski.movieroom.models.Comment;
 import io.github.mmpodkanski.movieroom.models.Movie;
 import lombok.Data;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Data
-public class MovieReadModel {
+public class MovieResponse {
     private int id;
     private String title;
     private String description;
     private String director;
     private String producer;
     private String category;
-    // TODO: maybe ActorReadModel
-    private Set<Actor> actors;
+    private List<Actor> actors;
     private String releaseDate;
-    private Set<Comment> comments;
+    private List<Comment> comments;
 
-    public MovieReadModel(Movie source) {
+    public MovieResponse(Movie source) {
         id = source.getId();
         title = source.getTitle();
         description = source.getDescription();
         director = source.getDirector();
         producer = source.getProducer();
         category = source.getCategory().name();
-        actors = source.getActors();
+        actors = new ArrayList<>(source.getActors());
         releaseDate = source.getReleaseDate();
-        comments = source.getComments();
+        comments = new ArrayList<>(source.getComments());
+
+        comments.sort(Comparator.comparing(Comment::getCreatedAt));
+        actors.sort(Comparator.comparing(Actor::getFirstName));
     }
 }
 

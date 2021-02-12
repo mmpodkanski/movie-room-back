@@ -2,7 +2,6 @@ package io.github.mmpodkanski.movieroom.models;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,14 +13,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
+@Entity
+@EqualsAndHashCode
 @Getter
 @Setter
-@EqualsAndHashCode
-@NoArgsConstructor
-@Entity
 public class User implements UserDetails {
     @Id
     @GeneratedValue(generator = "inc")
@@ -36,10 +33,13 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private ERole role;
-    private Boolean locked = false;
+    private Boolean locked;
     private Boolean enabled = true;
     @OneToMany
-    private Set<Movie> favourites = new HashSet<>();
+    private Set<Movie> favourites;
+
+    public User() {
+    }
 
     public User(
             @NotBlank final String username,
@@ -49,6 +49,16 @@ public class User implements UserDetails {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public void addFavourite(Movie movie) {
+        movie.addStar();
+        favourites.add(movie);
+    }
+
+    public void removeFavourite(Movie movie) {
+        movie.removeStar();
+        favourites.remove(movie);
     }
 
     @Override

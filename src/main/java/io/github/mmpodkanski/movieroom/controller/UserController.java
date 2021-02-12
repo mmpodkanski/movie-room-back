@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.node.TextNode;
 import io.github.mmpodkanski.movieroom.models.request.LoginRequest;
 import io.github.mmpodkanski.movieroom.models.request.RegisterRequest;
 import io.github.mmpodkanski.movieroom.models.response.JwtResponse;
-import io.github.mmpodkanski.movieroom.service.AuthService;
+import io.github.mmpodkanski.movieroom.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,23 +15,23 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:8081")
-public class AuthController {
-    private final AuthService service;
+public class UserController {
+    private final UserService service;
 
-    AuthController(final AuthService service) {
+    UserController(final UserService service) {
         this.service = service;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         JwtResponse response = service.login(loginRequest);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest signUpRequest) {
         service.signup(signUpRequest);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/upgrade/{id}")
@@ -40,6 +41,6 @@ public class AuthController {
             @RequestBody TextNode key
     ) {
         service.addAdminRole(id, key.asText());
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

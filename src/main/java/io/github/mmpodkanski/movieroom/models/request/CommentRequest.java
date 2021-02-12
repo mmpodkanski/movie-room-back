@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class CommentDTO {
+public class CommentRequest {
     @NotNull
     private int ownerId;
     @NotBlank

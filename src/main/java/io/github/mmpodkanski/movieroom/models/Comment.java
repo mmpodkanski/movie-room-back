@@ -1,17 +1,25 @@
 package io.github.mmpodkanski.movieroom.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "comments")
+@Getter
+@Setter
 public class Comment {
     @Id
     @GeneratedValue(generator = "inc")
     @GenericGenerator(name = "inc", strategy = "increment")
     private int id;
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP")
+    private OffsetDateTime createdAt;
     @NotBlank(message = "Title can not be empty !")
     private String title;
     @NotBlank(message = "Description can not be empty !")
@@ -22,70 +30,10 @@ public class Comment {
     private User owner;
     @ManyToOne
     @JoinColumn(name = "movie_id")
+    @JsonBackReference
     private Movie movie;
 
     public Comment() {
     }
 
-    public Comment(
-            final String title,
-            final String description,
-            final String author,
-            final User owner,
-            final Movie movie
-    ) {
-        this.title = title;
-        this.description = description;
-        this.author = author;
-        this.owner = owner;
-        this.movie = movie;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    void setId(final int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    void setTitle(final String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    void setDescription(final String description) {
-        this.description = description;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    void setAuthor(final String author) {
-        this.author = author;
-    }
-
-    User getOwner() {
-        return owner;
-    }
-
-    void setOwner(final User owner) {
-        this.owner = owner;
-    }
-
-    Movie getMovie() {
-        return movie;
-    }
-
-    void setMovie(final Movie movie) {
-        this.movie = movie;
-    }
 }
