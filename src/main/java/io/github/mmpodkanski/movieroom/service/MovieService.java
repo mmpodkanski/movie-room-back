@@ -4,6 +4,7 @@ import io.github.mmpodkanski.movieroom.exception.ApiBadRequestException;
 import io.github.mmpodkanski.movieroom.exception.ApiNotFoundException;
 import io.github.mmpodkanski.movieroom.models.Actor;
 import io.github.mmpodkanski.movieroom.models.ECategory;
+import io.github.mmpodkanski.movieroom.models.ERole;
 import io.github.mmpodkanski.movieroom.models.Movie;
 import io.github.mmpodkanski.movieroom.models.request.MovieRequest;
 import io.github.mmpodkanski.movieroom.models.response.MovieResponse;
@@ -35,14 +36,17 @@ public class MovieService {
     }
 
     public Movie createMovie(
-            MovieRequest movieToSave,
-            boolean createdByAdmin
+            MovieRequest movieReq,
+            int userId
     ) {
-        if (movieRepository.existsByTitle(movieToSave.getTitle())) {
+        if (movieRepository.existsByTitle(movieReq.getTitle())) {
             throw new ApiBadRequestException("Movie with that title already exists!");
         }
+        boolean createdByAdmin = userService.loadUserById(userId)
+                                            .getRole()
+                                            .equals(ERole.ROLE_ADMIN);
 
-        Movie newMovie = mapMovieRequest(movieToSave, createdByAdmin);
+        var newMovie = mapMovieRequest(movieReq, createdByAdmin);
         return movieRepository.save(newMovie);
     }
 
@@ -143,7 +147,7 @@ public class MovieService {
     }
 
     // MAP //
-    public Movie mapMovieRequest(
+    private Movie mapMovieRequest(
             MovieRequest movieModel,
             boolean createdByAdmin
     ) {

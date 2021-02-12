@@ -13,11 +13,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/profile")
 @CrossOrigin("http://localhost:8081")
-public class UserProfileController {
-    public final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
+public class UserBoardController {
+    public final Logger logger = LoggerFactory.getLogger(UserBoardController.class);
     public final UserService service;
 
-    UserProfileController(UserService service) {
+    UserBoardController(UserService service) {
         this.service = service;
     }
 

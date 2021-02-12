@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -48,6 +49,13 @@ public class UserService implements UserDetailsService {
         return userRepository.existsByFavourites(movie);
     }
 
+    public List<User> readAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> user.getRole().equals(ERole.ROLE_USER))
+                .collect(Collectors.toList());
+    }
+
     public User loadUserById(int id){
         return userRepository.findById(id)
                 .orElseThrow(() ->
@@ -67,12 +75,11 @@ public class UserService implements UserDetailsService {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             throw new ApiBadRequestException("Username is already taken!");
         }
-
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new ApiBadRequestException("Email is already in use!");
         }
 
-        User user = new User(registerRequest.getUsername(),
+        var user = new User(registerRequest.getUsername(),
                 registerRequest.getEmail(),
                 encoder.encode(registerRequest.getPassword()));
 
@@ -101,26 +108,26 @@ public class UserService implements UserDetailsService {
 
     public List<MovieResponse> readAllFavourites(int id) {
         List<MovieResponse> favouriteMovies = new ArrayList<>();
-
         Set<Movie> movies = userRepository.findById(id)
                 .map(User::getFavourites)
                 .orElseThrow(() -> new ApiBadRequestException("User with that id not exists!"));
 
         movies.forEach(source -> favouriteMovies.add(new MovieResponse(source)));
-
         return favouriteMovies;
     }
 
-    public void addAdminRole(int userId, String key) {
-        User userDetails = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new ApiBadRequestException("User with that id not found!"));
+    public void setAdminRole(int userId, String key) {
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiBadRequestException("User with that id not exists!"));
 
-        if (!key.equals("ADMIN")) {
-            throw new ApiBadRequestException("Incorrect key!");
-        }
+        user.setRole(ERole.ROLE_ADMIN);
+        userRepository.save(user);
+    }
 
-        userDetails.setRole(ERole.ROLE_ADMIN);
-        userRepository.save(userDetails);
+    public void changeStatusOfUser(int userId) {
+       var user =  userRepository.findById(userId)
+                .orElseThrow(() -> new ApiBadRequestException("User with that id not exists!"));
+
+       user.setLocked(!user.getLocked());
     }
 }

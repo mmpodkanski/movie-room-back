@@ -40,7 +40,7 @@ public class UserController {
             @PathVariable int id,
             @RequestBody TextNode key
     ) {
-        service.addAdminRole(id, key.asText());
+        service.setAdminRole(id, key.asText());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
