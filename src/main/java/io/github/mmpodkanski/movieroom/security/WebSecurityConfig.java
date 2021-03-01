@@ -5,6 +5,7 @@ import io.github.mmpodkanski.movieroom.security.jwt.AuthTokenFilter;
 import io.github.mmpodkanski.movieroom.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,16 +19,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true,jsr250Enabled = true,prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserService userDetailsService;
+    private final UserService userService;
     private final AuthEntryPointJwt unauthorizedHandler;
 
     WebSecurityConfig(
-            final UserService userDetailsService,
+            @Lazy final UserService userService,
             final AuthEntryPointJwt unauthorizedHandler
     ) {
-        this.userDetailsService = userDetailsService;
+        this.userService = userService;
         this.unauthorizedHandler = unauthorizedHandler;
     }
 
@@ -39,7 +40,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
     @Bean

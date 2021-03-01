@@ -19,11 +19,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -50,10 +50,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> readAllUsers() {
-        return userRepository.findAll()
-                .stream()
-                .filter(user -> user.getRole().equals(ERole.ROLE_USER))
-                .collect(Collectors.toList());
+        return userRepository.findAll();
     }
 
     public User loadUserById(int id){
@@ -116,18 +113,19 @@ public class UserService implements UserDetailsService {
         return favouriteMovies;
     }
 
-    public void setAdminRole(int userId, String key) {
+    @Transactional
+    public void setAdminRole(int userId) {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiBadRequestException("User with that id not exists!"));
 
         user.setRole(ERole.ROLE_ADMIN);
-        userRepository.save(user);
     }
 
+    @Transactional
     public void changeStatusOfUser(int userId) {
        var user =  userRepository.findById(userId)
                 .orElseThrow(() -> new ApiBadRequestException("User with that id not exists!"));
 
-       user.setLocked(!user.getLocked());
+       user.setLocked(!user.isLocked());
     }
 }

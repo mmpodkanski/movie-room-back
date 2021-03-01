@@ -1,6 +1,5 @@
 package io.github.mmpodkanski.movieroom.controller;
 
-import com.fasterxml.jackson.databind.node.TextNode;
 import io.github.mmpodkanski.movieroom.models.request.LoginRequest;
 import io.github.mmpodkanski.movieroom.models.request.RegisterRequest;
 import io.github.mmpodkanski.movieroom.models.response.JwtResponse;
@@ -14,7 +13,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600)
 public class UserController {
     private final UserService service;
 
@@ -37,10 +36,9 @@ public class UserController {
     @PostMapping("/upgrade/{id}")
     @PreAuthorize(value = "hasRole('ADMIN')")
     public ResponseEntity<?> upgradeUser(
-            @PathVariable int id,
-            @RequestBody TextNode key
+            @PathVariable int id
     ) {
-        service.setAdminRole(id, key.asText());
+        service.setAdminRole(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

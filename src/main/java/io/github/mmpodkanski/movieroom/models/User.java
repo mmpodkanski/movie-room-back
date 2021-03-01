@@ -33,8 +33,8 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private ERole role;
-    private Boolean locked;
-    private Boolean enabled = true;
+    private boolean locked;
+    private boolean enabled = true;
     @OneToMany
     private Set<Movie> favourites;
 

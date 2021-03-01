@@ -6,6 +6,7 @@ import io.github.mmpodkanski.movieroom.models.Actor;
 import io.github.mmpodkanski.movieroom.models.ECategory;
 import io.github.mmpodkanski.movieroom.models.ERole;
 import io.github.mmpodkanski.movieroom.models.Movie;
+import io.github.mmpodkanski.movieroom.models.request.CommentRequest;
 import io.github.mmpodkanski.movieroom.models.request.MovieRequest;
 import io.github.mmpodkanski.movieroom.models.response.MovieResponse;
 import io.github.mmpodkanski.movieroom.repository.MovieRepository;
@@ -22,17 +23,20 @@ public class MovieService {
     private final UserService userService;
     private final CategoryService categoryService;
     private final ActorService actorService;
+    private final CommentService commentService;
 
     MovieService(
             final MovieRepository movieRepository,
             final UserService userService,
             final CategoryService categoryService,
-            final ActorService actorService
+            final ActorService actorService,
+            final CommentService commentService
     ) {
         this.movieRepository = movieRepository;
         this.userService = userService;
         this.categoryService = categoryService;
         this.actorService = actorService;
+        this.commentService = commentService;
     }
 
     public Movie createMovie(
@@ -79,7 +83,7 @@ public class MovieService {
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
     }
 
-    public MovieResponse readMovieByTittle(String movieTitle) {
+    public MovieResponse readMovieByTitle(String movieTitle) {
         return movieRepository
                 .findByTitle(
                         movieTitle.substring(0, 1).toUpperCase() + movieTitle.substring(1))
@@ -121,8 +125,27 @@ public class MovieService {
 //        movieRepository.deleteByTitle(title);
 //    }
 
+    public void addCommentToMovie(CommentRequest newComment, int movieId) {
+        var movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
+
+        var comment = commentService.createComment(newComment, movie);
+        movie.addComment(comment);
+        movieRepository.save(movie);
+    }
+
+    public void deleteCommentFromMovie(int commentId) {
+        var comment = commentService.findCommentById(commentId);
+        var movie = comment.getMovie();
+
+        movie.removeComment(comment);
+        movieRepository.save(movie);
+
+    }
+
     // STARS //
     // TODO: CLEAN CODE !!!!!!
+
     public void giveStar(int userId, int idMovie) {
         var movie = movieRepository.findById(idMovie)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
@@ -146,8 +169,8 @@ public class MovieService {
         }
         user.removeFavourite(movie);
     }
-
     // MAP //
+
     private Movie mapMovieRequest(
             MovieRequest movieModel,
             boolean createdByAdmin

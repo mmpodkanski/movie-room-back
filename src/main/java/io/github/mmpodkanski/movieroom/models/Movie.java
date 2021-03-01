@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -32,23 +33,31 @@ public class Movie {
     private String releaseDate;
     @Enumerated(EnumType.STRING)
     private ECategory category;
-    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "actors_id")
-    private Set<Actor> actors;
+    private Set<Actor> actors = new HashSet<>();
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie")
-    private Set<Comment> comments;
+    private Set<Comment> comments = new HashSet<>();
     private int stars;
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private OffsetDateTime createdAt;
-    private String imageUrl;
     private boolean acceptedByAdmin;
+    private String imageUrl;
 
     public Movie() {
     }
 
     public void addActors(Set<Actor> actors) {
         this.actors.addAll(actors);
+    }
+
+    public void addComment(Comment commentToSave) {
+        this.comments.add(commentToSave);
+    }
+
+    public void removeComment(Comment commentToDelete) {
+        this.comments.remove(commentToDelete);
     }
 
     void addStar() {

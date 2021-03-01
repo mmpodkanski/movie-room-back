@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/profile")
-@CrossOrigin("http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600)
 public class UserBoardController {
     public final Logger logger = LoggerFactory.getLogger(UserBoardController.class);
     public final UserService service;
