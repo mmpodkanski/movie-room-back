@@ -17,9 +17,11 @@ public class MovieResponse {
     private String director;
     private String producer;
     private String category;
-    private List<Actor> actors;
     private String releaseDate;
+    private List<Actor> actors;
     private List<Comment> comments;
+    private boolean acceptedByAdmin;
+    private String imageUrl;
 
     public MovieResponse(Movie source) {
         id = source.getId();
@@ -28,9 +30,11 @@ public class MovieResponse {
         director = source.getDirector();
         producer = source.getProducer();
         category = source.getCategory().name();
-        actors = new ArrayList<>(source.getActors());
         releaseDate = source.getReleaseDate();
+        actors = new ArrayList<>(source.getActors());
         comments = new ArrayList<>(source.getComments());
+        acceptedByAdmin = source.isAcceptedByAdmin();
+        imageUrl = source.getImageUrl();
 
         comments.sort(Comparator.comparing(Comment::getCreatedAt));
         actors.sort(Comparator.comparing(Actor::getFirstName));

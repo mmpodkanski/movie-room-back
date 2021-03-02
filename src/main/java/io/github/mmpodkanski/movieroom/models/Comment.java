@@ -1,6 +1,7 @@
 package io.github.mmpodkanski.movieroom.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -27,6 +28,7 @@ public class Comment {
     private String author;
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User owner;
     @ManyToOne
     @JoinColumn(name = "movie_id")

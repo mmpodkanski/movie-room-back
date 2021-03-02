@@ -43,6 +43,7 @@ public class Movie {
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private OffsetDateTime createdAt;
     private boolean acceptedByAdmin;
+    @Column(name = "imageUrl")
     private String imageUrl;
 
     public Movie() {

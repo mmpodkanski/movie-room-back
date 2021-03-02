@@ -16,6 +16,7 @@ public class Actor {
     private String firstName;
     private String lastName;
     private String birthDate = "Not updated";
+    private String imageUrl;
     // TODO: create rating for every actor (ex. 1-10 -> avg)
     @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "actors")
     private final Set<Movie> movies = new HashSet<>();
@@ -64,6 +65,14 @@ public class Actor {
 
     void setBirthDate(final String birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     Set<Movie> getMovies() {
