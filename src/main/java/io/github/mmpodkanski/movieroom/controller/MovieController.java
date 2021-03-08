@@ -5,7 +5,6 @@ import io.github.mmpodkanski.movieroom.models.User;
 import io.github.mmpodkanski.movieroom.models.request.CommentRequest;
 import io.github.mmpodkanski.movieroom.models.request.MovieRequest;
 import io.github.mmpodkanski.movieroom.models.response.MovieResponse;
-import io.github.mmpodkanski.movieroom.service.CommentService;
 import io.github.mmpodkanski.movieroom.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/movies")
@@ -27,27 +24,35 @@ import java.util.Set;
 public class MovieController {
     private final Logger logger = LoggerFactory.getLogger(MovieController.class);
     private final MovieService movieService;
-    private final CommentService commentService;
 
     MovieController(
-            final MovieService movieService,
-            final CommentService commentService
+            final MovieService movieService
     ) {
         this.movieService = movieService;
-        this.commentService = commentService;
     }
 
     @GetMapping
-    ResponseEntity<List<MovieResponse>> getAllMovies() {
-        logger.warn("Exposing all the movies!");
+    ResponseEntity<List<MovieResponse>> getMovies() {
+        logger.info("Exposing all the movies!");
         var movieList = movieService.readAllMovies();
+        return new ResponseEntity<>(movieList, HttpStatus.OK);
+    }
+
+    @GetMapping("/top-rated")
+    ResponseEntity<List<MovieResponse>> getTopRatedMovies() {
+        var movieList = movieService.readAllTopRatedMovies();
+        return new ResponseEntity<>(movieList, HttpStatus.OK);
+    }
+
+    @GetMapping("/new-added")
+    ResponseEntity<List<MovieResponse>> getTheNewestMovies() {
+        var movieList = movieService.readAllTheNewestAddedMovies();
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
 
     @GetMapping(params = "year")
     ResponseEntity<List<MovieResponse>> getMoviesByYear(@RequestParam String year) {
-        logger.info("Exposing a movie!");
-        var movieList = movieService.readMoviesByYear(year);
+        var movieList = movieService.readAllMoviesByYear(year);
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
 
@@ -60,34 +65,43 @@ public class MovieController {
 
     @GetMapping(params = "title")
     ResponseEntity<MovieResponse> getMovieByTitle(@RequestParam String title) {
-        logger.info("Exposing a movie!");
+        logger.info("Exposing a movie by title!");
         var movie = movieService.readMovieByTitle(title);
         return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 
+    @GetMapping("/check-fav/{id}")
+    ResponseEntity<Boolean> existsUserFavourite(
+            @PathVariable("id") int movieId,
+            @AuthenticationPrincipal User user
+    ) {
+        var result = movieService.checkIfUserAlreadyAddedFav(movieId, user.getId());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
     @PostMapping("/add")
     ResponseEntity<Movie> addMovie(
-            @Valid @RequestBody MovieRequest newMovie,
+            @RequestBody @Valid MovieRequest movieRequest,
             @AuthenticationPrincipal User user
     ) {
         logger.warn("Adding a new movie!");
-        var result = movieService.createMovie(newMovie, user.getId());
+        var result = movieService.createMovie(movieRequest, user.getId());
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @PostMapping("/{id}/comments/add")
     ResponseEntity<MovieResponse> addComment(
             @PathVariable("id") int movieId,
-            @RequestBody CommentRequest comment
+            @RequestBody @Valid CommentRequest commentRequest
     ) {
         logger.info("Adding a new comment to movie(id): " + movieId);
-        movieService.addCommentToMovie(comment, movieId);
+        movieService.addCommentToMovie(commentRequest, movieId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Transactional
-    @PostMapping(value = "/{id}", params = "add-fav")
-    ResponseEntity<?> addFavourite(
+    @PostMapping(value = "/{id}/add-fav")
+    ResponseEntity<?> addToFavourites(
             @PathVariable("id") int movieId,
             @AuthenticationPrincipal User user
     ) {
@@ -96,9 +110,8 @@ public class MovieController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Transactional
-    @PostMapping(value = "/{id}", params = "remove-fav")
-    ResponseEntity<?> removeFavourite(
+    @PostMapping(value = "/{id}/remove-fav")
+    ResponseEntity<?> removeFromFavourites(
             @PathVariable("id") int movieId,
             @AuthenticationPrincipal User user
     ) {
@@ -107,19 +120,28 @@ public class MovieController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PatchMapping("/{id}/actors/add")
-    public ResponseEntity<Integer> addActors(
-            @RequestBody @NotBlank Set<String> names,
-            @PathVariable int id
+    @PatchMapping("/{id}/edit")
+    public ResponseEntity<MovieRequest> updateMovie(
+            @PathVariable int id,
+            @RequestBody @Valid MovieRequest movieRequest
     ) {
-        logger.info("[ADMIN] Adding new actors");
-        movieService.insertActorToMovie(names, id);
+        logger.warn("[ADMIN] Updating movie with id: " + id);
+        movieService.updateMovie(movieRequest, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Transactional
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PatchMapping("/{id}/actors/add")
+//    public ResponseEntity<Integer> addActors(
+//            @RequestBody @NotBlank Set<String> names,
+//            @PathVariable int id
+//    ) {
+//        logger.info("[ADMIN] Adding new actors");
+//        movieService.insertActorToMovie(names, id);
+//        return new ResponseEntity<>(HttpStatus.OK);
+
+//    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}", params = "remove")
     public ResponseEntity<Integer> removeMovie(@PathVariable int id) {
@@ -128,13 +150,6 @@ public class MovieController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @Transactional
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @DeleteMapping("/remove/{title}")
-//    public ResponseEntity<String> removeMovieByTitle(@PathVariable String title) {
-//        movieService.deleteMovieByTitle(title);
-//        return ResponseEntity.noContent().build();
-//    }
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -1,6 +1,7 @@
 package io.github.mmpodkanski.movieroom.service;
 
 import io.github.mmpodkanski.movieroom.exception.ApiBadRequestException;
+import io.github.mmpodkanski.movieroom.models.News;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PublicApiService {
     HttpClient client = HttpClient.newHttpClient();
 
-    public String showNews() throws IOException, InterruptedException {
+    public News showNews() throws IOException, InterruptedException {
+        String apiKey = "gt2Ezv8EHyPljtLSesAyophGDoDMGZIXpIIEsixkvxc9vi72";
         var request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.currentsapi.services/v1/latest-news?" + "apiKey=gt2Ezv8EHyPljtLSesAyophGDoDMGZIXpIIEsixkvxc9vi72"))
+                .uri(URI.create("https://api.currentsapi.services/v1/latest-news?language=en&category=movie&apiKey=" + apiKey))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -31,11 +33,17 @@ public class PublicApiService {
         JSONArray news = jsonObject.getJSONArray("news");
         int randomNum = ThreadLocalRandom.current().nextInt(0, news.length());
 
-        var title = news
-                .getJSONObject(randomNum)
-                .getString("title");
+        var jsonRes = news
+                .getJSONObject(randomNum);
 
-        return title;
+        return new News(
+                jsonRes.getString("author"),
+                jsonRes.getString("title"),
+                jsonRes.getString("description"),
+                jsonRes.getString("published"),
+                jsonRes.getString("image"),
+                jsonRes.getString("url")
+        );
     }
 
     public String showScheduleOfMovies() {

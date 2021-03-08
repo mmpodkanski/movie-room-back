@@ -43,8 +43,10 @@ public class Movie {
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private OffsetDateTime createdAt;
     private boolean acceptedByAdmin;
-    @Column(name = "imageUrl")
-    private String imageUrl;
+    @Column(name = "imageLogoUrl")
+    private String imgLogoUrl;
+    @Column(name = "imageBackUrl")
+    private String imgBackUrl;
 
     public Movie() {
     }
@@ -70,5 +72,18 @@ public class Movie {
             throw new ApiBadRequestException("Movie doesn't has stars!");
         }
         --stars;
+    }
+
+    public void update(Movie movie) {
+        title = movie.getTitle();
+        director = movie.getDirector();
+        producer = movie.getProducer();
+        description = movie.getDescription();
+        releaseDate = movie.getReleaseDate();
+        category = movie.getCategory();
+//        actors = movie.getActors();
+        acceptedByAdmin = movie.isAcceptedByAdmin();
+        imgLogoUrl = movie.getImgLogoUrl();
+        imgBackUrl = movie.getImgBackUrl();
     }
 }

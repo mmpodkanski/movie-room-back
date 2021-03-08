@@ -14,6 +14,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     boolean existsByFavourites(Movie movie);
 
+    boolean existsByIdAndFavourites(int id, Movie movie);
+
     List<User> findAll();
 
     Optional<User> findById(int id);

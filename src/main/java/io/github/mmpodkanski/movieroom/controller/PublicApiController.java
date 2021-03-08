@@ -1,5 +1,6 @@
 package io.github.mmpodkanski.movieroom.controller;
 
+import io.github.mmpodkanski.movieroom.models.News;
 import io.github.mmpodkanski.movieroom.service.PublicApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class PublicApiController {
     }
 
     @GetMapping("/news")
-    ResponseEntity<String> getNews() throws IOException, InterruptedException {
+    ResponseEntity<News> getNews() throws IOException, InterruptedException {
         logger.info("Displaying news!");
         var news = service.showNews();
         return new ResponseEntity<>(news, HttpStatus.OK);

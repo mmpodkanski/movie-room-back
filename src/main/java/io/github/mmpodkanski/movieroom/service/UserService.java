@@ -45,12 +45,16 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public List<User> readAllUsers() {
+        return userRepository.findAll();
+    }
+
     public boolean existsByFavourites(Movie movie) {
         return userRepository.existsByFavourites(movie);
     }
 
-    public List<User> readAllUsers() {
-        return userRepository.findAll();
+    public boolean existsUserByFavourite(int id, Movie movie) {
+        return userRepository.existsByIdAndFavourites(id, movie);
     }
 
     public User loadUserById(int id){

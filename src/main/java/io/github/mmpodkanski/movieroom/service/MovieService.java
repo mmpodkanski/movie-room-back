@@ -11,8 +11,10 @@ import io.github.mmpodkanski.movieroom.models.request.MovieRequest;
 import io.github.mmpodkanski.movieroom.models.response.MovieResponse;
 import io.github.mmpodkanski.movieroom.repository.MovieRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,29 +41,23 @@ public class MovieService {
         this.commentService = commentService;
     }
 
-    public Movie createMovie(
-            MovieRequest movieReq,
-            int userId
-    ) {
-        if (movieRepository.existsByTitle(movieReq.getTitle())) {
-            throw new ApiBadRequestException("Movie with that title already exists!");
-        }
-        boolean createdByAdmin = userService
-                .loadUserById(userId)
-                .getRole()
-                .equals(ERole.ROLE_ADMIN);
-
-        var newMovie = mapMovieRequest(movieReq, createdByAdmin);
-        return movieRepository.save(newMovie);
-    }
-
-    public void changeStatusOfMovie(int id) {
-        movieRepository.findById(id)
-                .ifPresent(movie -> movie.setAcceptedByAdmin(true));
-    }
+     /*
+        Read methods
+    */
 
     public List<MovieResponse> readAllMovies() {
         return movieRepository.findAll()
+                .stream()
+                .filter(Movie::isAcceptedByAdmin)
+                .map(MovieResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<MovieResponse> readAllMoviesByYear(String year) {
+        if (movieRepository.findAllByReleaseDate(year).isEmpty()) {
+            throw new ApiBadRequestException("Movies made in that year not found");
+        }
+        return movieRepository.findAllByReleaseDate(year)
                 .stream()
                 .filter(Movie::isAcceptedByAdmin)
                 .map(MovieResponse::new)
@@ -72,6 +68,25 @@ public class MovieService {
         return movieRepository.findAll()
                 .stream()
                 .filter(movie -> !movie.isAcceptedByAdmin())
+                .map(MovieResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<MovieResponse> readAllTopRatedMovies() {
+        return movieRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparingInt(Movie::getStars)
+                        .reversed())
+                .limit(5)
+                .map(MovieResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<MovieResponse> readAllTheNewestAddedMovies() {
+        return movieRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Movie::getCreatedAt, Comparator.nullsLast(Comparator.reverseOrder())))
+                .limit(5)
                 .map(MovieResponse::new)
                 .collect(Collectors.toList());
     }
@@ -91,47 +106,98 @@ public class MovieService {
                 .map(MovieResponse::new)
                 .orElseThrow(() ->
                         new ApiNotFoundException("No movie exists with that title"));
-
     }
 
-    public List<MovieResponse> readMoviesByYear(String year) {
-        if (movieRepository.findAllByReleaseDate(year).isEmpty()) {
-            throw new ApiBadRequestException("Movies made in that year not found");
-        }
-        return movieRepository.findAllByReleaseDate(year)
-                .stream()
-                .filter(Movie::isAcceptedByAdmin)
-                .map(MovieResponse::new)
-                .collect(Collectors.toList());
+    public boolean checkIfUserAlreadyAddedFav(int movieId, int userId) {
+        var movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
+
+        return userService.existsUserByFavourite(userId, movie);
     }
 
-    public void insertActorToMovie(
-            Set<String> newActors,
-            int id
+
+    /*
+        Create methods
+    */
+
+    public Movie createMovie(
+            MovieRequest newMovie,
+            int userId
     ) {
-        var movie = movieRepository.findById(id).orElseThrow(() ->
-                new ApiBadRequestException("Movie with that id not exists!"));
+        if (movieRepository.existsByTitle(newMovie.getTitle())) {
+            throw new ApiBadRequestException("Movie with that title already exists!");
+        }
+        boolean createdByAdmin = userService
+                .loadUserById(userId)
+                .getRole()
+                .equals(ERole.ROLE_ADMIN);
 
-        Set<Actor> actors = actorService.checkActors(newActors);
-        movie.addActors(actors);
-        movieRepository.save(movie);
+        var movie = mapMovieRequest(newMovie, createdByAdmin);
+        return movieRepository.save(movie);
     }
 
-    public void deleteMovieById(int movieId) {
-        movieRepository.deleteById(movieId);
+    /*
+        Update methods
+    */
+
+    public void updateMovie(MovieRequest updatedMovie, int movieId) {
+        var movieToUpdate = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
+        var newMovie = mapMovieRequest(updatedMovie, true);
+
+        movieToUpdate.update(newMovie);
+        movieRepository.save(movieToUpdate);
     }
 
-//    public void deleteMovieByTitle(String title) {
-//        movieRepository.deleteByTitle(title);
-//    }
+    @Transactional
+    public void changeStatusOfMovie(int id) {
+        movieRepository.findById(id)
+                .ifPresent(movie -> movie.setAcceptedByAdmin(true));
+    }
 
     public void addCommentToMovie(CommentRequest newComment, int movieId) {
         var movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
-
         var comment = commentService.createComment(newComment, movie);
+
         movie.addComment(comment);
         movieRepository.save(movie);
+    }
+
+//    public void insertActorToMovie(
+//            Set<String> newActors,
+//            int id
+//    ) {
+//        var movie = movieRepository.findById(id).orElseThrow(() ->
+//                new ApiBadRequestException("Movie with that id not exists!"));
+//
+//        Set<Actor> actors = actorService.checkActors(newActors);
+//        movie.addActors(actors);
+//        movieRepository.save(movie);
+
+//    }
+
+
+    @Transactional
+    public void giveStar(int userId, int movieId) {
+        var movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
+
+        var user = userService.loadUserById(userId);
+
+        if (userService.existsByFavourites(movie)) {
+            throw new ApiBadRequestException("Movie already exists in favourites!");
+        }
+        user.addFavourite(movie);
+    }
+
+    /*
+        Delete methods
+    */
+
+    @Transactional
+    public void deleteMovieById(int movieId) {
+        movieRepository.deleteById(movieId);
     }
 
     public void deleteCommentFromMovie(int commentId) {
@@ -143,33 +209,21 @@ public class MovieService {
 
     }
 
-    // STARS //
-    // TODO: CLEAN CODE !!!!!!
-
-    public void giveStar(int userId, int idMovie) {
-        var movie = movieRepository.findById(idMovie)
+    @Transactional
+    public void deleteStar(int userId, int movieId) {
+        var movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
         var user = userService.loadUserById(userId);
-
-        if (userService.existsByFavourites(movie)) {
-            throw new ApiBadRequestException("Movie already exists in favourites!");
-        }
-        user.addFavourite(movie);
-    }
-
-    public void deleteStar(int userId, int idMovie) {
-        var movie = movieRepository.findById(idMovie)
-                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
-
-        var user = userService.loadUserById(userId);
-
-        if (userService.existsByFavourites(movie)) {
-            throw new ApiBadRequestException("Movie already exists in favourites!");
+        if (!userService.existsByFavourites(movie)) {
+            throw new ApiBadRequestException("Movie not exists in favourites!");
         }
         user.removeFavourite(movie);
     }
-    // MAP //
+
+    /*
+        MAP (MODEL -> ENTITY)
+    */
 
     private Movie mapMovieRequest(
             MovieRequest movieModel,

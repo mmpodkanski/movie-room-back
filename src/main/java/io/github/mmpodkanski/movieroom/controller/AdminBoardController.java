@@ -39,22 +39,30 @@ public class AdminBoardController {
 
     @GetMapping("/requests")
     ResponseEntity<List<MovieResponse>> getAllMoviesToAccept() {
-        logger.warn("[ADMIN] Exposing all the movies to accept!");
+        logger.info("[ADMIN] Exposing all the movies to accept!");
         List<MovieResponse> movieList = movieService.readAllMoviesToAccept();
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
 
     @PatchMapping(value = "/users", params = "id")
     ResponseEntity<?> toggleUserStatus(@RequestParam int id) {
-        logger.info("[ADMIN] Changing user status!");
+        logger.warn("[ADMIN] Changing user status!");
         userService.changeStatusOfUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/requests/{id}/accept")
     public ResponseEntity<?> acceptMovie(@PathVariable int id) {
-        logger.info("[ADMIN] Movie with id: " + id + " has been accepted");
+        logger.warn("[ADMIN] Movie with id: " + id + " has been accepted");
         movieService.changeStatusOfMovie(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping("/requests/{id}/refuse")
+    public ResponseEntity<?> refuseMovie(@PathVariable int id) {
+        logger.warn("[ADMIN] Movie with id: " + id + " has been refused");
+        movieService.deleteMovieById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

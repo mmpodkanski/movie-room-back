@@ -21,7 +21,8 @@ public class MovieResponse {
     private List<Actor> actors;
     private List<Comment> comments;
     private boolean acceptedByAdmin;
-    private String imageUrl;
+    private String imgLogoUrl;
+    private String imgBackUrl;
 
     public MovieResponse(Movie source) {
         id = source.getId();
@@ -34,7 +35,8 @@ public class MovieResponse {
         actors = new ArrayList<>(source.getActors());
         comments = new ArrayList<>(source.getComments());
         acceptedByAdmin = source.isAcceptedByAdmin();
-        imageUrl = source.getImageUrl();
+        imgLogoUrl = source.getImgLogoUrl();
+        imgBackUrl = source.getImgBackUrl();
 
         comments.sort(Comparator.comparing(Comment::getCreatedAt));
         actors.sort(Comparator.comparing(Actor::getFirstName));
