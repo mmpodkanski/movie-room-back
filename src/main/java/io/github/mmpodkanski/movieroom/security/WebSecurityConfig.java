@@ -2,7 +2,7 @@ package io.github.mmpodkanski.movieroom.security;
 
 import io.github.mmpodkanski.movieroom.security.jwt.AuthEntryPointJwt;
 import io.github.mmpodkanski.movieroom.security.jwt.AuthTokenFilter;
-import io.github.mmpodkanski.movieroom.service.UserService;
+import io.github.mmpodkanski.movieroom.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;

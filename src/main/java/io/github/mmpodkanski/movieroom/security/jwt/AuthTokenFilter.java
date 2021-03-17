@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.movieroom.security.jwt;
 
-import io.github.mmpodkanski.movieroom.service.UserService;
+import io.github.mmpodkanski.movieroom.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

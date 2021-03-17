@@ -9,16 +9,16 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @ControllerAdvice
-public class ApiExceptionHandler {
+class ApiExceptionHandler {
 
     @ExceptionHandler(value = {ApiBadRequestException.class})
-    public ResponseEntity<Object> handleApiBadRequestException(ApiBadRequestException e) {
+    ResponseEntity<Object> handleApiBadRequestException(ApiBadRequestException e) {
         var badRequest = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(exception(e, badRequest), badRequest);
     }
 
     @ExceptionHandler(value = {ApiNotFoundException.class})
-    public ResponseEntity<Object> handleApiNotFoundException(ApiNotFoundException e) {
+    ResponseEntity<Object> handleApiNotFoundException(ApiNotFoundException e) {
         var notFound = HttpStatus.NOT_FOUND;
         return new ResponseEntity<>(exception(e, notFound), notFound);
     }
