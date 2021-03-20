@@ -1,6 +1,5 @@
 package io.github.mmpodkanski.user;
 
-import io.github.mmpodkanski.movie.Movie;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,8 +11,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class User implements UserDetails {
@@ -33,8 +30,8 @@ public class User implements UserDetails {
     private boolean locked;
     private boolean enabled = true;
     // FIXME: CANT DELETE PARENT
-    @OneToMany
-    private Set<Movie> favourites = new HashSet<>();
+//    @OneToMany
+//    private Set<Movie> favourites = new HashSet<>();
 
     @PersistenceConstructor
     public User() {
@@ -57,17 +54,17 @@ public class User implements UserDetails {
         return Collections.singletonList(authority);
     }
 
-    void addFavourite(Movie movie) {
-        favourites.add(movie);
-    }
+//    void addFavourite(Movie movie) {
+//        favourites.add(movie);
+//    }
 
-    void removeFavourite(Movie movie) {
-//        if (favourites.isEmpty()) {
-//            throw new ApiBadRequestException("User doesn't has favourites!");
-//        }
-
-        favourites.remove(movie);
-    }
+//    void removeFavourite(Movie movie) {
+////        if (favourites.isEmpty()) {
+////            throw new ApiBadRequestException("User doesn't has favourites!");
+////        }
+//
+//        favourites.remove(movie);
+//    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -143,12 +140,12 @@ public class User implements UserDetails {
     void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-
-    Set<Movie> getFavourites() {
-        return favourites;
-    }
-
-    void setFavourites(Set<Movie> favourites) {
-        this.favourites = favourites;
-    }
+//
+//    Set<Movie> getFavourites() {
+//        return favourites;
+//    }
+//
+//    void setFavourites(Set<Movie> favourites) {
+//        this.favourites = favourites;
+//    }
 }

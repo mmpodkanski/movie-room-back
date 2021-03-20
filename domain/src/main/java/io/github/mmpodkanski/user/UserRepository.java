@@ -1,6 +1,5 @@
 package io.github.mmpodkanski.user;
 
-import io.github.mmpodkanski.movie.Movie;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
@@ -11,9 +10,9 @@ public interface UserRepository extends Repository<User, Integer> {
 
     boolean existsByEmail(String email);
 
-    boolean existsByFavourites(Movie movie);
-
-    boolean existsByIdAndFavourites(int id, Movie movie);
+//    boolean existsByFavourites(Movie movie);
+//
+//    boolean existsByIdAndFavourites(int id, Movie movie);
 
     List<User> findAll();
 

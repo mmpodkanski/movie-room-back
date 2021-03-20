@@ -9,17 +9,17 @@ import java.time.LocalDateTime;
 @Service
 class CommentFactory {
 
-    Comment mapCommentDTO(CommentRequestDto commentRequestDto, Movie movie, User owner) {
+    Comment mapCommentDTO(CommentRequestDto source, Movie movie, User owner) {
         var createdAt = LocalDateTime.now();
-        var result = new Comment();
 
-        result.setTitle(commentRequestDto.getTitle());
-        result.setDescription(commentRequestDto.getDescription());
-        result.setCreatedAt(createdAt);
-        result.setAuthor(owner.getUsername());
-        result.setOwner(owner);
-        result.setMovie(movie);
-
-        return result;
+        return Comment.restore(new CommentSnapshot(
+                source.getId(),
+                createdAt,
+                source.getTitle(),
+                source.getDescription(),
+                owner.getUsername(),
+                owner,
+                movie.getSnapshot()
+        ));
     }
 }

@@ -34,15 +34,15 @@ class MovieController {
     }
 
 
-    // TODO: REMOVE IT!
-    @GetMapping("/check-fav/{id}")
-    ResponseEntity<Boolean> existsUserFavourite(
-            @PathVariable("id") int movieId,
-            @AuthenticationPrincipal User user
-    ) {
-        var result = movieFacade.checkIfUserAlreadyAddedFav(movieId, user.getId());
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
+//    // TODO: REMOVE IT!
+//    @GetMapping("/check-fav/{id}")
+//    ResponseEntity<Boolean> existsUserFavourite(
+//            @PathVariable("id") int movieId,
+//            @AuthenticationPrincipal User user
+//    ) {
+//        var result = movieFacade.checkIfUserAlreadyAddedFav(movieId, user.getId());
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//    }
 
     @GetMapping
     ResponseEntity<List<MovieResponseDto>> getMovies() {
@@ -106,25 +106,25 @@ class MovieController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping(value = "/{id}", params = "add-fav")
-    ResponseEntity<Void> addToFavourites(
-            @PathVariable("id") int movieId,
-            @AuthenticationPrincipal User user
-    ) {
-        logger.info("User(id): " + user.getId() + " added movie(id): " + movieId + " to favourites");
-        movieFacade.giveStar(user.getId(), movieId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping(value = "/{id}", params = "remove-fav")
-    ResponseEntity<Void> removeFromFavourites(
-            @PathVariable("id") int movieId,
-            @AuthenticationPrincipal User user
-    ) {
-        logger.info("User(id): " + user.getId() + " removed movie(id): " + movieId + " from favourites");
-        movieFacade.deleteStar(user.getId(), movieId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @PostMapping(value = "/{id}", params = "add-fav")
+//    ResponseEntity<Void> addToFavourites(
+//            @PathVariable("id") int movieId,
+//            @AuthenticationPrincipal User user
+//    ) {
+//        logger.info("User(id): " + user.getId() + " added movie(id): " + movieId + " to favourites");
+//        movieFacade.giveStar(user.getId(), movieId);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
+//
+//    @PostMapping(value = "/{id}", params = "remove-fav")
+//    ResponseEntity<Void> removeFromFavourites(
+//            @PathVariable("id") int movieId,
+//            @AuthenticationPrincipal User user
+//    ) {
+//        logger.info("User(id): " + user.getId() + " removed movie(id): " + movieId + " from favourites");
+//        movieFacade.deleteStar(user.getId(), movieId);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
     @PatchMapping("/{id}")
     ResponseEntity<MovieRequestDto> updateMovie(

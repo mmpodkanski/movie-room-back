@@ -53,15 +53,15 @@ class ActorController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    ResponseEntity<ActorDto> updateActor(
-            @RequestBody @Valid ActorDto actorDto,
-            @PathVariable int id
-    ) {
-        logger.warn("Updating an actor with id: " + actorDto.getId());
-        actorFacade.updateActor(id, actorDto);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @PutMapping("/{id}")
+//    ResponseEntity<ActorDto> updateActor(
+//            @RequestBody @Valid ActorDto actorDto,
+//            @PathVariable int id
+//    ) {
+//        logger.warn("Updating an actor with id: " + actorDto.getId());
+//        actorFacade.updateActor(id, actorDto);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
 
 }

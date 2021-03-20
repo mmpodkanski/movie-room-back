@@ -3,11 +3,9 @@ package io.github.mmpodkanski.actor;
 import io.github.mmpodkanski.actor.dto.ActorDto;
 import io.github.mmpodkanski.actor.dto.ActorSimpleRequestDto;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
-import io.github.mmpodkanski.exception.ApiNotFoundException;
 import io.github.mmpodkanski.user.ERole;
 import io.github.mmpodkanski.user.UserFacade;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -54,18 +52,18 @@ public class ActorFacade {
         ).collect(Collectors.toSet());
     }
 
-    @Transactional
-    public void updateActor(int actorId, ActorDto actor) {
-        var actorToUpdate = repository.findById(actorId)
-                .orElseThrow(() -> new ApiNotFoundException("Actor with that id not exists!"));
-
-        update(actorToUpdate, actor);
-    }
+//    @Transactional
+//    public void updateActor(int actorId, ActorDto actor) {
+//        var actorToUpdate = repository.findById(actorId)
+//                .orElseThrow(() -> new ApiNotFoundException("Actor with that id not exists!"));
+//
+//        update(actorToUpdate, actor);
+//    }
 
 
     public void deleteActorsFromExistingMovie(Set<Actor> actors) {
         actors.stream()
-                .filter(actor -> actor.getMovies().size() <= 1)
+                .filter(actor -> actor.getSnapshot().getMovies().size() <= 1)
                 .forEach(repository::delete);
     }
 
@@ -81,20 +79,21 @@ public class ActorFacade {
     }
 
     private ActorDto toDto(Actor actor) {
+        var snap = actor.getSnapshot();
         return ActorDto.builder()
-                .withId(actor.getId())
-                .withFirstName(actor.getFirstName())
-                .withLastName(actor.getLastName())
-                .withBirthDate(actor.getBirthDate())
-                .withImageUrl(actor.getImageUrl())
+                .withId(snap.getId())
+                .withFirstName(snap.getFirstName())
+                .withLastName(snap.getLastName())
+                .withBirthDate(snap.getBirthDate())
+                .withImageUrl(snap.getImageUrl())
                 .build();
     }
 
-    private void update(Actor actorToUpdate,ActorDto actor) {
-        actorToUpdate.setFirstName(actor.getFirstName());
-        actorToUpdate.setLastName(actor.getLastName());
-        actorToUpdate.setBirthDate(actor.getBirthDate());
-        actorToUpdate.setImageUrl(actor.getImageUrl());
-    }
+//    private void update(Actor actorToUpdate, ActorDto actor) {
+//        actorToUpdate.setFirstName(actor.getFirstName());
+//        actorToUpdate.setLastName(actor.getLastName());
+//        actorToUpdate.setBirthDate(actor.getBirthDate());
+//        actorToUpdate.setImageUrl(actor.getImageUrl());
+//    }
 
 }

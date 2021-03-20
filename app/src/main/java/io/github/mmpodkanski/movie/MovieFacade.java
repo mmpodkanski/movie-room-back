@@ -1,5 +1,6 @@
 package io.github.mmpodkanski.movie;
 
+import io.github.mmpodkanski.actor.Actor;
 import io.github.mmpodkanski.actor.ActorFacade;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
 import io.github.mmpodkanski.exception.ApiNotFoundException;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieFacade {
@@ -37,12 +40,12 @@ public class MovieFacade {
         this.movieFactory = movieFactory;
     }
 
-    boolean checkIfUserAlreadyAddedFav(int movieId, int userId) {
-        var movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
-
-        return userFacade.existsUserByFavourite(userId, movie);
-    }
+//    boolean checkIfUserAlreadyAddedFav(int movieId, int userId) {
+//        var movie = movieRepository.findById(movieId)
+//                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
+//
+//        return userFacade.existsUserByFavourite(userId, movie);
+//    }
 
     public Movie createMovie(
             MovieRequestDto newMovie,
@@ -56,8 +59,8 @@ public class MovieFacade {
                 .getRole()
                 .equals(ERole.ROLE_ADMIN);
 
-        var movie = mapMovieRequest(newMovie, createdByAdmin);
         var actorsToSave = actorFacade.addSimpleActors(newMovie.getActors());
+        var movie = mapMovieRequest(newMovie, createdByAdmin, actorsToSave);
 
         movie.addActors(actorsToSave);
         return movieRepository.save(movie);
@@ -67,16 +70,27 @@ public class MovieFacade {
         var movieToUpdate = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
-        actorFacade.deleteActorsFromExistingMovie(movieToUpdate.getActors());
+        actorFacade.deleteActorsFromExistingMovie(movieToUpdate.getSnapshot().getActors().stream().map(Actor::restore).collect(Collectors.toSet()));
 
-        movieToUpdate.update(mapMovieRequest(requestMovie, true));
+        movieToUpdate.update(
+                requestMovie.getTitle(),
+                requestMovie.getDirector(),
+                requestMovie.getProducer(),
+                requestMovie.getDescription(),
+                requestMovie.getReleaseDate(),
+                ECategory.valueOf(requestMovie.getCategory()),
+// FIXME: OPTION TO ADD/REMOVE ACTORS
+//                requestMovie.getActors(),
+                requestMovie.getImgLogoUrl(),
+                requestMovie.getImgBackUrl()
+        );
         movieRepository.save(movieToUpdate);
     }
 
     @Transactional
     public void changeStatusOfMovie(int id) {
         movieRepository.findById(id)
-                .ifPresent(movie -> movie.setAcceptedByAdmin(true));
+                .ifPresent(Movie::toggleStatus);
     }
 
     void addCommentToMovie(CommentRequestDto newComment, int movieId) {
@@ -102,27 +116,27 @@ public class MovieFacade {
 //    }
 
 
-    @Transactional
-    public void giveStar(int userId, int movieId) {
-        var movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
-
-        var user = userFacade.loadUserById(userId);
-
-        if (userFacade.existsByFavourites(movie)) {
-            throw new ApiBadRequestException("Movie already exists in favourites!");
-        }
-
-        userFacade.addFavouriteToUser(movie, user);
-        movie.addStar();
-    }
+//    @Transactional
+//    public void giveStar(int userId, int movieId) {
+//        var movie = movieRepository.findById(movieId)
+//                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
+//
+//        var user = userFacade.loadUserById(userId);
+//
+//        if (userFacade.existsByFavourites(movie)) {
+//            throw new ApiBadRequestException("Movie already exists in favourites!");
+//        }
+//
+//        userFacade.addFavouriteToUser(movie, user);
+//        movie.addStar();
+//    }
 
     // FIXME: CANT DELETE PARENT
     public void deleteMovieById(int movieId) {
         var movieToDelete = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
-        actorFacade.deleteActorsFromExistingMovie(movieToDelete.getActors());
+        actorFacade.deleteActorsFromExistingMovie(movieToDelete.getSnapshot().getActors().stream().map(Actor::restore).collect(Collectors.toSet()));
 
         movieRepository.delete(movieToDelete);
     }
@@ -131,27 +145,28 @@ public class MovieFacade {
         commentFacade.deleteComment(commentId);
     }
 
-    @Transactional
-    public void deleteStar(int userId, int movieId) {
-        var movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
-
-        var user = userFacade.loadUserById(userId);
-
-        if (!userFacade.existsByFavourites(movie)) {
-            throw new ApiBadRequestException("Movie not exists in favourites!");
-        }
-
-        userFacade.removeFavouriteFromUser(movie, user);
-        movie.removeStar();
-    }
+//    @Transactional
+//    public void deleteStar(int userId, int movieId) {
+//        var movie = movieRepository.findById(movieId)
+//                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
+//
+//        var user = userFacade.loadUserById(userId);
+//
+//        if (!userFacade.existsByFavourites(movie)) {
+//            throw new ApiBadRequestException("Movie not exists in favourites!");
+//        }
+//
+//        userFacade.removeFavouriteFromUser(movie, user);
+//        movie.removeStar();
+//    }
 
     private Movie mapMovieRequest(
             MovieRequestDto movieModel,
-            boolean createdByAdmin
+            boolean createdByAdmin,
+            Set<Actor> actorsToSave
     ) {
         var createdAt = LocalDateTime.now();
         ECategory category = categoryFacade.checkCategory(movieModel.getCategory());
-        return movieFactory.from(movieModel, createdAt, createdByAdmin, category);
+        return movieFactory.from(movieModel, createdAt, createdByAdmin, category, actorsToSave);
     }
 }

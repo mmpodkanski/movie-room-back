@@ -1,17 +1,13 @@
 package io.github.mmpodkanski.user;
 
 import io.github.mmpodkanski.exception.ApiBadRequestException;
-import io.github.mmpodkanski.exception.ApiNotFoundException;
-import io.github.mmpodkanski.movie.Movie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserFacade implements UserDetailsService {
@@ -25,13 +21,13 @@ public class UserFacade implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public boolean existsByFavourites(Movie movie) {
-        return userRepository.existsByFavourites(movie);
-    }
-
-    public boolean existsUserByFavourite(int id, Movie movie) {
-        return userRepository.existsByIdAndFavourites(id, movie);
-    }
+//    public boolean existsByFavourites(Movie movie) {
+//        return userRepository.existsByFavourites(movie);
+//    }
+//
+//    public boolean existsUserByFavourite(int id, Movie movie) {
+//        return userRepository.existsByIdAndFavourites(id, movie);
+//    }
 
     public User loadUserById(int id) {
         return userRepository.findById(id)
@@ -47,23 +43,23 @@ public class UserFacade implements UserDetailsService {
     }
 
 
-    //FIXME: VERY IMPORTANT !!!!!!
-    List<Movie> readAllFavourites(int id) {
-        Set<Movie> movies = userRepository.findById(id)
-                .map(User::getFavourites)
-                .orElseThrow(() -> new ApiNotFoundException("User with that id not exists!"));
+//    //FIXME: VERY IMPORTANT !!!!!!
+//    List<Movie> readAllFavourites(int id) {
+//        Set<Movie> movies = userRepository.findById(id)
+//                .map(User::getFavourites)
+//                .orElseThrow(() -> new ApiNotFoundException("User with that id not exists!"));
+//
+////        return movies.stream().map(MovieResponse::new).collect(Collectors.toList());
+//        return new ArrayList<>(movies);
+//    }
 
-//        return movies.stream().map(MovieResponse::new).collect(Collectors.toList());
-        return new ArrayList<>(movies);
-    }
-
-    public void addFavouriteToUser(Movie movie, User user) {
-        user.addFavourite(movie);
-    }
-
-    public void removeFavouriteFromUser(Movie movie, User user) {
-        user.removeFavourite(movie);
-    }
+//    public void addFavouriteToUser(Movie movie, User user) {
+//        user.addFavourite(movie);
+//    }
+//
+//    public void removeFavouriteFromUser(Movie movie, User user) {
+//        user.removeFavourite(movie);
+//    }
 
 
     @Transactional

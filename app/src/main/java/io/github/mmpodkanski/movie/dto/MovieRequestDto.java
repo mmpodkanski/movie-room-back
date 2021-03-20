@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 public class MovieRequestDto {
+    private int id;
     @NotBlank(message = "Movie's title can not be empty!")
     private String title;
     @NotBlank(message = "Movie's description can not be empty!")
@@ -24,6 +25,10 @@ public class MovieRequestDto {
     private String releaseDate;
     private String imgLogoUrl;
     private String imgBackUrl;
+
+    public int getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;

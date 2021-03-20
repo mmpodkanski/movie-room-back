@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
+http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
+                 version="1.0">
+
+    <description>XML Mapping file</description>
+
+    <entity class="io.github.mmpodkanski.actor.ActorSnapshot" access="FIELD">
+        <table name="actors"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="AUTO"/>
+            </id>
+            <basic name="firstName">
+                <column nullable="false"/>
+            </basic>
+            <basic name="lastName">
+                <column nullable="false"/>
+            </basic>
+            <basic name="birthDate">
+                <column nullable="false"/>
+            </basic>
+            <basic name="imageUrl">
+                <column nullable="false"/>
+            </basic>
+            <many-to-many name="movies"/>
+            <basic name="acceptedByAdmin">
+                <column nullable="false"/>
+            </basic>
+        </attributes>
+    </entity>
+
+    <entity class="io.github.mmpodkanski.movie.MovieSnapshot" access="FIELD">
+        <table name="actors"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="AUTO"/>
+            </id>
+            <basic name="title">
+                <column nullable="false"/>
+            </basic>
+            <basic name="director">
+                <column nullable="false"/>
+            </basic>
+            <basic name="producer">
+                <column nullable="false"/>
+            </basic>
+            <basic name="description">
+                <column nullable="false"/>
+            </basic>
+            <basic name="releaseDate">
+                <column nullable="false" precision="4" scale="0"/>
+            </basic>
+            <basic name="category">
+                <column  nullable="false"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+            <many-to-many name="actors">
+                <join-table name="ACTORS_MOVIES"/>
+                <cascade>
+                    <cascade-all/>
+                </cascade>
+            </many-to-many>
+            <one-to-many name="comments" mapped-by="movie" fetch="EAGER">
+                <cascade>
+                    <cascade-all/>
+                </cascade>
+            </one-to-many>
+            <basic name="stars">
+                <column nullable="false"/>
+            </basic>
+            <basic name="createdAt">
+                <column nullable="false"/>
+            </basic>
+            <basic name="acceptedByAdmin">
+                <column nullable="false"/>
+            </basic>
+            <basic name="imgLogoUrl">
+                <column nullable="true"/>
+            </basic>
+            <basic name="imgBackUrl">
+                <column nullable="true"/>
+            </basic>
+        </attributes>
+    </entity>
+
+    <entity class="io.github.mmpodkanski.movie.CommentSnapshot" access="FIELD">
+        <table name="actors"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="AUTO"/>
+            </id>
+            <basic name="createdAt">
+                <column nullable="false"/>
+            </basic>
+            <basic name="title">
+                <column nullable="false"/>
+            </basic>
+            <basic name="description">
+                <column nullable="false"/>
+            </basic>
+            <basic name="author">
+                <column nullable="false"/>
+            </basic>
+            <one-to-one name="owner">
+                <join-column name="user_id"/>
+            </one-to-one>
+            <many-to-one name="movie">
+                <join-column name="movie_id"/>
+            </many-to-one>
+        </attributes>
+    </entity>
+
+</entity-mappings>
