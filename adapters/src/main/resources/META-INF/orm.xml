@@ -52,15 +52,25 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
                     <cascade-all/>
                 </cascade>
             </one-to-many>
-            <many-to-many name="actors" target-entity="io.github.mmpodkanski.actor.ActorSnapshot">
+
+            <one-to-many name="actors" fetch="EAGER" target-entity="io.github.mmpodkanski.actor.ActorSnapshot">
                 <join-table name="MOVIES_ACTORS">
-                    <join-column name="movie_id" updatable="false" insertable="false" unique="true"/>
-                    <inverse-join-column name="actor_id" updatable="false" insertable="false"  />
+                    <join-column name="movie_id"/>
+                    <inverse-join-column name="actor_id"  />
                 </join-table>
                 <cascade>
                     <cascade-merge/>
                 </cascade>
-            </many-to-many>
+            </one-to-many>
+<!--            <many-to-many name="actors" target-entity="io.github.mmpodkanski.actor.ActorSnapshot">-->
+<!--                <join-table name="MOVIES_ACTORS">-->
+<!--                    <join-column name="movie_id" unique="true"/>-->
+<!--                    <inverse-join-column name="actor_id"  />-->
+<!--                </join-table>-->
+<!--                <cascade>-->
+<!--                    <cascade-merge/>-->
+<!--                </cascade>-->
+<!--            </many-to-many>-->
         </attributes>
     </entity>
 
@@ -85,7 +95,7 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
             <basic name="acceptedByAdmin">
                 <column/>
             </basic>
-            <many-to-many mapped-by="actors" name="movies" target-entity="io.github.mmpodkanski.movie.MovieSnapshot"/>
+<!--            <many-to-many mapped-by="actors" name="movies" target-entity="io.github.mmpodkanski.movie.MovieSnapshot"/>-->
         </attributes>
     </entity>
 

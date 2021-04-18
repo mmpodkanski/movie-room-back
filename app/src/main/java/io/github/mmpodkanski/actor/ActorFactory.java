@@ -18,7 +18,6 @@ class ActorFactory {
                 source.getLastName(),
                 source.getBirthDate(),
                 source.getImageUrl(),
-                null,
                 createdByAdmin
         ));
     }

@@ -47,8 +47,8 @@ public class ActorFacade {
         return actors.stream().map(actorDto -> {
                     var actor = regexActor(actorDto);
                     return Actor.restore(queryRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName())
-                            .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName())).getSnapshot())
-                    );
+                            .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName())).getSnapshot()
+                    ));
                 }
         ).collect(Collectors.toSet());
     }
@@ -62,11 +62,11 @@ public class ActorFacade {
 //    }
 
 
-    public void deleteActorsFromExistingMovie(Set<Actor> actors) {
-        actors.stream()
-                .filter(actor -> actor.getSnapshot().getMovies().size() <= 1)
-                .forEach(repository::delete);
-    }
+//    public void deleteActorsFromExistingMovie(Set<Actor> actors) {
+//        actors.stream()
+//                .filter(actor -> actor.getSnapshot().getMovies().size() <= 1)
+//                .forEach(repository::delete);
+//    }
 
     private ActorSimpleRequestDto regexActor(ActorSimpleRequestDto actorSimpleRequestDTO) {
         var firstName = actorSimpleRequestDTO.getFirstName();

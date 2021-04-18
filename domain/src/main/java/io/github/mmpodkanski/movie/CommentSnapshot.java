@@ -13,7 +13,7 @@ class CommentSnapshot {
     private User owner;
     private MovieSnapshot movie;
 
-    protected CommentSnapshot() {
+    public CommentSnapshot() {
     }
 
     CommentSnapshot(

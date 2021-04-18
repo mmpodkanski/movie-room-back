@@ -28,11 +28,9 @@ class MovieInitializer {
                     "releaseDate",
                     ECategory.ACTION,
                     Set.of(
-                            new ActorSnapshot(1, "Adam", "Kowalski", "2001", null, EmptySet, true)
+                            new ActorSnapshot(1, "Adam", "Kowalski", "2001", null, true)
                     ),
-                    Set.of(
-                            new CommentSnapshot(1, null, "title", "description", "mmpodkanski", null, null)
-                    ),
+                    null,
                     0,
                     null,
                     true,
