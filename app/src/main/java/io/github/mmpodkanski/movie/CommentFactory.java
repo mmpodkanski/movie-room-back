@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Service
 class CommentFactory {
 
-    Comment mapCommentDTO(CommentRequestDto source, Movie movie, User owner) {
+    Comment mapCommentDTO(CommentRequestDto source, User owner) {
         var createdAt = LocalDateTime.now();
 
         return Comment.restore(new CommentSnapshot(
@@ -18,8 +18,7 @@ class CommentFactory {
                 source.getTitle(),
                 source.getDescription(),
                 owner.getUsername(),
-                owner,
-                movie.getSnapshot()
+                owner
         ));
     }
 }

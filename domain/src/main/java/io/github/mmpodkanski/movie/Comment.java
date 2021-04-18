@@ -12,8 +12,8 @@ class Comment {
                 snapshot.getTitle(),
                 snapshot.getDescription(),
                 snapshot.getAuthor(),
-                snapshot.getOwner(),
-                snapshot.getMovie() != null ? Movie.restore(snapshot.getMovie()) : null
+                snapshot.getOwner()
+//                snapshot.getMovie() != null ? Movie.restore(snapshot.getMovie()) : null
         );
     }
 
@@ -23,7 +23,6 @@ class Comment {
     private final String description;
     private final String author;
     private final User owner;
-    private final Movie movie;
 
     private Comment(
             final int id,
@@ -31,8 +30,7 @@ class Comment {
             final String title,
             final String description,
             final String author,
-            final User owner,
-            final Movie movie
+            final User owner
     ) {
         this.id = id;
         this.createdAt = createdAt;
@@ -40,7 +38,6 @@ class Comment {
         this.description = description;
         this.author = author;
         this.owner = owner;
-        this.movie = movie;
     }
 
     CommentSnapshot getSnapshot() {
@@ -50,8 +47,8 @@ class Comment {
                 title,
                 description,
                 author,
-                owner,
-                movie != null ? movie.getSnapshot() : null
+                owner
+//                movie != null ? movie.getSnapshot() : null
         );
     }
 }

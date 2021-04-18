@@ -47,16 +47,16 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
             <basic name="imgBackUrl">
                 <column nullable="true"/>
             </basic>
-            <one-to-many name="comments" mapped-by="movie" fetch="EAGER">
+            <one-to-many name="comments" fetch="EAGER">
                 <cascade>
                     <cascade-all/>
                 </cascade>
             </one-to-many>
             <many-to-many name="actors" target-entity="io.github.mmpodkanski.actor.ActorSnapshot">
-                <join-table name="MOVIES_ACTORS">
-                    <join-column name="movie_id" updatable="false" insertable="false" unique="true"/>
-                    <inverse-join-column name="actor_id" updatable="false" insertable="false"  />
-                </join-table>
+<!--                <join-table name="MOVIES_ACTORS">-->
+<!--                    <join-column name="movie_id" updatable="false" insertable="false" unique="true"/>-->
+<!--                    <inverse-join-column name="actor_id" updatable="false" insertable="false"  />-->
+<!--                </join-table>-->
                 <cascade>
                     <cascade-merge/>
                 </cascade>
@@ -107,9 +107,6 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
             <basic name="author">
                 <column nullable="false"/>
             </basic>
-            <many-to-one name="movie">
-                <join-column name="movie_id"/>
-            </many-to-one>
             <one-to-one name="owner">
                 <join-column name="user_id"/>
             </one-to-one>

@@ -11,7 +11,6 @@ class CommentSnapshot {
     private String description;
     private String author;
     private User owner;
-    private MovieSnapshot movie;
 
     protected CommentSnapshot() {
     }
@@ -22,8 +21,7 @@ class CommentSnapshot {
             final String title,
             final String description,
             final String author,
-            final User owner,
-            final MovieSnapshot movie
+            final User owner
     ) {
         this.id = id;
         this.createdAt = createdAt;
@@ -31,7 +29,6 @@ class CommentSnapshot {
         this.description = description;
         this.author = author;
         this.owner = owner;
-        this.movie = movie;
     }
 
     int getId() {
@@ -58,7 +55,4 @@ class CommentSnapshot {
         return owner;
     }
 
-    MovieSnapshot getMovie() {
-        return movie;
-    }
 }

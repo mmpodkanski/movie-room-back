@@ -2,6 +2,7 @@ package io.github.mmpodkanski.actor;
 
 import io.github.mmpodkanski.actor.dto.ActorDto;
 import io.github.mmpodkanski.actor.dto.ActorSimpleRequestDto;
+import io.github.mmpodkanski.actor.dto.ActorSimpleResponseDto;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
 import io.github.mmpodkanski.user.ERole;
 import io.github.mmpodkanski.user.UserFacade;
@@ -29,6 +30,7 @@ public class ActorFacade {
         this.userFacade = userFacade;
     }
 
+    //FIXME: ADD ACTOR
     ActorDto addActor(ActorDto newActor, int userId) {
         if (queryRepository.existsActorByFirstNameAndLastName(newActor.getFirstName(), newActor.getLastName())) {
             throw new ApiBadRequestException("Actor with that name already exists!");
@@ -77,6 +79,11 @@ public class ActorFacade {
 
         actorSimpleRequestDTO.update(newFirstName, newLastName);
         return actorSimpleRequestDTO;
+    }
+
+    public ActorSimpleResponseDto toSimpleDto(Actor actor) {
+        var snap = actor.getSnapshot();
+        return ActorSimpleResponseDto.create(snap.getId(), snap.getFirstName(), snap.getLastName());
     }
 
     private ActorDto toDto(Actor actor) {

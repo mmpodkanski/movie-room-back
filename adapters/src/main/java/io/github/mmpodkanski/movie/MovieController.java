@@ -87,7 +87,7 @@ class MovieController {
 
 
     @PostMapping
-    ResponseEntity<Movie> addMovie(
+    ResponseEntity<MovieResponseDto> addMovie(
             @RequestBody @Valid MovieRequestDto movieRequestDto,
             @AuthenticationPrincipal User user
     ) {
@@ -97,13 +97,13 @@ class MovieController {
     }
 
     @PostMapping("/{id}/comments")
-    ResponseEntity<Void> addComment(
+    ResponseEntity<MovieResponseDto> addComment(
             @PathVariable("id") int movieId,
             @RequestBody @Valid CommentRequestDto commentRequestDto
     ) {
         logger.info("Adding a new comment to movie(id): " + movieId);
-        movieFacade.addCommentToMovie(commentRequestDto, movieId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        var result = movieFacade.addCommentToMovie(commentRequestDto, movieId);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
 //    @PostMapping(value = "/{id}", params = "add-fav")
@@ -165,6 +165,7 @@ class MovieController {
     ) {
         logger.warn("[ADMIN] Removing comment(id): " + commentId + " from movie(id): " + movieId);
         movieFacade.deleteCommentFromMovie(commentId);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

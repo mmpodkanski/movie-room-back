@@ -6,7 +6,9 @@ import io.github.mmpodkanski.exception.ApiBadRequestException;
 import io.github.mmpodkanski.exception.ApiNotFoundException;
 import io.github.mmpodkanski.movie.dto.CommentRequestDto;
 import io.github.mmpodkanski.movie.dto.MovieRequestDto;
+import io.github.mmpodkanski.movie.dto.MovieResponseDto;
 import io.github.mmpodkanski.user.ERole;
+import io.github.mmpodkanski.user.User;
 import io.github.mmpodkanski.user.UserFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +23,9 @@ public class MovieFacade {
     private final UserFacade userFacade;
     private final CategoryFacade categoryFacade;
     private final ActorFacade actorFacade;
-    private final CommentFacade commentFacade;
+    private final CommentQueryRepository commentQueryRepository;
+    private final CommentFactory commentFactory;
+    private final CommentRepository commentRepository;
     private final MovieFactory movieFactory;
 
     MovieFacade(
@@ -29,14 +33,18 @@ public class MovieFacade {
             final UserFacade userFacade,
             final CategoryFacade categoryFacade,
             final ActorFacade actorFacade,
-            final CommentFacade commentFacade,
+            final CommentQueryRepository commentQueryRepository,
+            final CommentFactory commentFactory,
+            final CommentRepository commentRepository,
             final MovieFactory movieFactory
     ) {
         this.movieRepository = movieRepository;
         this.userFacade = userFacade;
         this.categoryFacade = categoryFacade;
         this.actorFacade = actorFacade;
-        this.commentFacade = commentFacade;
+        this.commentQueryRepository = commentQueryRepository;
+        this.commentFactory = commentFactory;
+        this.commentRepository = commentRepository;
         this.movieFactory = movieFactory;
     }
 
@@ -47,7 +55,7 @@ public class MovieFacade {
 //        return userFacade.existsUserByFavourite(userId, movie);
 //    }
 
-    public Movie createMovie(
+    public MovieResponseDto createMovie(
             MovieRequestDto newMovie,
             int userId
     ) {
@@ -62,8 +70,25 @@ public class MovieFacade {
         var actorsToSave = actorFacade.addSimpleActors(newMovie.getActors());
         var movie = mapMovieRequest(newMovie, createdByAdmin, actorsToSave);
 
-        return movieRepository.save(movie);
+        return toDto(movieRepository.save(movie));
     }
+
+
+    MovieResponseDto addCommentToMovie(CommentRequestDto commentReq, int movieId) {
+        if (commentQueryRepository.existsByTitle(commentReq.getTitle())) {
+            throw new ApiBadRequestException("Comment with that title already exists!");
+        }
+
+        var movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
+
+        User owner = userFacade.loadUserById(commentReq.getOwnerId());
+        var comment = commentFactory.mapCommentDTO(commentReq, owner);
+
+        movie.addComment(comment);
+        return toDto(movieRepository.save(movie));
+    }
+
 
     void updateMovie(MovieRequestDto requestMovie, int movieId) {
         var movieToUpdate = movieRepository.findById(movieId)
@@ -92,14 +117,6 @@ public class MovieFacade {
                 .ifPresent(Movie::toggleStatus);
     }
 
-    void addCommentToMovie(CommentRequestDto newComment, int movieId) {
-        var movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
-        var comment = commentFacade.createComment(newComment, movie);
-
-        movie.addComment(comment);
-        movieRepository.save(movie);
-    }
 
 //    public void insertActorToMovie(
 //            Set<String> newActors,
@@ -135,13 +152,20 @@ public class MovieFacade {
         var movieToDelete = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
-        actorFacade.deleteActorsFromExistingMovie(movieToDelete.getSnapshot().getActors().stream().map(Actor::restore).collect(Collectors.toSet()));
+        actorFacade.deleteActorsFromExistingMovie(
+                movieToDelete
+                        .getSnapshot()
+                        .getActors()
+                        .stream()
+                        .map(Actor::restore)
+                        .collect(Collectors.toSet())
+        );
 
         movieRepository.delete(movieToDelete);
     }
 
     void deleteCommentFromMovie(int commentId) {
-        commentFacade.deleteComment(commentId);
+        commentRepository.deleteById(commentId);
     }
 
 //    @Transactional
@@ -169,4 +193,25 @@ public class MovieFacade {
 
         return movieFactory.from(movieModel, createdAt, createdByAdmin, category, actorsToSave);
     }
+
+    private MovieResponseDto toDto(Movie movie) {
+        var snap = movie.getSnapshot();
+        return MovieResponseDto.create(
+                snap.getId(),
+                snap.getTitle(),
+                snap.getDescription(),
+                snap.getDirector(),
+                snap.getProducer(),
+                snap.getCategory(),
+                snap.getReleaseDate(),
+                snap.getStars(),
+                snap.getActors().stream().map(Actor::restore).map(actorFacade::toSimpleDto).collect(Collectors.toList()),
+                null,
+                snap.isAcceptedByAdmin(),
+                snap.getImgLogoUrl(),
+                snap.getImgBackUrl()
+        );
+    }
+
+
 }

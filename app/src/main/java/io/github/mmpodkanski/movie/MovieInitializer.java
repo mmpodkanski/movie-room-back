@@ -31,7 +31,7 @@ class MovieInitializer {
                             new ActorSnapshot(1, "Adam", "Kowalski", "2001", null, EmptySet, true)
                     ),
                     Set.of(
-                            new CommentSnapshot(1, null, "title", "description", "mmpodkanski", null, null)
+                            new CommentSnapshot(1, null, "title", "description", "mmpodkanski", null)
                     ),
                     0,
                     null,
