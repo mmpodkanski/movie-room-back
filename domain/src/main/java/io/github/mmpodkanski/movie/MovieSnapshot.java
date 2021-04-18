@@ -22,7 +22,7 @@ public class MovieSnapshot {
     private String imgLogoUrl;
     private String imgBackUrl;
 
-    protected MovieSnapshot() {
+    public MovieSnapshot() {
     }
 
     MovieSnapshot(

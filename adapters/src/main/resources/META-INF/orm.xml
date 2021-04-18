@@ -7,36 +7,11 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
 
     <description>XML Mapping file</description>
 
-    <entity class="io.github.mmpodkanski.actor.ActorSnapshot" access="FIELD">
-        <table name="actors"/>
-        <attributes>
-            <id name="id">
-                <generated-value strategy="AUTO"/>
-            </id>
-            <basic name="firstName">
-                <column nullable="false"/>
-            </basic>
-            <basic name="lastName">
-                <column nullable="false"/>
-            </basic>
-            <basic name="birthDate">
-                <column nullable="false"/>
-            </basic>
-            <basic name="imageUrl">
-                <column nullable="false"/>
-            </basic>
-            <many-to-many name="movies"/>
-            <basic name="acceptedByAdmin">
-                <column nullable="false"/>
-            </basic>
-        </attributes>
-    </entity>
-
     <entity class="io.github.mmpodkanski.movie.MovieSnapshot" access="FIELD">
-        <table name="actors"/>
+        <table name="movies"/>
         <attributes>
             <id name="id">
-                <generated-value strategy="AUTO"/>
+                <generated-value strategy="IDENTITY"/>
             </id>
             <basic name="title">
                 <column nullable="false"/>
@@ -57,22 +32,11 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
                 <column  nullable="false"/>
                 <enumerated>STRING</enumerated>
             </basic>
-            <many-to-many name="actors">
-                <join-table name="ACTORS_MOVIES"/>
-                <cascade>
-                    <cascade-all/>
-                </cascade>
-            </many-to-many>
-            <one-to-many name="comments" mapped-by="movie" fetch="EAGER">
-                <cascade>
-                    <cascade-all/>
-                </cascade>
-            </one-to-many>
             <basic name="stars">
                 <column nullable="false"/>
             </basic>
             <basic name="createdAt">
-                <column nullable="false"/>
+                <column nullable="true"/>
             </basic>
             <basic name="acceptedByAdmin">
                 <column nullable="false"/>
@@ -83,17 +47,56 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
             <basic name="imgBackUrl">
                 <column nullable="true"/>
             </basic>
+            <one-to-many name="comments" mapped-by="movie" fetch="EAGER">
+                <cascade>
+                    <cascade-all/>
+                </cascade>
+            </one-to-many>
+            <many-to-many name="actors" target-entity="io.github.mmpodkanski.actor.ActorSnapshot">
+                <join-table name="MOVIES_ACTORS">
+                    <join-column name="movie_id" updatable="false" insertable="false" unique="true"/>
+                    <inverse-join-column name="actor_id" updatable="false" insertable="false"  />
+                </join-table>
+                <cascade>
+                    <cascade-merge/>
+                </cascade>
+            </many-to-many>
+        </attributes>
+    </entity>
+
+    <entity class="io.github.mmpodkanski.actor.ActorSnapshot" access="FIELD">
+        <table name="actors"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY" generator="inc"/>
+            </id>
+            <basic name="firstName">
+                <column nullable="false"/>
+            </basic>
+            <basic name="lastName">
+                <column nullable="false"/>
+            </basic>
+            <basic name="birthDate">
+                <column nullable="false"/>
+            </basic>
+            <basic name="imageUrl">
+                <column nullable="true"/>
+            </basic>
+            <basic name="acceptedByAdmin">
+                <column/>
+            </basic>
+            <many-to-many mapped-by="actors" name="movies" target-entity="io.github.mmpodkanski.movie.MovieSnapshot"/>
         </attributes>
     </entity>
 
     <entity class="io.github.mmpodkanski.movie.CommentSnapshot" access="FIELD">
-        <table name="actors"/>
+        <table name="comments"/>
         <attributes>
             <id name="id">
-                <generated-value strategy="AUTO"/>
+                <generated-value strategy="IDENTITY"/>
             </id>
             <basic name="createdAt">
-                <column nullable="false"/>
+                <column nullable="true"/>
             </basic>
             <basic name="title">
                 <column nullable="false"/>
@@ -104,12 +107,12 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
             <basic name="author">
                 <column nullable="false"/>
             </basic>
-            <one-to-one name="owner">
-                <join-column name="user_id"/>
-            </one-to-one>
             <many-to-one name="movie">
                 <join-column name="movie_id"/>
             </many-to-one>
+            <one-to-one name="owner">
+                <join-column name="user_id"/>
+            </one-to-one>
         </attributes>
     </entity>
 

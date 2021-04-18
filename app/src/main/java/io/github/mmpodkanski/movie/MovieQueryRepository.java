@@ -1,12 +1,11 @@
 package io.github.mmpodkanski.movie;
 
 import io.github.mmpodkanski.movie.dto.MovieResponseDto;
-import org.springframework.data.repository.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-interface MovieQueryRepository extends Repository<Movie, Integer> {
+interface MovieQueryRepository {
 
     List<MovieResponseDto> findMoviesBy();
 
@@ -19,5 +18,7 @@ interface MovieQueryRepository extends Repository<Movie, Integer> {
     Optional<MovieResponseDto> findDtoById(int id);
 
     Optional<MovieResponseDto> findDtoByTitle(String title);
+
+    int count();
 
 }

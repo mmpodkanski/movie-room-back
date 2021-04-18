@@ -1,10 +1,8 @@
 package io.github.mmpodkanski.movie;
 
-import org.springframework.data.repository.Repository;
-
 import java.util.Optional;
 
-interface MovieRepository extends Repository<Movie, Integer> {
+interface MovieRepository {
     boolean existsByTitle(String title);
 
     Optional<Movie> findById(int id);

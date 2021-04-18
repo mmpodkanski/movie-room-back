@@ -3,7 +3,6 @@ package io.github.mmpodkanski.movie;
 import io.github.mmpodkanski.actor.Actor;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,7 +16,7 @@ public class Movie {
                 snapshot.getDescription(),
                 snapshot.getReleaseDate(),
                 snapshot.getCategory(),
-                snapshot.getActors() != null ? snapshot.getActors().stream().map(Actor::restore).collect(Collectors.toSet()) : null,
+                snapshot.getActors().stream().map(Actor::restore).collect(Collectors.toSet()),
                 snapshot.getComments() != null ? snapshot.getComments().stream().map(Comment::restore).collect(Collectors.toSet()) : null,
                 snapshot.getStars(),
                 snapshot.getCreatedAt(),
@@ -34,8 +33,8 @@ public class Movie {
     private String description;
     private String releaseDate;
     private ECategory category;
-    private Set<Actor> actors = new HashSet<>();
-    private Set<Comment> comments = new HashSet<>();
+    private Set<Actor> actors;
+    private Set<Comment> comments;
     private int stars;
     private LocalDateTime createdAt;
     private boolean acceptedByAdmin;

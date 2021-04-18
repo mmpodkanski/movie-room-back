@@ -31,7 +31,7 @@ public class User implements UserDetails {
     private boolean enabled = true;
     // FIXME: CANT DELETE PARENT
 //    @OneToMany
-//    private Set<Movie> favourites = new HashSet<>();
+//    private Set<MovieSnapshot> favourites = new HashSet<>();
 
     @PersistenceConstructor
     public User() {
@@ -54,11 +54,11 @@ public class User implements UserDetails {
         return Collections.singletonList(authority);
     }
 
-//    void addFavourite(Movie movie) {
+//    void addFavourite(MovieSnapshot movie) {
 //        favourites.add(movie);
 //    }
-
-//    void removeFavourite(Movie movie) {
+//
+//    void removeFavourite(MovieSnapshot movie) {
 ////        if (favourites.isEmpty()) {
 ////            throw new ApiBadRequestException("User doesn't has favourites!");
 ////        }
@@ -140,12 +140,12 @@ public class User implements UserDetails {
     void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-//
-//    Set<Movie> getFavourites() {
+
+//    Set<MovieSnapshot> getFavourites() {
 //        return favourites;
 //    }
 //
-//    void setFavourites(Set<Movie> favourites) {
+//    void setFavourites(Set<MovieSnapshot> favourites) {
 //        this.favourites = favourites;
 //    }
 }

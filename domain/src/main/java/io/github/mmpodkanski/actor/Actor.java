@@ -1,6 +1,7 @@
 package io.github.mmpodkanski.actor;
 
 import io.github.mmpodkanski.movie.Movie;
+import io.github.mmpodkanski.movie.MovieSnapshot;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +15,8 @@ public class Actor {
                 snapshot.getLastName(),
                 snapshot.getBirthDate(),
                 snapshot.getImageUrl(),
-                snapshot.getMovies().stream().map(Movie::restore).collect(Collectors.toSet()),
+                //FIXME: WTF
+                snapshot.getMovies(),
                 snapshot.isAcceptedByAdmin()
         );
     }
@@ -23,8 +25,8 @@ public class Actor {
     private String firstName;
     private String lastName;
     private String birthDate = "Not updated";
-    private String imageUrl = "https://www.findcollab.com/img/user-folder/5d9704d04880fprofile.jpg";
-    private Set<Movie> movies = new HashSet<>();
+    private String imageUrl;
+    private final Set<Movie> movies = new HashSet<>();
     private boolean acceptedByAdmin;
 
     protected Actor() {
@@ -36,7 +38,7 @@ public class Actor {
             final String lastName,
             final String birthDate,
             final String imageUrl,
-            final Set<Movie> movies,
+            final Set<MovieSnapshot> movies,
             final boolean acceptedByAdmin
     ) {
         this.id = id;
@@ -44,8 +46,18 @@ public class Actor {
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.imageUrl = imageUrl;
-        this.movies = movies;
+        modifyMovies(movies);
         this.acceptedByAdmin = acceptedByAdmin;
+    }
+
+    private void modifyMovies(final Set<MovieSnapshot> init) {
+        Set<Movie> newMovies = new HashSet<>();
+
+        for (MovieSnapshot movieSnapshot : init) {
+            newMovies.add(Movie.restore(movieSnapshot));
+        }
+
+        movies.addAll(newMovies);
     }
 
     public ActorSnapshot getSnapshot() {
@@ -55,7 +67,7 @@ public class Actor {
                 lastName,
                 birthDate,
                 imageUrl,
-                movies.stream().map(Movie::getSnapshot).collect(Collectors.toSet()),
+                movies.size() > 0 ? movies.stream().map(Movie::getSnapshot).collect(Collectors.toSet()) : null,
                 acceptedByAdmin
         );
     }

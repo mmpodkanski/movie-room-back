@@ -46,8 +46,9 @@ public class ActorFacade {
     public Set<Actor> addSimpleActors(Set<ActorSimpleRequestDto> actors) {
         return actors.stream().map(actorDto -> {
                     var actor = regexActor(actorDto);
-                    return repository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName())
-                            .orElseGet(() -> new Actor(actor.getFirstName(), actor.getLastName()));
+                    return Actor.restore(queryRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName())
+                            .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName())).getSnapshot())
+                    );
                 }
         ).collect(Collectors.toSet());
     }

@@ -62,7 +62,6 @@ public class MovieFacade {
         var actorsToSave = actorFacade.addSimpleActors(newMovie.getActors());
         var movie = mapMovieRequest(newMovie, createdByAdmin, actorsToSave);
 
-        movie.addActors(actorsToSave);
         return movieRepository.save(movie);
     }
 
@@ -167,6 +166,7 @@ public class MovieFacade {
     ) {
         var createdAt = LocalDateTime.now();
         ECategory category = categoryFacade.checkCategory(movieModel.getCategory());
+
         return movieFactory.from(movieModel, createdAt, createdByAdmin, category, actorsToSave);
     }
 }

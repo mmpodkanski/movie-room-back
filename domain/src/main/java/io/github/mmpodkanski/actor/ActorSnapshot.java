@@ -9,15 +9,15 @@ public class ActorSnapshot {
     private int id;
     private String firstName;
     private String lastName;
-    private String birthDate = "Not updated";
-    private String imageUrl = "https://www.findcollab.com/img/user-folder/5d9704d04880fprofile.jpg";
+    private String birthDate;
+    private String imageUrl;
     private Set<MovieSnapshot> movies = new HashSet<>();
     private boolean acceptedByAdmin;
 
     protected ActorSnapshot() {
     }
 
-    ActorSnapshot(
+    public ActorSnapshot(
             final int id,
             final String firstName,
             final String lastName,

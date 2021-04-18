@@ -54,5 +54,4 @@ class Comment {
                 movie != null ? movie.getSnapshot() : null
         );
     }
-
 }
