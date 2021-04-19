@@ -3,9 +3,8 @@ package io.github.mmpodkanski.actor;
 import io.github.mmpodkanski.actor.dto.ActorDto;
 import io.github.mmpodkanski.actor.dto.ActorSimpleRequestDto;
 import io.github.mmpodkanski.actor.dto.ActorSimpleResponseDto;
+import io.github.mmpodkanski.auth.UserFacade;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
-import io.github.mmpodkanski.user.ERole;
-import io.github.mmpodkanski.user.UserFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -31,15 +30,12 @@ public class ActorFacade {
     }
 
     //FIXME: ADD ACTOR
-    ActorDto addActor(ActorDto newActor, int userId) {
+    ActorDto addActor(ActorDto newActor, String username) {
         if (queryRepository.existsActorByFirstNameAndLastName(newActor.getFirstName(), newActor.getLastName())) {
             throw new ApiBadRequestException("Actor with that name already exists!");
         }
 
-        boolean createdByAdmin = userFacade
-                .loadUserById(userId)
-                .getRole()
-                .equals(ERole.ROLE_ADMIN);
+        boolean createdByAdmin = userFacade.checkIfAdmin(username);
 
         var actor = factory.from(newActor, createdByAdmin);
         return toDto(repository.save(actor));
@@ -49,8 +45,8 @@ public class ActorFacade {
         return actors.stream().map(actorDto -> {
                     var actor = regexActor(actorDto);
                     return Actor.restore(queryRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName())
-                            .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName())).getSnapshot())
-                    );
+                            .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName())).getSnapshot()
+                            ));
                 }
         ).collect(Collectors.toSet());
     }
@@ -64,11 +60,11 @@ public class ActorFacade {
 //    }
 
 
-    public void deleteActorsFromExistingMovie(Set<Actor> actors) {
-        actors.stream()
-                .filter(actor -> actor.getSnapshot().getMovies().size() <= 1)
-                .forEach(repository::delete);
-    }
+//    public void deleteActorsFromExistingMovie(Set<Actor> actors) {
+//        actors.stream()
+//                .filter(actor -> actor.getSnapshot().getMovies().size() <= 1)
+//                .forEach(repository::delete);
+//    }
 
     private ActorSimpleRequestDto regexActor(ActorSimpleRequestDto actorSimpleRequestDTO) {
         var firstName = actorSimpleRequestDTO.getFirstName();

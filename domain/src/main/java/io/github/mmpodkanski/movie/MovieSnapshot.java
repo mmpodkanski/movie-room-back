@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MovieSnapshot {
+class MovieSnapshot {
     private int id;
     private String title;
     private String director;

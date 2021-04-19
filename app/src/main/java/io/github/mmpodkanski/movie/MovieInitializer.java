@@ -2,7 +2,7 @@ package io.github.mmpodkanski.movie;
 
 import io.github.mmpodkanski.actor.ActorSnapshot;
 
-import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 class MovieInitializer {
@@ -15,9 +15,8 @@ class MovieInitializer {
     }
 
     void init() {
-        if(movieQueryRepository.count() == 0) {
-            Set<MovieSnapshot> EmptySet = Collections.emptySet();
-
+        if (movieQueryRepository.count() == 0) {
+//            Set<MovieSnapshot> EmptySet = Collections.emptySet();
 
             movieRepository.save(Movie.restore(new MovieSnapshot(
                     1,
@@ -28,17 +27,19 @@ class MovieInitializer {
                     "releaseDate",
                     ECategory.ACTION,
                     Set.of(
-                            new ActorSnapshot(1, "Adam", "Kowalski", "2001", null, EmptySet, true)
+                            new ActorSnapshot(1, "Adam", "Kowalski", "2001", null, true)
                     ),
                     Set.of(
-                            new CommentSnapshot(1, null, "title", "description", "mmpodkanski", null)
+                            new CommentSnapshot(1, null, "title", "description", "mmpodkanski")
                     ),
                     0,
-                    null,
+                    LocalDateTime.now(),
                     true,
                     null,
                     null
             )));
+
+
         }
     }
 }

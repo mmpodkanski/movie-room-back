@@ -4,18 +4,19 @@ import io.github.mmpodkanski.exception.ApiNotFoundException;
 import io.github.mmpodkanski.movie.dto.CommentRequestDto;
 import io.github.mmpodkanski.movie.dto.MovieRequestDto;
 import io.github.mmpodkanski.movie.dto.MovieResponseDto;
-import io.github.mmpodkanski.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/movies")
@@ -37,35 +38,49 @@ class MovieController {
 //    // TODO: REMOVE IT!
 //    @GetMapping("/check-fav/{id}")
 //    ResponseEntity<Boolean> existsUserFavourite(
-//            @PathVariable("id") int movieId,
-//            @AuthenticationPrincipal User user
+//            @PathVariable("id") int movieId
 //    ) {
-//        var result = movieFacade.checkIfUserAlreadyAddedFav(movieId, user.getId());
+//        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+//
+//        var result = movieFacade.checkIfUserAlreadyAddedFav(movieId, currentUser.getName());
+//
 //        return new ResponseEntity<>(result, HttpStatus.OK);
 //    }
 
     @GetMapping
     ResponseEntity<List<MovieResponseDto>> getMovies() {
         logger.info("Exposing all the movies!");
-        var movieList = movieQueryRepository.findMoviesBy();
+        var movieList = movieQueryRepository.findMoviesByAcceptedByAdminTrue();
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
 
     @GetMapping(params = "top-rated")
     ResponseEntity<List<MovieResponseDto>> getTopRatedMovies() {
-        var movieList = movieQueryRepository.findFirst5ByOrderByStarsDesc();
+        var movieList = movieQueryRepository.findFirst5ByOrderByStarsDesc()
+                .stream()
+                .filter(MovieResponseDto::isAcceptedByAdmin)
+                .collect(Collectors.toList());
+
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
 
     @GetMapping(params = "new-added")
     ResponseEntity<List<MovieResponseDto>> getTheNewestMovies() {
-        var movieList = movieQueryRepository.findMoviesByOrderByCreatedAtDesc();
+        var movieList = movieQueryRepository.findMoviesByOrderByCreatedAtDesc()
+                .stream()
+                .filter(MovieResponseDto::isAcceptedByAdmin)
+                .collect(Collectors.toList());
+
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
 
     @GetMapping(params = "year")
     ResponseEntity<List<MovieResponseDto>> getMoviesByYear(@RequestParam String year) {
-        var movieList =  movieQueryRepository.findMoviesByReleaseDate(year);
+        var movieList = movieQueryRepository.findMoviesByReleaseDate(year)
+                .stream()
+                .filter(MovieResponseDto::isAcceptedByAdmin)
+                .collect(Collectors.toList());
+
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
 
@@ -73,7 +88,9 @@ class MovieController {
     ResponseEntity<MovieResponseDto> getMovieById(@PathVariable int id) {
         logger.info("Exposing a movie!");
         var movie = movieQueryRepository.findDtoById(id)
+                .filter(MovieResponseDto::isAcceptedByAdmin)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that not exists!"));
+
         return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 
@@ -81,18 +98,20 @@ class MovieController {
     ResponseEntity<MovieResponseDto> getMovieByTitle(@RequestParam String title) {
         logger.info("Exposing a movie by title!");
         var movie = movieQueryRepository.findDtoByTitle(title)
+                .filter(MovieResponseDto::isAcceptedByAdmin)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that title not exists!"));
+
         return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 
 
     @PostMapping
     ResponseEntity<MovieResponseDto> addMovie(
-            @RequestBody @Valid MovieRequestDto movieRequestDto,
-            @AuthenticationPrincipal User user
+            @RequestBody @Valid MovieRequestDto movieRequestDto
     ) {
         logger.warn("Adding a new movie!");
-        var result = movieFacade.createMovie(movieRequestDto, user.getId());
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        var result = movieFacade.createMovie(movieRequestDto, currentUser.getName());
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 

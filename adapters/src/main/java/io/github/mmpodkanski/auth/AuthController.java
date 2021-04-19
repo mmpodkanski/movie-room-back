@@ -1,5 +1,8 @@
 package io.github.mmpodkanski.auth;
 
+import io.github.mmpodkanski.auth.dto.JwtResponse;
+import io.github.mmpodkanski.auth.dto.LoginRequest;
+import io.github.mmpodkanski.auth.dto.RegisterRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,5 @@
 package io.github.mmpodkanski.auth;
 
-import io.github.mmpodkanski.user.UserFacade;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;

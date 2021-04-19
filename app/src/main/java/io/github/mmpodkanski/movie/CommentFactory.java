@@ -1,7 +1,6 @@
 package io.github.mmpodkanski.movie;
 
 import io.github.mmpodkanski.movie.dto.CommentRequestDto;
-import io.github.mmpodkanski.user.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
 @Service
 class CommentFactory {
 
-    Comment mapCommentDTO(CommentRequestDto source, User owner) {
+    Comment mapCommentDTO(CommentRequestDto source, String owner) {
         var createdAt = LocalDateTime.now();
 
         return Comment.restore(new CommentSnapshot(
@@ -17,7 +16,6 @@ class CommentFactory {
                 createdAt,
                 source.getTitle(),
                 source.getDescription(),
-                owner.getUsername(),
                 owner
         ));
     }

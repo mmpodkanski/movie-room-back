@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Movie {
+class Movie {
     public static Movie restore(MovieSnapshot snapshot) {
         return new Movie(
                 snapshot.getId(),
@@ -26,17 +26,17 @@ public class Movie {
         );
     }
 
-    private int id;
+    private final int id;
     private String title;
     private String director;
     private String producer;
     private String description;
     private String releaseDate;
     private ECategory category;
-    private Set<Actor> actors;
-    private Set<Comment> comments;
+    private final Set<Actor> actors;
+    private final Set<Comment> comments;
     private int stars;
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
     private boolean acceptedByAdmin;
     private String imgLogoUrl;
     private String imgBackUrl;
@@ -120,14 +120,14 @@ public class Movie {
     }
 
     void update(
-            String title,
-            String director,
-            String producer,
-            String description,
-            String releaseDate,
-            ECategory category,
-            String imgLogoUrl,
-            String imgBackUrl
+            final String title,
+            final String director,
+            final String producer,
+            final String description,
+            final String releaseDate,
+            final ECategory category,
+            final String imgLogoUrl,
+            final String imgBackUrl
     ) {
         this.title = title;
         this.director = director;

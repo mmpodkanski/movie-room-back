@@ -1,7 +1,5 @@
 package io.github.mmpodkanski.movie;
 
-import io.github.mmpodkanski.user.User;
-
 import java.time.LocalDateTime;
 
 class Comment {
@@ -11,8 +9,7 @@ class Comment {
                 snapshot.getCreatedAt(),
                 snapshot.getTitle(),
                 snapshot.getDescription(),
-                snapshot.getAuthor(),
-                snapshot.getOwner()
+                snapshot.getAuthor()
 //                snapshot.getMovie() != null ? Movie.restore(snapshot.getMovie()) : null
         );
     }
@@ -22,22 +19,19 @@ class Comment {
     private final String title;
     private final String description;
     private final String author;
-    private final User owner;
 
     private Comment(
             final int id,
             final LocalDateTime createdAt,
             final String title,
             final String description,
-            final String author,
-            final User owner
+            final String author
     ) {
         this.id = id;
         this.createdAt = createdAt;
         this.title = title;
         this.description = description;
         this.author = author;
-        this.owner = owner;
     }
 
     CommentSnapshot getSnapshot() {
@@ -46,8 +40,7 @@ class Comment {
                 createdAt,
                 title,
                 description,
-                author,
-                owner
+                author
 //                movie != null ? movie.getSnapshot() : null
         );
     }

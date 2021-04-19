@@ -2,14 +2,12 @@ package io.github.mmpodkanski.movie;
 
 import io.github.mmpodkanski.actor.Actor;
 import io.github.mmpodkanski.actor.ActorFacade;
+import io.github.mmpodkanski.auth.UserFacade;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
 import io.github.mmpodkanski.exception.ApiNotFoundException;
 import io.github.mmpodkanski.movie.dto.CommentRequestDto;
 import io.github.mmpodkanski.movie.dto.MovieRequestDto;
 import io.github.mmpodkanski.movie.dto.MovieResponseDto;
-import io.github.mmpodkanski.user.ERole;
-import io.github.mmpodkanski.user.User;
-import io.github.mmpodkanski.user.UserFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,24 +46,22 @@ public class MovieFacade {
         this.movieFactory = movieFactory;
     }
 
-//    boolean checkIfUserAlreadyAddedFav(int movieId, int userId) {
+//    boolean checkIfUserAlreadyAddedFav(int movieId, String username) {
 //        var movie = movieRepository.findById(movieId)
 //                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 //
-//        return userFacade.existsUserByFavourite(userId, movie);
+//        return userFacade.existsUserByFavourite(username, movie);
 //    }
 
     public MovieResponseDto createMovie(
             MovieRequestDto newMovie,
-            int userId
+            String username
     ) {
         if (movieRepository.existsByTitle(newMovie.getTitle())) {
             throw new ApiBadRequestException("Movie with that title already exists!");
         }
-        boolean createdByAdmin = userFacade
-                .loadUserById(userId)
-                .getRole()
-                .equals(ERole.ROLE_ADMIN);
+
+        boolean createdByAdmin = userFacade.checkIfAdmin(username);
 
         var actorsToSave = actorFacade.addSimpleActors(newMovie.getActors());
         var movie = mapMovieRequest(newMovie, createdByAdmin, actorsToSave);
@@ -82,7 +78,7 @@ public class MovieFacade {
         var movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
-        User owner = userFacade.loadUserById(commentReq.getOwnerId());
+        String owner = userFacade.loadUserNameById(commentReq.getOwnerId());
         var comment = commentFactory.mapCommentDTO(commentReq, owner);
 
         movie.addComment(comment);
@@ -94,7 +90,7 @@ public class MovieFacade {
         var movieToUpdate = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
-        actorFacade.deleteActorsFromExistingMovie(movieToUpdate.getSnapshot().getActors().stream().map(Actor::restore).collect(Collectors.toSet()));
+//        actorFacade.deleteActorsFromExistingMovie(movieToUpdate.getSnapshot().getActors().stream().map(Actor::restore).collect(Collectors.toSet()));
 
         movieToUpdate.update(
                 requestMovie.getTitle(),
@@ -152,14 +148,18 @@ public class MovieFacade {
         var movieToDelete = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
-        actorFacade.deleteActorsFromExistingMovie(
-                movieToDelete
-                        .getSnapshot()
-                        .getActors()
-                        .stream()
-                        .map(Actor::restore)
-                        .collect(Collectors.toSet())
-        );
+
+//        actorFacade.deleteActorsFromExistingMovie(
+//                movieToDelete
+//                        .getSnapshot()
+//                        .getActors()
+//                        .stream()
+//                        .map(Actor::restore)
+//                        .collect(Collectors.toSet())
+//        );
+
+//        actorFacade.deleteActorsFromExistingMovie(movieToDelete.getSnapshot().getActors().stream().map(Actor::restore).collect(Collectors.toSet()));
+
 
         movieRepository.delete(movieToDelete);
     }

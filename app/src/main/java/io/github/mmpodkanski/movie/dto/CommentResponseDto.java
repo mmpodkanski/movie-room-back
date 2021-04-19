@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 
 public interface CommentResponseDto {
     int getId();
-
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     LocalDateTime getCreatedAt();
 

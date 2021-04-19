@@ -2,12 +2,12 @@ package io.github.mmpodkanski.actor;
 
 import io.github.mmpodkanski.actor.dto.ActorDto;
 import io.github.mmpodkanski.exception.ApiNotFoundException;
-import io.github.mmpodkanski.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +45,13 @@ class ActorController {
 
     @PostMapping
     ResponseEntity<ActorDto> addActor(
-            @RequestBody @Valid ActorDto actorDto,
-            @AuthenticationPrincipal User user
+            @RequestBody @Valid ActorDto actorDto
     ) {
         logger.warn("Adding a new actor!");
-        var result = actorFacade.addActor(actorDto, user.getId());
+
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+
+        var result = actorFacade.addActor(actorDto, currentUser.getName());
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 

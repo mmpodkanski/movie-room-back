@@ -1,20 +1,14 @@
 package io.github.mmpodkanski.actor;
 
-import io.github.mmpodkanski.movie.MovieSnapshot;
-
-import java.util.HashSet;
-import java.util.Set;
-
 public class ActorSnapshot {
     private int id;
     private String firstName;
     private String lastName;
     private String birthDate;
     private String imageUrl;
-    private Set<MovieSnapshot> movies = new HashSet<>();
     private boolean acceptedByAdmin;
 
-    protected ActorSnapshot() {
+    public ActorSnapshot() {
     }
 
     public ActorSnapshot(
@@ -23,7 +17,6 @@ public class ActorSnapshot {
             final String lastName,
             final String birthDate,
             final String imageUrl,
-            final Set<MovieSnapshot> movies,
             final boolean acceptedByAdmin
     ) {
         this.id = id;
@@ -31,7 +24,6 @@ public class ActorSnapshot {
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.imageUrl = imageUrl;
-        this.movies = movies;
         this.acceptedByAdmin = acceptedByAdmin;
     }
 
@@ -53,10 +45,6 @@ public class ActorSnapshot {
 
     String getImageUrl() {
         return imageUrl;
-    }
-
-    Set<MovieSnapshot> getMovies() {
-        return movies;
     }
 
     boolean isAcceptedByAdmin() {

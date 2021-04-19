@@ -7,7 +7,7 @@ import java.util.Optional;
 
 interface MovieQueryRepository {
 
-    List<MovieResponseDto> findMoviesBy();
+    List<MovieResponseDto> findMoviesByAcceptedByAdminTrue();
 
     List<MovieResponseDto> findFirst5ByOrderByStarsDesc();
 
@@ -20,5 +20,4 @@ interface MovieQueryRepository {
     Optional<MovieResponseDto> findDtoByTitle(String title);
 
     int count();
-
 }
