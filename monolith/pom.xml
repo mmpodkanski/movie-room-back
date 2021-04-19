@@ -43,6 +43,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>io.github.mmpodkanski.JavaMovieRoomApplication</mainClass>
+                </configuration>
                 <version>${parent.version}</version>
             </plugin>
 

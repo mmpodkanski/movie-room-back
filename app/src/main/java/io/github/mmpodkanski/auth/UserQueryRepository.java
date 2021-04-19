@@ -1,5 +1,7 @@
 package io.github.mmpodkanski.auth;
 
+import io.github.mmpodkanski.auth.dto.UserDto;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,8 +11,8 @@ interface UserQueryRepository {
 
     boolean existsByEmail(String email);
 
-    List<User> findAll();
+    List<UserDto> findAll();
 
-    Optional<User> findByUsername(String username);
+    Optional<UserDto> findByUsername(String username);
 
 }

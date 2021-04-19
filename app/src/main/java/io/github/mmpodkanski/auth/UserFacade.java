@@ -1,5 +1,6 @@
 package io.github.mmpodkanski.auth;
 
+import io.github.mmpodkanski.auth.dto.UserDto;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UserFacade implements UserDetailsService{
+public class UserFacade implements UserDetailsService {
     private final UserQueryRepository queryRepository;
     private final UserRepository userRepository;
 
@@ -19,7 +20,7 @@ public class UserFacade implements UserDetailsService{
         this.userRepository = userRepository;
     }
 
-    List<User> readAllUsers() {
+    List<UserDto> readAllUsers() {
         return queryRepository.findAll();
     }
 
@@ -43,7 +44,6 @@ public class UserFacade implements UserDetailsService{
         return queryRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User with that id not exists!"))
-                .getSnapshot()
                 .getRole()
                 .equals(ERole.ROLE_ADMIN);
     }
@@ -99,15 +99,14 @@ public class UserFacade implements UserDetailsService{
                         new UsernameNotFoundException("User with that username not exists!"));
 
         return new UserDetailsImpl(
-                user.getSnapshot().getId(),
-                user.getSnapshot().getUsername(),
-                user.getSnapshot().getEmail(),
-                user.getSnapshot().getPassword(),
-                user.getSnapshot().getRole(),
-                user.getSnapshot().isLocked()
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole(),
+                user.isLocked()
         );
     }
-
 
 
 }
