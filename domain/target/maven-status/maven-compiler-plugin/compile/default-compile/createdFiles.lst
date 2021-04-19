@@ -1,0 +1,14 @@
+io\github\mmpodkanski\auth\UserRepository.class
+io\github\mmpodkanski\movie\CommentRepository.class
+io\github\mmpodkanski\auth\User.class
+io\github\mmpodkanski\movie\ECategory.class
+io\github\mmpodkanski\actor\ActorRepository.class
+io\github\mmpodkanski\auth\UserSnapshot.class
+io\github\mmpodkanski\actor\Actor.class
+io\github\mmpodkanski\actor\ActorSnapshot.class
+io\github\mmpodkanski\movie\MovieSnapshot.class
+io\github\mmpodkanski\movie\Movie.class
+io\github\mmpodkanski\movie\MovieRepository.class
+io\github\mmpodkanski\movie\CommentSnapshot.class
+io\github\mmpodkanski\auth\ERole.class
+io\github\mmpodkanski\movie\Comment.class
