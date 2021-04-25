@@ -183,19 +183,19 @@
     <sequence id="165" parent="4" name="SYSTEM_SEQUENCE_317361D9_9DF6_436C_A5D9_148FDA1777F0">
       <ObjectId>8</ObjectId>
       <NameSurrogate>1</NameSurrogate>
-      <SequenceIdentity>null(33)</SequenceIdentity>
+      <SequenceIdentity>null(65)</SequenceIdentity>
       <AutoCreated>1</AutoCreated>
     </sequence>
     <sequence id="166" parent="4" name="SYSTEM_SEQUENCE_6476D80A_62A4_4FDB_8B7E_9FFA2641421D">
       <ObjectId>4</ObjectId>
       <NameSurrogate>1</NameSurrogate>
-      <SequenceIdentity>null(33)</SequenceIdentity>
+      <SequenceIdentity>null(65)</SequenceIdentity>
       <AutoCreated>1</AutoCreated>
     </sequence>
     <sequence id="167" parent="4" name="SYSTEM_SEQUENCE_73F5DB77_4628_425F_B998_D2D4A5D9EBF5">
       <ObjectId>12</ObjectId>
       <NameSurrogate>1</NameSurrogate>
-      <SequenceIdentity>null(65)</SequenceIdentity>
+      <SequenceIdentity>null(97)</SequenceIdentity>
       <AutoCreated>1</AutoCreated>
     </sequence>
     <sequence id="168" parent="4" name="SYSTEM_SEQUENCE_959FDAF4_2BE2_4E6E_8CB0_3879249FD00E">
@@ -222,36 +222,39 @@
     <table id="174" parent="4" name="USERS">
       <ObjectId>21</ObjectId>
     </table>
-    <column id="175" parent="169" name="ID">
+    <table id="175" parent="4" name="USER_FAVOURITES">
+      <ObjectId>34</ObjectId>
+    </table>
+    <column id="176" parent="169" name="ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>null(33)</SequenceIdentity>
+      <SequenceIdentity>null(65)</SequenceIdentity>
     </column>
-    <column id="176" parent="169" name="ACCEPTED_BY_ADMIN">
+    <column id="177" parent="169" name="ACCEPTED_BY_ADMIN">
       <Position>2</Position>
       <DataType>BOOLEAN|0s</DataType>
     </column>
-    <column id="177" parent="169" name="BIRTH_DATE">
+    <column id="178" parent="169" name="BIRTH_DATE">
       <Position>3</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="178" parent="169" name="FIRST_NAME">
+    <column id="179" parent="169" name="FIRST_NAME">
       <Position>4</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="179" parent="169" name="IMAGE_URL">
+    <column id="180" parent="169" name="IMAGE_URL">
       <Position>5</Position>
       <DataType>VARCHAR(255)|0s</DataType>
     </column>
-    <column id="180" parent="169" name="LAST_NAME">
+    <column id="181" parent="169" name="LAST_NAME">
       <Position>6</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="181" parent="169" name="PRIMARY_KEY_7">
+    <index id="182" parent="169" name="PRIMARY_KEY_7">
       <ObjectId>5</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>70</SourceTextLength>
@@ -259,37 +262,37 @@
       <Unique>1</Unique>
       <AutoCreated>1</AutoCreated>
     </index>
-    <key id="182" parent="169" name="CONSTRAINT_7">
+    <key id="183" parent="169" name="CONSTRAINT_7">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="183" parent="170" name="ID">
+    <column id="184" parent="170" name="ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>null(33)</SequenceIdentity>
+      <SequenceIdentity>null(65)</SequenceIdentity>
     </column>
-    <column id="184" parent="170" name="AUTHOR">
+    <column id="185" parent="170" name="AUTHOR">
       <Position>2</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="185" parent="170" name="CREATED_AT">
+    <column id="186" parent="170" name="CREATED_AT">
       <Position>3</Position>
       <DataType>TIMESTAMP|0s</DataType>
     </column>
-    <column id="186" parent="170" name="DESCRIPTION">
+    <column id="187" parent="170" name="DESCRIPTION">
       <Position>4</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="187" parent="170" name="TITLE">
+    <column id="188" parent="170" name="TITLE">
       <Position>5</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="188" parent="170" name="PRIMARY_KEY_A">
+    <index id="189" parent="170" name="PRIMARY_KEY_A">
       <ObjectId>9</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>72</SourceTextLength>
@@ -297,70 +300,70 @@
       <Unique>1</Unique>
       <AutoCreated>1</AutoCreated>
     </index>
-    <key id="189" parent="170" name="CONSTRAINT_A">
+    <key id="190" parent="170" name="CONSTRAINT_A">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="190" parent="171" name="ID">
+    <column id="191" parent="171" name="ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>null(65)</SequenceIdentity>
+      <SequenceIdentity>null(97)</SequenceIdentity>
     </column>
-    <column id="191" parent="171" name="ACCEPTED_BY_ADMIN">
+    <column id="192" parent="171" name="ACCEPTED_BY_ADMIN">
       <Position>2</Position>
       <DataType>BOOLEAN|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="192" parent="171" name="CATEGORY">
+    <column id="193" parent="171" name="CATEGORY">
       <Position>3</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="193" parent="171" name="CREATED_AT">
+    <column id="194" parent="171" name="CREATED_AT">
       <Position>4</Position>
       <DataType>TIMESTAMP|0s</DataType>
     </column>
-    <column id="194" parent="171" name="DESCRIPTION">
+    <column id="195" parent="171" name="DESCRIPTION">
       <Position>5</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="195" parent="171" name="DIRECTOR">
+    <column id="196" parent="171" name="DIRECTOR">
       <Position>6</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="196" parent="171" name="IMG_BACK_URL">
+    <column id="197" parent="171" name="IMG_BACK_URL">
       <Position>7</Position>
       <DataType>VARCHAR(255)|0s</DataType>
     </column>
-    <column id="197" parent="171" name="IMG_LOGO_URL">
+    <column id="198" parent="171" name="IMG_LOGO_URL">
       <Position>8</Position>
       <DataType>VARCHAR(255)|0s</DataType>
     </column>
-    <column id="198" parent="171" name="PRODUCER">
+    <column id="199" parent="171" name="PRODUCER">
       <Position>9</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="199" parent="171" name="RELEASE_DATE">
+    <column id="200" parent="171" name="RELEASE_DATE">
       <Position>10</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="200" parent="171" name="STARS">
+    <column id="201" parent="171" name="STARS">
       <Position>11</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="201" parent="171" name="TITLE">
+    <column id="202" parent="171" name="TITLE">
       <Position>12</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="202" parent="171" name="PRIMARY_KEY_8">
+    <index id="203" parent="171" name="PRIMARY_KEY_8">
       <ObjectId>13</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>70</SourceTextLength>
@@ -368,22 +371,22 @@
       <Unique>1</Unique>
       <AutoCreated>1</AutoCreated>
     </index>
-    <key id="203" parent="171" name="CONSTRAINT_8">
+    <key id="204" parent="171" name="CONSTRAINT_8">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="204" parent="172" name="MOVIE_ID">
+    <column id="205" parent="172" name="MOVIE_ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="205" parent="172" name="ACTOR_ID">
+    <column id="206" parent="172" name="ACTOR_ID">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="206" parent="172" name="PRIMARY_KEY_83">
+    <index id="207" parent="172" name="PRIMARY_KEY_83">
       <ObjectId>16</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>96</SourceTextLength>
@@ -392,27 +395,27 @@ ACTOR_ID</ColNames>
       <Unique>1</Unique>
       <AutoCreated>1</AutoCreated>
     </index>
-    <index id="207" parent="172" name="FKO40LC9YIROX8UM5POAXHW6AK0_INDEX_8">
+    <index id="208" parent="172" name="FKO40LC9YIROX8UM5POAXHW6AK0_INDEX_8">
       <ObjectId>29</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>99</SourceTextLength>
       <ColNames>MOVIE_ID</ColNames>
       <AutoCreated>1</AutoCreated>
     </index>
-    <index id="208" parent="172" name="FKLEXE564X1FI4SSJE5WCUII3V2_INDEX_8">
+    <index id="209" parent="172" name="FKLEXE564X1FI4SSJE5WCUII3V2_INDEX_8">
       <ObjectId>27</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>99</SourceTextLength>
       <ColNames>ACTOR_ID</ColNames>
       <AutoCreated>1</AutoCreated>
     </index>
-    <key id="209" parent="172" name="CONSTRAINT_83">
+    <key id="210" parent="172" name="CONSTRAINT_83">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>MOVIE_ID
 ACTOR_ID</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="210" parent="172" name="FKO40LC9YIROX8UM5POAXHW6AK0">
+    <foreign-key id="211" parent="172" name="FKO40LC9YIROX8UM5POAXHW6AK0">
       <ColNames>MOVIE_ID</ColNames>
       <RefTableName>MOVIES</RefTableName>
       <RefKeyName>PRIMARY_KEY_8</RefKeyName>
@@ -420,7 +423,7 @@ ACTOR_ID</ColNames>
       <OnDelete>restrict</OnDelete>
       <OnUpdate>restrict</OnUpdate>
     </foreign-key>
-    <foreign-key id="211" parent="172" name="FKLEXE564X1FI4SSJE5WCUII3V2">
+    <foreign-key id="212" parent="172" name="FKLEXE564X1FI4SSJE5WCUII3V2">
       <ColNames>ACTOR_ID</ColNames>
       <RefTableName>ACTORS</RefTableName>
       <RefKeyName>PRIMARY_KEY_7</RefKeyName>
@@ -428,17 +431,17 @@ ACTOR_ID</ColNames>
       <OnDelete>restrict</OnDelete>
       <OnUpdate>restrict</OnUpdate>
     </foreign-key>
-    <column id="212" parent="173" name="MOVIE_SNAPSHOT_ID">
+    <column id="213" parent="173" name="MOVIE_SNAPSHOT_ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="213" parent="173" name="COMMENTS_ID">
+    <column id="214" parent="173" name="COMMENTS_ID">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="214" parent="173" name="PRIMARY_KEY_71">
+    <index id="215" parent="173" name="PRIMARY_KEY_71">
       <ObjectId>19</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>110</SourceTextLength>
@@ -447,7 +450,7 @@ COMMENTS_ID</ColNames>
       <Unique>1</Unique>
       <AutoCreated>1</AutoCreated>
     </index>
-    <index id="215" parent="173" name="UK_AKVLG3BT257BNOXMFXXTLYNUH_INDEX_7">
+    <index id="216" parent="173" name="UK_AKVLG3BT257BNOXMFXXTLYNUH_INDEX_7">
       <ObjectId>25</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>112</SourceTextLength>
@@ -455,23 +458,23 @@ COMMENTS_ID</ColNames>
       <Unique>1</Unique>
       <AutoCreated>1</AutoCreated>
     </index>
-    <index id="216" parent="173" name="FK3XQJ7Q9RTLFQIYN3IFA3M6720_INDEX_7">
+    <index id="217" parent="173" name="FK3XQJ7Q9RTLFQIYN3IFA3M6720_INDEX_7">
       <ObjectId>32</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>110</SourceTextLength>
       <ColNames>MOVIE_SNAPSHOT_ID</ColNames>
       <AutoCreated>1</AutoCreated>
     </index>
-    <key id="217" parent="173" name="CONSTRAINT_71">
+    <key id="218" parent="173" name="CONSTRAINT_71">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>MOVIE_SNAPSHOT_ID
 COMMENTS_ID</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="218" parent="173" name="UK_AKVLG3BT257BNOXMFXXTLYNUH">
+    <key id="219" parent="173" name="UK_AKVLG3BT257BNOXMFXXTLYNUH">
       <ColNames>COMMENTS_ID</ColNames>
     </key>
-    <foreign-key id="219" parent="173" name="FK3XQJ7Q9RTLFQIYN3IFA3M6720">
+    <foreign-key id="220" parent="173" name="FK3XQJ7Q9RTLFQIYN3IFA3M6720">
       <ColNames>MOVIE_SNAPSHOT_ID</ColNames>
       <RefTableName>MOVIES</RefTableName>
       <RefKeyName>PRIMARY_KEY_8</RefKeyName>
@@ -479,7 +482,7 @@ COMMENTS_ID</ColNames>
       <OnDelete>restrict</OnDelete>
       <OnUpdate>restrict</OnUpdate>
     </foreign-key>
-    <foreign-key id="220" parent="173" name="FKEEP0K4TATEI2KXI8M9X73466P">
+    <foreign-key id="221" parent="173" name="FKEEP0K4TATEI2KXI8M9X73466P">
       <ColNames>COMMENTS_ID</ColNames>
       <RefTableName>COMMENTS</RefTableName>
       <RefKeyName>PRIMARY_KEY_A</RefKeyName>
@@ -487,41 +490,41 @@ COMMENTS_ID</ColNames>
       <OnDelete>restrict</OnDelete>
       <OnUpdate>restrict</OnUpdate>
     </foreign-key>
-    <column id="221" parent="174" name="ID">
+    <column id="222" parent="174" name="ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null(65)</SequenceIdentity>
     </column>
-    <column id="222" parent="174" name="EMAIL">
+    <column id="223" parent="174" name="EMAIL">
       <Position>2</Position>
       <DataType>VARCHAR(255)|0s</DataType>
     </column>
-    <column id="223" parent="174" name="ENABLED">
+    <column id="224" parent="174" name="ENABLED">
       <Position>3</Position>
       <DataType>BOOLEAN|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="224" parent="174" name="LOCKED">
+    <column id="225" parent="174" name="LOCKED">
       <Position>4</Position>
       <DataType>BOOLEAN|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="225" parent="174" name="PASSWORD">
+    <column id="226" parent="174" name="PASSWORD">
       <Position>5</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="226" parent="174" name="ROLE">
+    <column id="227" parent="174" name="ROLE">
       <Position>6</Position>
       <DataType>VARCHAR(255)|0s</DataType>
     </column>
-    <column id="227" parent="174" name="USERNAME">
+    <column id="228" parent="174" name="USERNAME">
       <Position>7</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="228" parent="174" name="PRIMARY_KEY_4">
+    <index id="229" parent="174" name="PRIMARY_KEY_4">
       <ObjectId>23</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>69</SourceTextLength>
@@ -529,10 +532,65 @@ COMMENTS_ID</ColNames>
       <Unique>1</Unique>
       <AutoCreated>1</AutoCreated>
     </index>
-    <key id="229" parent="174" name="CONSTRAINT_4">
+    <key id="230" parent="174" name="CONSTRAINT_4">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
     </key>
+    <column id="231" parent="175" name="USER_ID">
+      <Position>1</Position>
+      <DataType>INTEGER|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="232" parent="175" name="MOVIE_ID">
+      <Position>2</Position>
+      <DataType>INTEGER|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="233" parent="175" name="PRIMARY_KEY_5">
+      <ObjectId>36</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <SourceTextLength>96</SourceTextLength>
+      <ColNames>USER_ID
+MOVIE_ID</ColNames>
+      <Unique>1</Unique>
+      <AutoCreated>1</AutoCreated>
+    </index>
+    <index id="234" parent="175" name="FKSOTYKJAPINH9K0QDDENALW94K_INDEX_5">
+      <ObjectId>40</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <SourceTextLength>100</SourceTextLength>
+      <ColNames>USER_ID</ColNames>
+      <AutoCreated>1</AutoCreated>
+    </index>
+    <index id="235" parent="175" name="FKGDSXQ8CU4ODTGY26JESAIGLEO_INDEX_5">
+      <ObjectId>38</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <SourceTextLength>101</SourceTextLength>
+      <ColNames>MOVIE_ID</ColNames>
+      <AutoCreated>1</AutoCreated>
+    </index>
+    <key id="236" parent="175" name="CONSTRAINT_5">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>USER_ID
+MOVIE_ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="237" parent="175" name="FKSOTYKJAPINH9K0QDDENALW94K">
+      <ColNames>USER_ID</ColNames>
+      <RefTableName>USERS</RefTableName>
+      <RefKeyName>PRIMARY_KEY_4</RefKeyName>
+      <RefColNames>ID</RefColNames>
+      <OnDelete>restrict</OnDelete>
+      <OnUpdate>restrict</OnUpdate>
+    </foreign-key>
+    <foreign-key id="238" parent="175" name="FKGDSXQ8CU4ODTGY26JESAIGLEO">
+      <ColNames>MOVIE_ID</ColNames>
+      <RefTableName>MOVIES</RefTableName>
+      <RefKeyName>PRIMARY_KEY_8</RefKeyName>
+      <RefColNames>ID</RefColNames>
+      <OnDelete>restrict</OnDelete>
+      <OnUpdate>restrict</OnUpdate>
+    </foreign-key>
   </database-model>
 </dataSource>

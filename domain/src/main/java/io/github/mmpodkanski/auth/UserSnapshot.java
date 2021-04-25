@@ -1,5 +1,7 @@
 package io.github.mmpodkanski.auth;
 
+import java.util.Set;
+
 class UserSnapshot {
     private int id;
     private String username;
@@ -8,6 +10,7 @@ class UserSnapshot {
     private ERole role;
     private boolean locked;
     private boolean enabled = true;
+    private Set<UserMovie> favourites;
 
     public UserSnapshot() {
     }
@@ -19,7 +22,8 @@ class UserSnapshot {
             final String password,
             final ERole role,
             final boolean locked,
-            final boolean enabled
+            final boolean enabled,
+            final Set<UserMovie> favourites
     ) {
         this.id = id;
         this.username = username;
@@ -28,6 +32,7 @@ class UserSnapshot {
         this.role = role;
         this.locked = locked;
         this.enabled = enabled;
+        this.favourites = favourites;
     }
 
     int getId() {
@@ -56,5 +61,9 @@ class UserSnapshot {
 
     boolean isEnabled() {
         return enabled;
+    }
+
+    Set<UserMovie> getFavourites() {
+        return favourites;
     }
 }

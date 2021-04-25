@@ -1,8 +1,6 @@
 package io.github.mmpodkanski.actor;
 
-import io.github.mmpodkanski.actor.dto.ActorDto;
-import io.github.mmpodkanski.actor.dto.ActorSimpleRequestDto;
-import io.github.mmpodkanski.actor.dto.ActorSimpleResponseDto;
+import io.github.mmpodkanski.actor.dto.*;
 import io.github.mmpodkanski.auth.UserFacade;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
 import org.springframework.stereotype.Service;
@@ -41,12 +39,14 @@ public class ActorFacade {
         return toDto(repository.save(actor));
     }
 
-    public Set<Actor> addSimpleActors(Set<ActorSimpleRequestDto> actors) {
+    public Set<SimpleActor> addSimpleActors(Set<ActorSimpleRequestDto> actors) {
         return actors.stream().map(actorDto -> {
                     var actor = regexActor(actorDto);
-                    return Actor.restore(queryRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName())
-                            .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName())).getSnapshot()
-                            ));
+                    var snapshot = queryRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName())
+                            .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName())).getSnapshot());
+
+
+                    return SimpleActor.restore(new SimpleActorSnapshot(snapshot.getId(), snapshot.getFirstName(), snapshot.getLastName()));
                 }
         ).collect(Collectors.toSet());
     }
@@ -77,7 +77,7 @@ public class ActorFacade {
         return actorSimpleRequestDTO;
     }
 
-    public ActorSimpleResponseDto toSimpleDto(Actor actor) {
+    public ActorSimpleResponseDto toSimpleDto(SimpleActor actor) {
         var snap = actor.getSnapshot();
         return ActorSimpleResponseDto.create(snap.getId(), snap.getFirstName(), snap.getLastName());
     }

@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.movie;
 
-import io.github.mmpodkanski.actor.ActorSnapshot;
+import io.github.mmpodkanski.actor.dto.SimpleActorSnapshot;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -27,7 +27,7 @@ class MovieInitializer {
                     "releaseDate",
                     ECategory.ACTION,
                     Set.of(
-                            new ActorSnapshot(1, "Adam", "Kowalski", "2001", null, true)
+                            new SimpleActorSnapshot(1, "Adam", "Kowalski")
                     ),
                     Set.of(
                             new CommentSnapshot(1, null, "title", "description", "mmpodkanski")

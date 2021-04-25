@@ -1,8 +1,6 @@
 package io.github.mmpodkanski.auth.dto;
 
 
-import io.github.mmpodkanski.auth.ERole;
-
 public interface UserDto {
     int getId();
 
@@ -12,7 +10,7 @@ public interface UserDto {
 
     String getEmail();
 
-    ERole getRole();
+    String getRole();
 
     boolean isLocked();
 }

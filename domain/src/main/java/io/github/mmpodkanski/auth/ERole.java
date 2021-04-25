@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.auth;
 
-public enum ERole {
+enum ERole {
     ROLE_USER,
     ROLE_MODERATOR,
     ROLE_ADMIN

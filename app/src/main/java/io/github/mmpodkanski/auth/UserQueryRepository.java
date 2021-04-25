@@ -7,6 +7,8 @@ import java.util.Optional;
 
 interface UserQueryRepository {
 
+    boolean existsByIdAndFavourites(int id, UserMovie movie);
+
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);

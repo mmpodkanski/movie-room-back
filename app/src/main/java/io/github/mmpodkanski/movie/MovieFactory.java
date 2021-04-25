@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.movie;
 
-import io.github.mmpodkanski.actor.Actor;
+import io.github.mmpodkanski.actor.dto.SimpleActor;
 import io.github.mmpodkanski.movie.dto.MovieRequestDto;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Service
 class MovieFactory {
 
-    Movie from(MovieRequestDto source, LocalDateTime createdAt, boolean createdByAdmin, ECategory category, Set<Actor> actors) {
+    Movie from(MovieRequestDto source, LocalDateTime createdAt, boolean createdByAdmin, ECategory category, Set<SimpleActor> actors) {
         return Movie.restore(new MovieSnapshot(
                 source.getId(),
                 source.getTitle(),
@@ -20,7 +20,7 @@ class MovieFactory {
                 source.getDescription(),
                 source.getReleaseDate(),
                 category,
-                actors.stream().map(Actor::getSnapshot).collect(Collectors.toSet()),
+                actors.stream().map(SimpleActor::getSnapshot).collect(Collectors.toSet()),
                 null,
                 0,
                 createdAt,

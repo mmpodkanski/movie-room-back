@@ -35,17 +35,16 @@ class MovieController {
     }
 
 
-//    // TODO: REMOVE IT!
-//    @GetMapping("/check-fav/{id}")
-//    ResponseEntity<Boolean> existsUserFavourite(
-//            @PathVariable("id") int movieId
-//    ) {
-//        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-//
-//        var result = movieFacade.checkIfUserAlreadyAddedFav(movieId, currentUser.getName());
-//
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
+    // TODO: REMOVE IT IN FUTURE!
+    @GetMapping("/check-fav/{id}")
+    ResponseEntity<Boolean> existsUserFavourite(
+            @PathVariable("id") int movieId
+    ) {
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+
+        var result = movieFacade.checkIfUserAlreadyAddedFav(movieId, currentUser.getName());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
     @GetMapping
     ResponseEntity<List<MovieResponseDto>> getMovies() {
@@ -112,6 +111,7 @@ class MovieController {
         logger.warn("Adding a new movie!");
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         var result = movieFacade.createMovie(movieRequestDto, currentUser.getName());
+
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
@@ -122,28 +122,32 @@ class MovieController {
     ) {
         logger.info("Adding a new comment to movie(id): " + movieId);
         var result = movieFacade.addCommentToMovie(commentRequestDto, movieId);
+
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-//    @PostMapping(value = "/{id}", params = "add-fav")
-//    ResponseEntity<Void> addToFavourites(
-//            @PathVariable("id") int movieId,
-//            @AuthenticationPrincipal User user
-//    ) {
-//        logger.info("User(id): " + user.getId() + " added movie(id): " + movieId + " to favourites");
-//        movieFacade.giveStar(user.getId(), movieId);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
-//
-//    @PostMapping(value = "/{id}", params = "remove-fav")
-//    ResponseEntity<Void> removeFromFavourites(
-//            @PathVariable("id") int movieId,
-//            @AuthenticationPrincipal User user
-//    ) {
-//        logger.info("User(id): " + user.getId() + " removed movie(id): " + movieId + " from favourites");
-//        movieFacade.deleteStar(user.getId(), movieId);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
+    @PatchMapping(value = "/{id}", params = "add-fav")
+    ResponseEntity<Void> addToFavourites(
+            @PathVariable("id") int movieId
+    ) {
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+
+        logger.info("User(name): " + currentUser.getName() + " adding movie(id): " + movieId + " to favourites");
+        movieFacade.giveStar(currentUser.getName(), movieId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping(value = "/{id}", params = "remove-fav")
+    ResponseEntity<Void> removeFromFavourites(
+            @PathVariable("id") int movieId
+    ) {
+
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+
+        logger.info("User(id): " + currentUser.getName() + " removing movie(id): " + movieId + " from favourites");
+        movieFacade.removeStar(currentUser.getName(), movieId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
     @PatchMapping("/{id}")
     ResponseEntity<MovieRequestDto> updateMovie(

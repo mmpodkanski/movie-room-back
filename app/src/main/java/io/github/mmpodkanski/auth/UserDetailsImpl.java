@@ -17,7 +17,7 @@ class UserDetailsImpl extends User implements UserDetails {
     private final boolean enabled = true;
 
     public UserDetailsImpl(int id, String username, String email, String password, ERole role, boolean locked) {
-        super(id, username, email, password, role, locked);
+        super(id, username, email, password, role, locked, null);
         this.id = id;
         this.username = username;
         this.email = email;
@@ -65,5 +65,7 @@ class UserDetailsImpl extends User implements UserDetails {
     }
 
 
-
+    public int getId() {
+        return id;
+    }
 }

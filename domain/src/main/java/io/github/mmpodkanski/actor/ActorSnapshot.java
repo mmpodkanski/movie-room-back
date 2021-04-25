@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.actor;
 
-public class ActorSnapshot {
+class ActorSnapshot {
     private int id;
     private String firstName;
     private String lastName;

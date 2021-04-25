@@ -1,13 +1,16 @@
 package io.github.mmpodkanski.movie;
 
-import io.github.mmpodkanski.actor.Actor;
+import io.github.mmpodkanski.DomainEventPublisher;
 import io.github.mmpodkanski.actor.ActorFacade;
+import io.github.mmpodkanski.actor.dto.SimpleActor;
 import io.github.mmpodkanski.auth.UserFacade;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
 import io.github.mmpodkanski.exception.ApiNotFoundException;
 import io.github.mmpodkanski.movie.dto.CommentRequestDto;
 import io.github.mmpodkanski.movie.dto.MovieRequestDto;
 import io.github.mmpodkanski.movie.dto.MovieResponseDto;
+import io.github.mmpodkanski.movie.vo.MovieEvent;
+import io.github.mmpodkanski.movie.vo.UserSourceId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,7 @@ public class MovieFacade {
     private final CommentFactory commentFactory;
     private final CommentRepository commentRepository;
     private final MovieFactory movieFactory;
+    private final DomainEventPublisher publisher;
 
     MovieFacade(
             final MovieRepository movieRepository,
@@ -34,7 +38,8 @@ public class MovieFacade {
             final CommentQueryRepository commentQueryRepository,
             final CommentFactory commentFactory,
             final CommentRepository commentRepository,
-            final MovieFactory movieFactory
+            final MovieFactory movieFactory,
+            final DomainEventPublisher publisher
     ) {
         this.movieRepository = movieRepository;
         this.userFacade = userFacade;
@@ -44,14 +49,15 @@ public class MovieFacade {
         this.commentFactory = commentFactory;
         this.commentRepository = commentRepository;
         this.movieFactory = movieFactory;
+        this.publisher = publisher;
     }
 
-//    boolean checkIfUserAlreadyAddedFav(int movieId, String username) {
-//        var movie = movieRepository.findById(movieId)
-//                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
-//
-//        return userFacade.existsUserByFavourite(username, movie);
-//    }
+    boolean checkIfUserAlreadyAddedFav(int movieId, String username) {
+        var movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
+
+        return userFacade.existsByFavourites(username, toDto(movie));
+    }
 
     public MovieResponseDto createMovie(
             MovieRequestDto newMovie,
@@ -92,6 +98,8 @@ public class MovieFacade {
 
 //        actorFacade.deleteActorsFromExistingMovie(movieToUpdate.getSnapshot().getActors().stream().map(Actor::restore).collect(Collectors.toSet()));
 
+        var actorsToSave = actorFacade.addSimpleActors(requestMovie.getActors());
+
         movieToUpdate.update(
                 requestMovie.getTitle(),
                 requestMovie.getDirector(),
@@ -99,8 +107,7 @@ public class MovieFacade {
                 requestMovie.getDescription(),
                 requestMovie.getReleaseDate(),
                 ECategory.valueOf(requestMovie.getCategory()),
-// FIXME: OPTION TO ADD/REMOVE ACTORS
-//                requestMovie.getActors(),
+                actorsToSave,
                 requestMovie.getImgLogoUrl(),
                 requestMovie.getImgBackUrl()
         );
@@ -128,20 +135,38 @@ public class MovieFacade {
 //    }
 
 
-//    @Transactional
-//    public void giveStar(int userId, int movieId) {
-//        var movie = movieRepository.findById(movieId)
-//                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
-//
-//        var user = userFacade.loadUserById(userId);
-//
-//        if (userFacade.existsByFavourites(movie)) {
-//            throw new ApiBadRequestException("Movie already exists in favourites!");
-//        }
-//
-//        userFacade.addFavouriteToUser(movie, user);
-//        movie.addStar();
-//    }
+    public void giveStar(String username, int movieId) {
+        publisher.publish(toggleStar(username, movieId, MovieEvent.EState.ADDED));
+    }
+
+    public void removeStar(String username, int movieId) {
+        publisher.publish(toggleStar(username, movieId, MovieEvent.EState.REMOVED));
+    }
+
+    private MovieEvent toggleStar(String username, int movieId, MovieEvent.EState state) {
+        var movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"))
+                .getSnapshot();
+
+        var userId = userFacade.loadIdByUsername(username);
+
+//        tworzymy tutaj zdarzenie ktore zawiera w sobie informacje o movie;
+//        wtedy --> UserFacade odbiera i na podstawie tych danych tworzy encje UserMovie, ktora jest w encji glownej - czyt. User;
+
+        return new MovieEvent(
+                new UserSourceId(String.valueOf(userId)),
+                state,
+                new MovieEvent.Data(
+                        movieId,
+                        movie.getTitle(),
+                        movie.getReleaseDate(),
+                        movie.getCategory(),
+                        movie.getStars(),
+                        movie.isAcceptedByAdmin(),
+                        movie.getImgLogoUrl()
+                )
+        );
+    }
 
     // FIXME: CANT DELETE PARENT
     public void deleteMovieById(int movieId) {
@@ -165,28 +190,15 @@ public class MovieFacade {
     }
 
     void deleteCommentFromMovie(int commentId) {
+
         commentRepository.deleteById(commentId);
     }
 
-//    @Transactional
-//    public void deleteStar(int userId, int movieId) {
-//        var movie = movieRepository.findById(movieId)
-//                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
-//
-//        var user = userFacade.loadUserById(userId);
-//
-//        if (!userFacade.existsByFavourites(movie)) {
-//            throw new ApiBadRequestException("Movie not exists in favourites!");
-//        }
-//
-//        userFacade.removeFavouriteFromUser(movie, user);
-//        movie.removeStar();
-//    }
 
     private Movie mapMovieRequest(
             MovieRequestDto movieModel,
             boolean createdByAdmin,
-            Set<Actor> actorsToSave
+            Set<SimpleActor> actorsToSave
     ) {
         var createdAt = LocalDateTime.now();
         ECategory category = categoryFacade.checkCategory(movieModel.getCategory());
@@ -205,7 +217,7 @@ public class MovieFacade {
                 snap.getCategory(),
                 snap.getReleaseDate(),
                 snap.getStars(),
-                snap.getActors().stream().map(Actor::restore).map(actorFacade::toSimpleDto).collect(Collectors.toList()),
+                snap.getActors().stream().map(SimpleActor::restore).map(actorFacade::toSimpleDto).collect(Collectors.toList()),
                 null,
                 snap.isAcceptedByAdmin(),
                 snap.getImgLogoUrl(),

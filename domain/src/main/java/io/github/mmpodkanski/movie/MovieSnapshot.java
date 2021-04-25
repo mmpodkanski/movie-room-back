@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.movie;
 
-import io.github.mmpodkanski.actor.ActorSnapshot;
+import io.github.mmpodkanski.actor.dto.SimpleActorSnapshot;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ class MovieSnapshot {
     private String description;
     private String releaseDate;
     private ECategory category;
-    private Set<ActorSnapshot> actors = new HashSet<>();
+    private Set<SimpleActorSnapshot> actors = new HashSet<>();
     private Set<CommentSnapshot> comments = new HashSet<>();
     private int stars;
     private LocalDateTime createdAt;
@@ -33,7 +33,7 @@ class MovieSnapshot {
             final String description,
             final String releaseDate,
             final ECategory category,
-            final Set<ActorSnapshot> actors,
+            final Set<SimpleActorSnapshot> actors,
             final Set<CommentSnapshot> comments,
             final int stars,
             final LocalDateTime createdAt,
@@ -85,7 +85,7 @@ class MovieSnapshot {
         return category;
     }
 
-    Set<ActorSnapshot> getActors() {
+    Set<SimpleActorSnapshot> getActors() {
         return actors;
     }
 

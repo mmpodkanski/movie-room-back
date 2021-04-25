@@ -10,7 +10,6 @@ class Comment {
                 snapshot.getTitle(),
                 snapshot.getDescription(),
                 snapshot.getAuthor()
-//                snapshot.getMovie() != null ? Movie.restore(snapshot.getMovie()) : null
         );
     }
 
@@ -41,7 +40,6 @@ class Comment {
                 title,
                 description,
                 author
-//                movie != null ? movie.getSnapshot() : null
         );
     }
 }

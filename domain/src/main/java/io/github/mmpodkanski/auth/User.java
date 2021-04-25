@@ -1,26 +1,28 @@
 package io.github.mmpodkanski.auth;
 
+import java.util.Set;
+
 class User {
-    static User restore (UserSnapshot snapshot) {
+    static User restore(UserSnapshot snapshot) {
         return new User(
                 snapshot.getId(),
                 snapshot.getUsername(),
                 snapshot.getEmail(),
                 snapshot.getPassword(),
                 snapshot.getRole(),
-                snapshot.isLocked()
+                snapshot.isLocked(),
+                snapshot.getFavourites()
         );
     }
 
-    private int id;
-    private String username;
-    private String email;
-    private String password;
+    private final int id;
+    private final String username;
+    private final String email;
+    private final String password;
     private ERole role;
     private boolean locked;
     private boolean enabled = true;
-//    @OneToMany
-//    private Set<MovieSnapshot> favourites = new HashSet<>();
+    private Set<UserMovie> favourites;
 
     public User(
             final int id,
@@ -28,7 +30,8 @@ class User {
             final String email,
             final String password,
             final ERole role,
-            final boolean locked
+            final boolean locked,
+            final Set<UserMovie> favourites
     ) {
         this.id = id;
         this.username = username;
@@ -36,6 +39,7 @@ class User {
         this.password = password;
         this.role = role;
         this.locked = locked;
+        this.favourites = favourites;
     }
 
     public UserSnapshot getSnapshot() {
@@ -46,8 +50,17 @@ class User {
                 password,
                 role,
                 locked,
-                enabled
+                enabled,
+                favourites
         );
+    }
+
+    void addFavourite(UserMovie movie) {
+        favourites.add(movie);
+    }
+
+    void removeFavourite(UserMovie movie) {
+        favourites.remove(movie);
     }
 
     void setUserRole() {

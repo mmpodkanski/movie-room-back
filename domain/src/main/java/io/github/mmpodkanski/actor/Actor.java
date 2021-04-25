@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.actor;
 
-public class Actor {
+class Actor {
     public static Actor restore(ActorSnapshot snapshot) {
         return new Actor(
                 snapshot.getId(),
@@ -8,7 +8,6 @@ public class Actor {
                 snapshot.getLastName(),
                 snapshot.getBirthDate(),
                 snapshot.getImageUrl(),
-                //FIXME: WTF
                 snapshot.isAcceptedByAdmin()
         );
     }

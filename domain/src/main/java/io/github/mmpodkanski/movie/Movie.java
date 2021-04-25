@@ -1,6 +1,6 @@
 package io.github.mmpodkanski.movie;
 
-import io.github.mmpodkanski.actor.Actor;
+import io.github.mmpodkanski.actor.dto.SimpleActor;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -16,7 +16,7 @@ class Movie {
                 snapshot.getDescription(),
                 snapshot.getReleaseDate(),
                 snapshot.getCategory(),
-                snapshot.getActors().stream().map(Actor::restore).collect(Collectors.toSet()),
+                snapshot.getActors().stream().map(SimpleActor::restore).collect(Collectors.toSet()),
                 snapshot.getComments() != null ? snapshot.getComments().stream().map(Comment::restore).collect(Collectors.toSet()) : null,
                 snapshot.getStars(),
                 snapshot.getCreatedAt(),
@@ -33,7 +33,7 @@ class Movie {
     private String description;
     private String releaseDate;
     private ECategory category;
-    private final Set<Actor> actors;
+    private Set<SimpleActor> actors;
     private final Set<Comment> comments;
     private int stars;
     private final LocalDateTime createdAt;
@@ -49,7 +49,7 @@ class Movie {
             final String description,
             final String releaseDate,
             final ECategory category,
-            final Set<Actor> actors,
+            final Set<SimpleActor> actors,
             final Set<Comment> comments,
             final int stars,
             final LocalDateTime createdAt,
@@ -82,7 +82,7 @@ class Movie {
                 description,
                 releaseDate,
                 category,
-                actors != null ? actors.stream().map(Actor::getSnapshot).collect(Collectors.toSet()) : null,
+                actors != null ? actors.stream().map(SimpleActor::getSnapshot).collect(Collectors.toSet()) : null,
                 comments != null ? comments.stream().map(Comment::getSnapshot).collect(Collectors.toSet()) : null,
                 stars,
                 createdAt,
@@ -96,7 +96,7 @@ class Movie {
         acceptedByAdmin = !acceptedByAdmin;
     }
 
-    void addActors(Set<Actor> actors) {
+    void addActors(Set<SimpleActor> actors) {
         this.actors.addAll(actors);
     }
 
@@ -126,6 +126,7 @@ class Movie {
             final String description,
             final String releaseDate,
             final ECategory category,
+            final Set<SimpleActor> actorsToSave,
             final String imgLogoUrl,
             final String imgBackUrl
     ) {
@@ -135,6 +136,7 @@ class Movie {
         this.description = description;
         this.releaseDate = releaseDate;
         this.category = category;
+        this.actors = actorsToSave;
         this.acceptedByAdmin = true;
         this.imgLogoUrl = imgLogoUrl;
         this.imgBackUrl = imgBackUrl;

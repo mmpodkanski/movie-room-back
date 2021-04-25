@@ -53,7 +53,8 @@ class AuthService {
                 registerRequest.getEmail(),
                 encoder.encode(registerRequest.getPassword()),
                 ERole.ROLE_USER,
-                false
+                false,
+                null
         );
 
         userRepository.save(user);

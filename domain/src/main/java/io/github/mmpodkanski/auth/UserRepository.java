@@ -9,4 +9,5 @@ interface UserRepository {
     User save(User entity);
 
     void delete(User entity);
+
 }
