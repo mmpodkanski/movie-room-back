@@ -7,7 +7,11 @@ MovieRoom gives you access to follow your favourites movies.
 * Default crud operations like: create, read, update, remove.
 * Used DDD-architecture, which allows to optimalize and separate application (easy to change spring framework to other).
 * Admin board is place where you can block users or accept all movie requests.
-* As user you can add movie to favourite, add movie to requests and comment all movies !
-* Public api to show you all news.
+* As user you can insert movie to favourites, add new movie to pending requests or comment all movies !
+* Used public api to display new news from around the world.
 
 ## Installation
+
+You can run application with maven wrapper !
+- mvnw clean install
+- mvnw spring-boot:run
