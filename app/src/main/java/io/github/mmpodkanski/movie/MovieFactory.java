@@ -16,7 +16,7 @@ class MovieFactory {
                 source.getId(),
                 source.getTitle(),
                 source.getDirector(),
-                source.getProducer(),
+                source.getWriter(),
                 source.getDescription(),
                 source.getReleaseDate(),
                 category,

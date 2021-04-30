@@ -11,7 +11,7 @@ public interface MovieResponseDto {
             final String title,
             final String description,
             final String director,
-            final String producer,
+            final String writer,
             final ECategory category,
             final String releaseDate,
             final int stars,
@@ -21,7 +21,7 @@ public interface MovieResponseDto {
             final String imgLogoUrl,
             final String imgBackUrl
     ) {
-        return new DeserializationImpl(id, title, description, director, producer, category, releaseDate, stars, actors, comments, isAcceptedByAdmin, imgLogoUrl, imgBackUrl);
+        return new DeserializationImpl(id, title, description, director, writer, category, releaseDate, stars, actors, comments, isAcceptedByAdmin, imgLogoUrl, imgBackUrl);
     }
 
     int getId();
@@ -32,7 +32,7 @@ public interface MovieResponseDto {
 
     String getDirector();
 
-    String getProducer();
+    String getWriter();
 
     ECategory getCategory();
 
@@ -56,7 +56,7 @@ public interface MovieResponseDto {
         private final String title;
         private final String description;
         private final String director;
-        private final String producer;
+        private final String writer;
         private final ECategory category;
         private final String releaseDate;
         private final int stars;
@@ -66,12 +66,12 @@ public interface MovieResponseDto {
         private final String imgLogoUrl;
         private final String imgBackUrl;
 
-        DeserializationImpl(int id, String title, String description, String director, String producer, ECategory category, String releaseDate, int stars, List<ActorSimpleResponseDto> actors, List<CommentResponseDto> comments, boolean acceptedByAdmin, String imgLogoUrl, String imgBackUrl) {
+        DeserializationImpl(int id, String title, String description, String director, String writer, ECategory category, String releaseDate, int stars, List<ActorSimpleResponseDto> actors, List<CommentResponseDto> comments, boolean acceptedByAdmin, String imgLogoUrl, String imgBackUrl) {
             this.id = id;
             this.title = title;
             this.description = description;
             this.director = director;
-            this.producer = producer;
+            this.writer = writer;
             this.category = category;
             this.releaseDate = releaseDate;
             this.stars = stars;
@@ -104,8 +104,8 @@ public interface MovieResponseDto {
         }
 
         @Override
-        public String getProducer() {
-            return producer;
+        public String getWriter() {
+            return writer;
         }
 
         @Override

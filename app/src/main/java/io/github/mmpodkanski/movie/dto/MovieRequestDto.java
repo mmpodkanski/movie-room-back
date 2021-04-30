@@ -16,7 +16,7 @@ public class MovieRequestDto {
     @NotBlank(message = "Movie's director can not be empty!")
     private String director;
     @NotBlank(message = "Movie's producer can not be empty!")
-    private String producer;
+    private String writer;
     @NotBlank(message = "Movie's category can not be empty!")
     private String category;
     @NotEmpty(message = "Please add some actors!")
@@ -42,8 +42,8 @@ public class MovieRequestDto {
         return director;
     }
 
-    public String getProducer() {
-        return producer;
+    public String getWriter() {
+        return writer;
     }
 
     public String getCategory() {

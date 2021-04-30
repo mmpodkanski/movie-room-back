@@ -65,7 +65,7 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
         </attributes>
     </entity>
 
-    <entity class="io.github.mmpodkanski.auth.UserMovie" access="FIELD">
+    <entity class="io.github.mmpodkanski.user.UserMovie" access="FIELD">
         <table name="movies"/>
         <attributes>
             <id name="id">
@@ -109,7 +109,7 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
     </entity>
 
 
-    <entity class="io.github.mmpodkanski.auth.UserSnapshot" access="FIELD">
+    <entity class="io.github.mmpodkanski.user.UserSnapshot" access="FIELD">
         <table name="users"/>
         <attributes>
             <id name="id">
@@ -133,7 +133,7 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
             <basic name="enabled">
                 <column nullable="false"/>
             </basic>
-            <many-to-many name="favourites" target-entity="io.github.mmpodkanski.auth.UserMovie">
+            <many-to-many name="favourites" target-entity="io.github.mmpodkanski.user.UserMovie">
                 <join-table name="USER_FAVOURITES">
                     <join-column name="user_id" unique="false"/>
                     <inverse-join-column name="movie_id"  unique="false"/>

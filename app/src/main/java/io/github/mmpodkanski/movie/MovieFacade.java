@@ -104,7 +104,7 @@ public class MovieFacade {
         movieToUpdate.update(
                 requestMovie.getTitle(),
                 requestMovie.getDirector(),
-                requestMovie.getProducer(),
+                requestMovie.getWriter(),
                 requestMovie.getDescription(),
                 requestMovie.getReleaseDate(),
                 ECategory.valueOf(requestMovie.getCategory()),
@@ -200,7 +200,7 @@ public class MovieFacade {
                 snap.getTitle(),
                 snap.getDescription(),
                 snap.getDirector(),
-                snap.getProducer(),
+                snap.getWriter(),
                 snap.getCategory(),
                 snap.getReleaseDate(),
                 snap.getStars(),

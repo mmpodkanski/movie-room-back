@@ -10,7 +10,7 @@ class MovieSnapshot {
     private int id;
     private String title;
     private String director;
-    private String producer;
+    private String writer;
     private String description;
     private String releaseDate;
     private ECategory category;
@@ -29,7 +29,7 @@ class MovieSnapshot {
             final int id,
             final String title,
             final String director,
-            final String producer,
+            final String writer,
             final String description,
             final String releaseDate,
             final ECategory category,
@@ -44,7 +44,7 @@ class MovieSnapshot {
         this.id = id;
         this.title = title;
         this.director = director;
-        this.producer = producer;
+        this.writer = writer;
         this.description = description;
         this.releaseDate = releaseDate;
         this.category = category;
@@ -69,8 +69,8 @@ class MovieSnapshot {
         return director;
     }
 
-    String getProducer() {
-        return producer;
+    String getWriter() {
+        return writer;
     }
 
     String getDescription() {

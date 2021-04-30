@@ -12,7 +12,7 @@ class Movie {
                 snapshot.getId(),
                 snapshot.getTitle(),
                 snapshot.getDirector(),
-                snapshot.getProducer(),
+                snapshot.getWriter(),
                 snapshot.getDescription(),
                 snapshot.getReleaseDate(),
                 snapshot.getCategory(),
@@ -29,7 +29,7 @@ class Movie {
     private final int id;
     private String title;
     private String director;
-    private String producer;
+    private String writer;
     private String description;
     private String releaseDate;
     private ECategory category;
@@ -45,7 +45,7 @@ class Movie {
             final int id,
             final String title,
             final String director,
-            final String producer,
+            final String writer,
             final String description,
             final String releaseDate,
             final ECategory category,
@@ -60,7 +60,7 @@ class Movie {
         this.id = id;
         this.title = title;
         this.director = director;
-        this.producer = producer;
+        this.writer = writer;
         this.description = description;
         this.releaseDate = releaseDate;
         this.category = category;
@@ -78,7 +78,7 @@ class Movie {
                 id,
                 title,
                 director,
-                producer,
+                writer,
                 description,
                 releaseDate,
                 category,
@@ -122,7 +122,7 @@ class Movie {
     void update(
             final String title,
             final String director,
-            final String producer,
+            final String writer,
             final String description,
             final String releaseDate,
             final ECategory category,
@@ -132,7 +132,7 @@ class Movie {
     ) {
         this.title = title;
         this.director = director;
-        this.producer = producer;
+        this.writer = writer;
         this.description = description;
         this.releaseDate = releaseDate;
         this.category = category;
