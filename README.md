@@ -2,7 +2,7 @@
 
 MovieRoom gives you access to follow your favourites movies.
 
-> Own movies, actors databases
+> Own movies and actors databases !
 
 * Default crud operations like: add, update, remove.
 * Used DDD-architecture, which allows to optimalize application and separate (easy to change spring framework to other).
