@@ -13,5 +13,6 @@ MovieRoom allows you to follow your favourites movies.
 ## Installation
 
 You can run application with maven wrapper !
+```
 - mvnw clean install
-- mvnw spring-boot:run
+- mvnw spring-boot:run```
