@@ -1,6 +1,6 @@
 # MovieRoom
 
-MovieRoom gives you access to follow your favourites movies.
+MovieRoom allows you to follow your favourites movies.
 
 > Own movies and actors databases !
 
