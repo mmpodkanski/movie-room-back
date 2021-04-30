@@ -1,4 +1,4 @@
-package io.github.mmpodkanski.auth;
+package io.github.mmpodkanski.user;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

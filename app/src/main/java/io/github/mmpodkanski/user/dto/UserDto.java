@@ -1,4 +1,4 @@
-package io.github.mmpodkanski.auth.dto;
+package io.github.mmpodkanski.user.dto;
 
 
 public interface UserDto {

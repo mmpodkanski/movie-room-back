@@ -48,7 +48,6 @@ class MovieController {
 
     @GetMapping
     ResponseEntity<List<MovieResponseDto>> getMovies() {
-        logger.info("Exposing all the movies!");
         var movieList = movieQueryRepository.findMoviesByAcceptedByAdminTrue();
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
@@ -106,7 +105,7 @@ class MovieController {
 
     @PostMapping
     ResponseEntity<MovieResponseDto> addMovie(
-            @RequestBody @Valid MovieRequestDto movieRequestDto
+            @RequestBody MovieRequestDto movieRequestDto
     ) {
         logger.warn("Adding a new movie!");
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
@@ -141,7 +140,6 @@ class MovieController {
     ResponseEntity<Void> removeFromFavourites(
             @PathVariable("id") int movieId
     ) {
-
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
 
         logger.info("User(id): " + currentUser.getName() + " removing movie(id): " + movieId + " from favourites");
@@ -154,8 +152,10 @@ class MovieController {
             @PathVariable int id,
             @RequestBody @Valid MovieRequestDto movieRequestDto
     ) {
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+
         logger.warn("[ADMIN] Updating movie with id: " + id);
-        movieFacade.updateMovie(movieRequestDto, id);
+        movieFacade.updateMovie(movieRequestDto, id, currentUser.getName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -1,8 +1,8 @@
 package io.github.mmpodkanski.actor;
 
 import io.github.mmpodkanski.actor.dto.*;
-import io.github.mmpodkanski.auth.UserFacade;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
+import io.github.mmpodkanski.user.UserFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -39,11 +39,11 @@ public class ActorFacade {
         return toDto(repository.save(actor));
     }
 
-    public Set<SimpleActor> addSimpleActors(Set<ActorSimpleRequestDto> actors) {
+    public Set<SimpleActor> addSimpleActors(Set<ActorSimpleRequestDto> actors, boolean createdByAdmin) {
         return actors.stream().map(actorDto -> {
                     var actor = regexActor(actorDto);
                     var snapshot = queryRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName())
-                            .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName())).getSnapshot());
+                            .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName(), createdByAdmin)).getSnapshot());
 
 
                     return SimpleActor.restore(new SimpleActorSnapshot(snapshot.getId(), snapshot.getFirstName(), snapshot.getLastName()));
@@ -59,12 +59,6 @@ public class ActorFacade {
 //        update(actorToUpdate, actor);
 //    }
 
-
-//    public void deleteActorsFromExistingMovie(Set<Actor> actors) {
-//        actors.stream()
-//                .filter(actor -> actor.getSnapshot().getMovies().size() <= 1)
-//                .forEach(repository::delete);
-//    }
 
     private ActorSimpleRequestDto regexActor(ActorSimpleRequestDto actorSimpleRequestDTO) {
         var firstName = actorSimpleRequestDTO.getFirstName();

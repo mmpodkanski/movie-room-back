@@ -1,10 +1,11 @@
-package io.github.mmpodkanski.auth;
+package io.github.mmpodkanski.user;
 
-import io.github.mmpodkanski.auth.dto.UserDto;
 import io.github.mmpodkanski.exception.ApiNotFoundException;
 import io.github.mmpodkanski.movie.dto.MovieResponseDto;
 import io.github.mmpodkanski.movie.vo.MovieEvent;
 import io.github.mmpodkanski.movie.vo.UserSourceId;
+import io.github.mmpodkanski.user.dto.UserDto;
+import io.github.mmpodkanski.user.dto.UserMovieDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,21 +13,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserFacade implements UserDetailsService {
     private final UserQueryRepository queryRepository;
     private final UserRepository userRepository;
     private final UserMovieRepository favRepository;
+    private final UserMovieQueryRepository favRepositoryQuery;
 
     UserFacade(
             final UserQueryRepository queryRepository,
             final UserRepository userRepository,
-            final UserMovieRepository favRepository
+            final UserMovieRepository favRepository,
+            final UserMovieQueryRepository favRepositoryQuery
     ) {
         this.queryRepository = queryRepository;
         this.userRepository = userRepository;
         this.favRepository = favRepository;
+        this.favRepositoryQuery = favRepositoryQuery;
     }
 
     void handle(MovieEvent event) {
@@ -79,8 +84,8 @@ public class UserFacade implements UserDetailsService {
         userRepository.save(user);
     }
 
-    List<UserDto> readAllUsers() {
-        return queryRepository.findAll();
+    public List<UserDto> readAllUsers() {
+        return queryRepository.findAllBy();
     }
 
     public boolean existsByFavourites(String username, MovieResponseDto movie) {
@@ -126,24 +131,12 @@ public class UserFacade implements UserDetailsService {
                 .equals(ERole.ROLE_ADMIN.toString());
     }
 
-//    //FIXME: VERY IMPORTANT !!!!!!
-//    List<Movie> readAllFavourites(int id) {
-//        Set<Movie> movies = userRepository.findById(id)
-//                .map(User::getFavourites)
-//                .orElseThrow(() -> new ApiNotFoundException("User with that id not exists!"));
-//
-////        return movies.stream().map(MovieResponse::new).collect(Collectors.toList());
-//        return new ArrayList<>(movies);
-
-//    }
-//    public void addFavouriteToUser(Movie movie, User user) {
-//        user.addFavourite(movie);
-//    }
-//
-//    public void removeFavouriteFromUser(Movie movie, User user) {
-//        user.removeFavourite(movie);
-
-//    }
+    public List<UserMovieDto> readAllFavourites(int id) {
+        return findUserById(id).getSnapshot().getFavourites()
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
 
 
     @Transactional
@@ -160,11 +153,11 @@ public class UserFacade implements UserDetailsService {
         user.setAdminRole();
     }
 
-    @Transactional
     public void changeStatusOfUser(int userId) {
         var user = findUserById(userId);
 
         user.toggleLocked();
+        userRepository.save(user);
     }
 
     @Override
@@ -180,6 +173,18 @@ public class UserFacade implements UserDetailsService {
                 user.getPassword(),
                 ERole.valueOf(user.getRole()),
                 user.isLocked()
+        );
+    }
+
+    UserMovieDto toDto(UserMovie movie) {
+        return new UserMovieDto(
+                movie.getId(),
+                movie.getTitle(),
+                movie.getReleaseDate(),
+                movie.getCategory(),
+                movie.getStars(),
+                movie.isAcceptedByAdmin(),
+                movie.getImgLogoUrl()
         );
     }
 
