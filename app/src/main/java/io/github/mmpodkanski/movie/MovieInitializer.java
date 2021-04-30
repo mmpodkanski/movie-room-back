@@ -20,7 +20,7 @@ class MovieInitializer {
 
             movieRepository.save(Movie.restore(new MovieSnapshot(
                     1,
-                    "First",
+                    "Vikings",
                     "Director",
                     "Producer",
                     "Description",
@@ -30,13 +30,13 @@ class MovieInitializer {
                             new SimpleActorSnapshot(1, "Adam", "Kowalski")
                     ),
                     Set.of(
-                            new CommentSnapshot(1, null, "title", "description", "mmpodkanski")
+                            new CommentSnapshot(1, LocalDateTime.now(), "title", "description", "mmpodkanski")
                     ),
                     0,
                     LocalDateTime.now(),
                     true,
-                    null,
-                    null
+                    "https://www.themoviedb.org/t/p/original/lVMpw7S7WH7gZQH2ub7gyYEaoUO.png",
+                    "https://www.themoviedb.org/t/p/original/wPOmXBgjy4xrxxw5gyVFDfhx8Ii.jpg"
             )));
 
 

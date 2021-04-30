@@ -50,8 +50,9 @@ class Actor {
         );
     }
 
-    Actor(String firstName, String lastName) {
+    Actor(String firstName, String lastName, boolean createdByAdmin) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.acceptedByAdmin = createdByAdmin;
     }
 }

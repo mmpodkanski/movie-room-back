@@ -180,20 +180,20 @@
       <ObjectId>35</ObjectId>
       <SequenceIdentity>null(299)</SequenceIdentity>
     </sequence>
-    <sequence id="165" parent="4" name="SYSTEM_SEQUENCE_317361D9_9DF6_436C_A5D9_148FDA1777F0">
+    <sequence id="165" parent="4" name="SYSTEM_SEQUENCE_146697FF_FE6D_4BFE_B829_A13B96313520">
+      <ObjectId>12</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <SequenceIdentity>null(65)</SequenceIdentity>
+      <AutoCreated>1</AutoCreated>
+    </sequence>
+    <sequence id="166" parent="4" name="SYSTEM_SEQUENCE_317361D9_9DF6_436C_A5D9_148FDA1777F0">
       <ObjectId>8</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SequenceIdentity>null(65)</SequenceIdentity>
       <AutoCreated>1</AutoCreated>
     </sequence>
-    <sequence id="166" parent="4" name="SYSTEM_SEQUENCE_6476D80A_62A4_4FDB_8B7E_9FFA2641421D">
+    <sequence id="167" parent="4" name="SYSTEM_SEQUENCE_6476D80A_62A4_4FDB_8B7E_9FFA2641421D">
       <ObjectId>4</ObjectId>
-      <NameSurrogate>1</NameSurrogate>
-      <SequenceIdentity>null(65)</SequenceIdentity>
-      <AutoCreated>1</AutoCreated>
-    </sequence>
-    <sequence id="167" parent="4" name="SYSTEM_SEQUENCE_73F5DB77_4628_425F_B998_D2D4A5D9EBF5">
-      <ObjectId>12</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SequenceIdentity>null(97)</SequenceIdentity>
       <AutoCreated>1</AutoCreated>
@@ -223,13 +223,13 @@
       <ObjectId>21</ObjectId>
     </table>
     <table id="175" parent="4" name="USER_FAVOURITES">
-      <ObjectId>34</ObjectId>
+      <ObjectId>25</ObjectId>
     </table>
     <column id="176" parent="169" name="ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>null(65)</SequenceIdentity>
+      <SequenceIdentity>null(97)</SequenceIdentity>
     </column>
     <column id="177" parent="169" name="ACCEPTED_BY_ADMIN">
       <Position>2</Position>
@@ -309,7 +309,7 @@
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>null(97)</SequenceIdentity>
+      <SequenceIdentity>null(65)</SequenceIdentity>
     </column>
     <column id="192" parent="171" name="ACCEPTED_BY_ADMIN">
       <Position>2</Position>
@@ -396,14 +396,14 @@ ACTOR_ID</ColNames>
       <AutoCreated>1</AutoCreated>
     </index>
     <index id="208" parent="172" name="FKO40LC9YIROX8UM5POAXHW6AK0_INDEX_8">
-      <ObjectId>29</ObjectId>
+      <ObjectId>32</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>99</SourceTextLength>
       <ColNames>MOVIE_ID</ColNames>
       <AutoCreated>1</AutoCreated>
     </index>
     <index id="209" parent="172" name="FKLEXE564X1FI4SSJE5WCUII3V2_INDEX_8">
-      <ObjectId>27</ObjectId>
+      <ObjectId>30</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>99</SourceTextLength>
       <ColNames>ACTOR_ID</ColNames>
@@ -451,7 +451,7 @@ COMMENTS_ID</ColNames>
       <AutoCreated>1</AutoCreated>
     </index>
     <index id="216" parent="173" name="UK_AKVLG3BT257BNOXMFXXTLYNUH_INDEX_7">
-      <ObjectId>25</ObjectId>
+      <ObjectId>28</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>112</SourceTextLength>
       <ColNames>COMMENTS_ID</ColNames>
@@ -459,7 +459,7 @@ COMMENTS_ID</ColNames>
       <AutoCreated>1</AutoCreated>
     </index>
     <index id="217" parent="173" name="FK3XQJ7Q9RTLFQIYN3IFA3M6720_INDEX_7">
-      <ObjectId>32</ObjectId>
+      <ObjectId>36</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>110</SourceTextLength>
       <ColNames>MOVIE_SNAPSHOT_ID</ColNames>
@@ -548,7 +548,7 @@ COMMENTS_ID</ColNames>
       <NotNull>1</NotNull>
     </column>
     <index id="233" parent="175" name="PRIMARY_KEY_5">
-      <ObjectId>36</ObjectId>
+      <ObjectId>26</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <SourceTextLength>96</SourceTextLength>
       <ColNames>USER_ID

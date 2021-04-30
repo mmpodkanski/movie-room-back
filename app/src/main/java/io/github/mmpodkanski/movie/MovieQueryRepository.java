@@ -5,9 +5,11 @@ import io.github.mmpodkanski.movie.dto.MovieResponseDto;
 import java.util.List;
 import java.util.Optional;
 
-interface MovieQueryRepository {
+public interface MovieQueryRepository {
 
     List<MovieResponseDto> findMoviesByAcceptedByAdminTrue();
+
+    List<MovieResponseDto> findMoviesByAcceptedByAdminFalse();
 
     List<MovieResponseDto> findFirst5ByOrderByStarsDesc();
 

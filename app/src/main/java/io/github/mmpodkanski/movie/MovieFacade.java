@@ -3,7 +3,6 @@ package io.github.mmpodkanski.movie;
 import io.github.mmpodkanski.DomainEventPublisher;
 import io.github.mmpodkanski.actor.ActorFacade;
 import io.github.mmpodkanski.actor.dto.SimpleActor;
-import io.github.mmpodkanski.auth.UserFacade;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
 import io.github.mmpodkanski.exception.ApiNotFoundException;
 import io.github.mmpodkanski.movie.dto.CommentRequestDto;
@@ -11,8 +10,8 @@ import io.github.mmpodkanski.movie.dto.MovieRequestDto;
 import io.github.mmpodkanski.movie.dto.MovieResponseDto;
 import io.github.mmpodkanski.movie.vo.MovieEvent;
 import io.github.mmpodkanski.movie.vo.UserSourceId;
+import io.github.mmpodkanski.user.UserFacade;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -66,10 +65,9 @@ public class MovieFacade {
         if (movieRepository.existsByTitle(newMovie.getTitle())) {
             throw new ApiBadRequestException("Movie with that title already exists!");
         }
-
         boolean createdByAdmin = userFacade.checkIfAdmin(username);
 
-        var actorsToSave = actorFacade.addSimpleActors(newMovie.getActors());
+        var actorsToSave = actorFacade.addSimpleActors(newMovie.getActors(), createdByAdmin);
         var movie = mapMovieRequest(newMovie, createdByAdmin, actorsToSave);
 
         return toDto(movieRepository.save(movie));
@@ -92,13 +90,16 @@ public class MovieFacade {
     }
 
 
-    void updateMovie(MovieRequestDto requestMovie, int movieId) {
+    void updateMovie(
+            MovieRequestDto requestMovie,
+            int movieId,
+            String username
+    ) {
         var movieToUpdate = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
-//        actorFacade.deleteActorsFromExistingMovie(movieToUpdate.getSnapshot().getActors().stream().map(Actor::restore).collect(Collectors.toSet()));
-
-        var actorsToSave = actorFacade.addSimpleActors(requestMovie.getActors());
+        boolean createdByAdmin = userFacade.checkIfAdmin(username);
+        var actorsToSave = actorFacade.addSimpleActors(requestMovie.getActors(), createdByAdmin);
 
         movieToUpdate.update(
                 requestMovie.getTitle(),
@@ -114,10 +115,13 @@ public class MovieFacade {
         movieRepository.save(movieToUpdate);
     }
 
-    @Transactional
+//    @Transactional
     public void changeStatusOfMovie(int id) {
-        movieRepository.findById(id)
-                .ifPresent(Movie::toggleStatus);
+        var movie = movieRepository.findById(id)
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
+
+        movie.toggleStatus();
+        movieRepository.save(movie);
     }
 
 
@@ -131,7 +135,6 @@ public class MovieFacade {
 //        Set<Actor> actors = actorService.checkActors(newActors);
 //        movie.addActors(actors);
 //        movieRepository.save(movie);
-
 //    }
 
 
@@ -149,9 +152,6 @@ public class MovieFacade {
                 .getSnapshot();
 
         var userId = userFacade.loadIdByUsername(username);
-
-//        tworzymy tutaj zdarzenie ktore zawiera w sobie informacje o movie;
-//        wtedy --> UserFacade odbiera i na podstawie tych danych tworzy encje UserMovie, ktora jest w encji glownej - czyt. User;
 
         return new MovieEvent(
                 new UserSourceId(String.valueOf(userId)),
@@ -172,19 +172,6 @@ public class MovieFacade {
     public void deleteMovieById(int movieId) {
         var movieToDelete = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
-
-
-//        actorFacade.deleteActorsFromExistingMovie(
-//                movieToDelete
-//                        .getSnapshot()
-//                        .getActors()
-//                        .stream()
-//                        .map(Actor::restore)
-//                        .collect(Collectors.toSet())
-//        );
-
-//        actorFacade.deleteActorsFromExistingMovie(movieToDelete.getSnapshot().getActors().stream().map(Actor::restore).collect(Collectors.toSet()));
-
 
         movieRepository.delete(movieToDelete);
     }
