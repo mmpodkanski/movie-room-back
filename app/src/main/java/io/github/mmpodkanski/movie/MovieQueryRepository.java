@@ -11,11 +11,11 @@ public interface MovieQueryRepository {
 
     List<MovieResponseDto> findMoviesByAcceptedByAdminFalse();
 
-    List<MovieResponseDto> findFirst5ByOrderByStarsDesc();
+    List<MovieResponseDto> findFirst4ByOrderByStarsDesc();
 
     List<MovieResponseDto> findMoviesByReleaseDate(String year);
 
-    List<MovieResponseDto> findMoviesByOrderByCreatedAtDesc();
+    List<MovieResponseDto> findFirst10ByOrderByCreatedAtDesc();
 
     Optional<MovieResponseDto> findDtoById(int id);
 

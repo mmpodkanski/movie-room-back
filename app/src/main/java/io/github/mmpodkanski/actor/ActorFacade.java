@@ -71,6 +71,7 @@ public class ActorFacade {
         return actorSimpleRequestDTO;
     }
 
+
     public ActorSimpleResponseDto toSimpleDto(SimpleActor actor) {
         var snap = actor.getSnapshot();
         return ActorSimpleResponseDto.create(snap.getId(), snap.getFirstName(), snap.getLastName());

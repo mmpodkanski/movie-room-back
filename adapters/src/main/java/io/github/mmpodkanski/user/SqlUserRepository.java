@@ -2,10 +2,14 @@ package io.github.mmpodkanski.user;
 
 import org.springframework.data.repository.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 interface SqlUserRepository extends Repository<UserSnapshot, Integer> {
     Optional<UserSnapshot> findById(int id);
+
+    List<UserSnapshot> findAllByFavouritesContaining(UserMovie userMovie);
 
     UserSnapshot save(UserSnapshot entity);
 
@@ -21,6 +25,11 @@ class UserRepositoryImpl implements UserRepository {
 
     UserRepositoryImpl(final SqlUserRepository sqlUserRepository) {
         this.sqlUserRepository = sqlUserRepository;
+    }
+
+    @Override
+    public List<User> findAllByFavouritesContaining(UserMovie userMovie) {
+        return sqlUserRepository.findAllByFavouritesContaining(userMovie).stream().map(User::restore).collect(Collectors.toList());
     }
 
     @Override

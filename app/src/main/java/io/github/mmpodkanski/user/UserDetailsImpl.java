@@ -30,7 +30,7 @@ class UserDetailsImpl extends User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority =
-                new SimpleGrantedAuthority(this.getUsername());
+                new SimpleGrantedAuthority(this.getRole().toString());
         return Collections.singletonList(authority);
     }
 

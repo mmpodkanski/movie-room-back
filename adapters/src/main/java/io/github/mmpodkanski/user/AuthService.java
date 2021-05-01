@@ -42,13 +42,12 @@ class AuthService {
             throw new ApiBadRequestException("Email is already in use!");
         }
 
-        var user = new User(0,
+        var user = new UserDetailsImpl(0,
                 registerRequest.getUsername(),
                 registerRequest.getEmail(),
                 encoder.encode(registerRequest.getPassword()),
                 ERole.ROLE_USER,
-                false,
-                null
+                false
         );
 
         userRepository.save(user);
@@ -62,10 +61,11 @@ class AuthService {
                 )
         );
 
+        System.out.println(auth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtAccessToken = jwtUtils.generateJwtToken(auth);
 
-        var user = (User) auth.getPrincipal();
+        var user = (UserDetailsImpl) auth.getPrincipal();
         String role = auth.getAuthorities().toString();
 
 

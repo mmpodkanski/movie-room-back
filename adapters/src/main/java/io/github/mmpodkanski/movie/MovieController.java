@@ -54,7 +54,7 @@ class MovieController {
 
     @GetMapping(params = "top-rated")
     ResponseEntity<List<MovieResponseDto>> getTopRatedMovies() {
-        var movieList = movieQueryRepository.findFirst5ByOrderByStarsDesc()
+        var movieList = movieQueryRepository.findFirst4ByOrderByStarsDesc()
                 .stream()
                 .filter(MovieResponseDto::isAcceptedByAdmin)
                 .collect(Collectors.toList());
@@ -64,7 +64,7 @@ class MovieController {
 
     @GetMapping(params = "new-added")
     ResponseEntity<List<MovieResponseDto>> getTheNewestMovies() {
-        var movieList = movieQueryRepository.findMoviesByOrderByCreatedAtDesc()
+        var movieList = movieQueryRepository.findFirst10ByOrderByCreatedAtDesc()
                 .stream()
                 .filter(MovieResponseDto::isAcceptedByAdmin)
                 .collect(Collectors.toList());

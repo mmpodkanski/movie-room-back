@@ -20,18 +20,15 @@ public class UserFacade implements UserDetailsService {
     private final UserQueryRepository queryRepository;
     private final UserRepository userRepository;
     private final UserMovieRepository favRepository;
-    private final UserMovieQueryRepository favRepositoryQuery;
 
     UserFacade(
             final UserQueryRepository queryRepository,
             final UserRepository userRepository,
-            final UserMovieRepository favRepository,
-            final UserMovieQueryRepository favRepositoryQuery
+            final UserMovieRepository favRepository
     ) {
         this.queryRepository = queryRepository;
         this.userRepository = userRepository;
         this.favRepository = favRepository;
-        this.favRepositoryQuery = favRepositoryQuery;
     }
 
     void handle(MovieEvent event) {
@@ -56,7 +53,7 @@ public class UserFacade implements UserDetailsService {
                             break;
 
                         case REMOVED:
-                            removeMovieToFav(userId, movie.getId());
+                            removeMovieFromFav(userId, movie.getId());
                             break;
                     }
                 });
@@ -74,7 +71,15 @@ public class UserFacade implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void removeMovieToFav(int userId, int movieId) {
+    public void removeFavouriteFromAllUsers(int id) {
+        var fav = favRepository.findById(id)
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists"));
+
+        var users = userRepository.findAllByFavouritesContaining(fav);
+        users.forEach(user -> user.removeFavourite(fav));
+    }
+
+    public void removeMovieFromFav(int userId, int movieId) {
         var user = findUserById(userId);
         var movie = favRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
@@ -88,7 +93,7 @@ public class UserFacade implements UserDetailsService {
         return queryRepository.findAllBy();
     }
 
-    public boolean existsByFavourites(String username, MovieResponseDto movie) {
+    public boolean existsByFavourite(String username, MovieResponseDto movie) {
         int userId = loadIdByUsername(username);
         var fav = new UserMovie(
                 movie.getId(),
@@ -105,7 +110,6 @@ public class UserFacade implements UserDetailsService {
 //
 //    public boolean existsUserByFavourite(int id, Movie movie) {
 //        return userRepository.existsByIdAndFavourites(id, movie);
-
 //    }
 
     public String loadUserNameById(int id) {
@@ -187,5 +191,6 @@ public class UserFacade implements UserDetailsService {
                 movie.getImgLogoUrl()
         );
     }
+
 
 }

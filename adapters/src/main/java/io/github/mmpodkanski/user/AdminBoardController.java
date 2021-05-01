@@ -8,13 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/admin/board")
-//@PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+@PreAuthorize(value = "hasRole('ROLE_ADMIN')")
 @CrossOrigin(origins = "http://localhost:8081", maxAge = 3600)
 class AdminBoardController {
     private final Logger logger = LoggerFactory.getLogger(AdminBoardController.class);

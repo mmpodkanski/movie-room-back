@@ -55,7 +55,7 @@ public class MovieFacade {
         var movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
-        return userFacade.existsByFavourites(username, toDto(movie));
+        return userFacade.existsByFavourite(username, toDto(movie));
     }
 
     public MovieResponseDto createMovie(
@@ -148,22 +148,31 @@ public class MovieFacade {
 
     private MovieEvent toggleStar(String username, int movieId, MovieEvent.EState state) {
         var movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"))
-                .getSnapshot();
+                .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
         var userId = userFacade.loadIdByUsername(username);
+
+        if (state == MovieEvent.EState.ADDED) {
+            movie.addStar();
+        }
+
+        if (state == MovieEvent.EState.REMOVED) {
+            movie.removeStar();
+        }
+
+        var snap = movie.getSnapshot();
 
         return new MovieEvent(
                 new UserSourceId(String.valueOf(userId)),
                 state,
                 new MovieEvent.Data(
                         movieId,
-                        movie.getTitle(),
-                        movie.getReleaseDate(),
-                        movie.getCategory(),
-                        movie.getStars(),
-                        movie.isAcceptedByAdmin(),
-                        movie.getImgLogoUrl()
+                        snap.getTitle(),
+                        snap.getReleaseDate(),
+                        snap.getCategory(),
+                        snap.getStars(),
+                        snap.isAcceptedByAdmin(),
+                        snap.getImgLogoUrl()
                 )
         );
     }
@@ -173,6 +182,7 @@ public class MovieFacade {
         var movieToDelete = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
+        userFacade.removeFavouriteFromAllUsers(movieToDelete.getSnapshot().getId());
         movieRepository.delete(movieToDelete);
     }
 

@@ -53,6 +53,7 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
                     <cascade-all/>
                 </cascade>
             </one-to-many>
+
             <many-to-many name="actors" target-entity="io.github.mmpodkanski.actor.dto.SimpleActorSnapshot">
                 <join-table name="MOVIES_ACTORS">
                     <join-column name="movie_id"/>
@@ -62,6 +63,7 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
                     <cascade-merge/>
                 </cascade>
             </many-to-many>
+
         </attributes>
     </entity>
 
