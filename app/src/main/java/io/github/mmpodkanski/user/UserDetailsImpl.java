@@ -68,4 +68,8 @@ class UserDetailsImpl extends User implements UserDetails {
     public int getId() {
         return id;
     }
+
+    public ERole getRole() {
+        return role;
+    }
 }

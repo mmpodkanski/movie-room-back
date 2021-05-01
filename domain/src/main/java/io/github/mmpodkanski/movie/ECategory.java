@@ -1,7 +1,6 @@
 package io.github.mmpodkanski.movie;
 
-// TODO: add more categories
-enum ECategory {
+public enum ECategory {
     ACTION,
     COMEDY,
     DRAMA,
@@ -9,5 +8,4 @@ enum ECategory {
     HORROR,
     ROMANCE,
     THRILLER
-
 }

@@ -75,23 +75,4 @@ class User {
         locked = !locked;
     }
 
-//    void addFavourite(MovieSnapshot movie) {
-//        favourites.add(movie);
-//    }
-//
-//    void removeFavourite(MovieSnapshot movie) {
-////        if (favourites.isEmpty()) {
-////            throw new ApiBadRequestException("User doesn't has favourites!");
-////        }
-//
-//        favourites.remove(movie);
-//    }
-
-//    Set<MovieSnapshot> getFavourites() {
-//        return favourites;
-//    }
-//
-//    void setFavourites(Set<MovieSnapshot> favourites) {
-//        this.favourites = favourites;
-//    }
 }

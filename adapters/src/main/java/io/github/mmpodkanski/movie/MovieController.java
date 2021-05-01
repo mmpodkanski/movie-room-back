@@ -172,7 +172,7 @@ class MovieController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
-    ResponseEntity<Void> removeMovie(@PathVariable int id) {
+    public ResponseEntity<Void> removeMovie(@PathVariable int id) {
         logger.warn("[ADMIN] Removing movie with id: " + id);
         movieFacade.deleteMovieById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
