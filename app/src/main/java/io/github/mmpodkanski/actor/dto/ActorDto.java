@@ -1,5 +1,7 @@
 package io.github.mmpodkanski.actor.dto;
 
+import io.github.mmpodkanski.actor.EGender;
+
 import java.util.Objects;
 
 public class ActorDto {
@@ -12,13 +14,22 @@ public class ActorDto {
     private final String lastName;
     private final String birthDate;
     private final String imageUrl;
+    private final EGender gender;
 
-    public ActorDto(final int id, final String firstName, final String lastName, String birthDate, String imageUrl) {
+    public ActorDto(
+            final int id,
+            final String firstName,
+            final String lastName,
+            final String birthDate,
+            final String imageUrl,
+            final EGender gender
+    ) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.imageUrl = imageUrl;
+        this.gender = gender;
     }
 
     public Builder toBuilder() {
@@ -27,8 +38,8 @@ public class ActorDto {
                 .withFirstName(firstName)
                 .withLastName(lastName)
                 .withBirthDate(birthDate)
-                .withImageUrl(imageUrl);
-//                .withAcceptedByAdmin(acceptedByAdmin);
+                .withImageUrl(imageUrl)
+                .withGender(gender);
     }
 
     public int getId() {
@@ -51,12 +62,17 @@ public class ActorDto {
         return imageUrl;
     }
 
+    public EGender getGender() {
+        return gender;
+    }
+
     public static class Builder {
         private int id;
         private String firstName;
         private String lastName;
         private String birthDate;
         private String imageUrl;
+        private EGender gender;
 
         public Builder withId(int id) {
             this.id = id;
@@ -83,8 +99,13 @@ public class ActorDto {
             return this;
         }
 
+        public Builder withGender(EGender gender) {
+            this.gender = gender;
+            return this;
+        }
+
         public ActorDto build() {
-            return new ActorDto(id, firstName, lastName, birthDate, imageUrl);
+            return new ActorDto(id, firstName, lastName, birthDate, imageUrl, gender);
         }
 
     }
@@ -98,11 +119,12 @@ public class ActorDto {
                 Objects.equals(firstName, actorDto.firstName) &&
                 Objects.equals(lastName, actorDto.lastName) &&
                 Objects.equals(birthDate, actorDto.birthDate) &&
-                Objects.equals(imageUrl, actorDto.imageUrl);
+                Objects.equals(imageUrl, actorDto.imageUrl) &&
+                Objects.equals(gender, actorDto.gender);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, birthDate, imageUrl);
+        return Objects.hash(id, firstName, lastName, birthDate, imageUrl, gender);
     }
 }

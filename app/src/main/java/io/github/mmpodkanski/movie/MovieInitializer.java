@@ -27,7 +27,7 @@ class MovieInitializer {
                     "releaseDate",
                     ECategory.ACTION,
                     Set.of(
-                            new SimpleActorSnapshot(1, "Adam", "Kowalski")
+                            new SimpleActorSnapshot(1, "Adam", "Kowalski", null)
                     ),
                     Set.of(
                             new CommentSnapshot(1, LocalDateTime.now(), "title", "description", "mmpodkanski")

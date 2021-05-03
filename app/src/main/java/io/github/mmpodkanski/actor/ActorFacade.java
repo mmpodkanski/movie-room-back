@@ -2,6 +2,7 @@ package io.github.mmpodkanski.actor;
 
 import io.github.mmpodkanski.actor.dto.*;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
+import io.github.mmpodkanski.exception.ApiNotFoundException;
 import io.github.mmpodkanski.user.UserFacade;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +28,23 @@ public class ActorFacade {
         this.userFacade = userFacade;
     }
 
-    //FIXME: ADD ACTOR
+    public void acceptActorsById(Set<Integer> setOfIntegers) {
+//        setOfIntegers.forEach(actorId ->
+//                repository.findById(actorId).ifPresent(Actor::setAcceptedByAdminToTrue)
+//        );
+
+        setOfIntegers.forEach(actorId ->
+                repository.findById(actorId).ifPresent(actor -> {
+                    actor.setAcceptedByAdminToTrue();
+                    repository.save(actor);
+                })
+        );
+    }
+
     ActorDto addActor(ActorDto newActor, String username) {
         if (queryRepository.existsActorByFirstNameAndLastName(newActor.getFirstName(), newActor.getLastName())) {
             throw new ApiBadRequestException("Actor with that name already exists!");
         }
-
         boolean createdByAdmin = userFacade.checkIfAdmin(username);
 
         var actor = factory.from(newActor, createdByAdmin);
@@ -40,25 +52,41 @@ public class ActorFacade {
     }
 
     public Set<SimpleActor> addSimpleActors(Set<ActorSimpleRequestDto> actors, boolean createdByAdmin) {
-        return actors.stream().map(actorDto -> {
-                    var actor = regexActor(actorDto);
+        return actors.stream().map(actorSimpleDto -> {
+                    var actor = regexActor(actorSimpleDto);
                     var snapshot = queryRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName())
                             .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName(), createdByAdmin)).getSnapshot());
 
 
-                    return SimpleActor.restore(new SimpleActorSnapshot(snapshot.getId(), snapshot.getFirstName(), snapshot.getLastName()));
+                    return SimpleActor.restore(new SimpleActorSnapshot(snapshot.getId(), snapshot.getFirstName(), snapshot.getLastName(), snapshot.getImageUrl()));
                 }
         ).collect(Collectors.toSet());
     }
 
-//    @Transactional
-//    public void updateActor(int actorId, ActorDto actor) {
-//        var actorToUpdate = repository.findById(actorId)
-//                .orElseThrow(() -> new ApiNotFoundException("Actor with that id not exists!"));
-//
-//        update(actorToUpdate, actor);
-//    }
+    ActorDto updateActor(int actorId, ActorDto dto) {
+        if (!queryRepository.existsActorById(actorId)) {
+            throw new ApiNotFoundException("Actor with that id not exists!");
+        }
 
+        var simpleDto = regexActor(
+                new ActorSimpleRequestDto(actorId, dto.getFirstName(), dto.getLastName()));
+
+        var toUpdate = dto.toBuilder()
+                .withId(actorId)
+                .withFirstName(simpleDto.getFirstName())
+                .withLastName(simpleDto.getLastName())
+                .build();
+
+        var actorToSave = factory.from(toUpdate, true);
+
+        return toDto(repository.save(actorToSave));
+
+    }
+
+
+    void removeActorById(int id) {
+        repository.deleteById(id);
+    }
 
     private ActorSimpleRequestDto regexActor(ActorSimpleRequestDto actorSimpleRequestDTO) {
         var firstName = actorSimpleRequestDTO.getFirstName();
@@ -74,7 +102,7 @@ public class ActorFacade {
 
     public ActorSimpleResponseDto toSimpleDto(SimpleActor actor) {
         var snap = actor.getSnapshot();
-        return ActorSimpleResponseDto.create(snap.getId(), snap.getFirstName(), snap.getLastName());
+        return ActorSimpleResponseDto.create(snap.getId(), snap.getFirstName(), snap.getLastName(), snap.getLastName());
     }
 
     private ActorDto toDto(Actor actor) {
@@ -87,12 +115,5 @@ public class ActorFacade {
                 .withImageUrl(snap.getImageUrl())
                 .build();
     }
-
-//    private void update(Actor actorToUpdate, ActorDto actor) {
-//        actorToUpdate.setFirstName(actor.getFirstName());
-//        actorToUpdate.setLastName(actor.getLastName());
-//        actorToUpdate.setBirthDate(actor.getBirthDate());
-//        actorToUpdate.setImageUrl(actor.getImageUrl());
-//    }
 
 }

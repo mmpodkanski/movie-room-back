@@ -12,7 +12,8 @@ class ActorFactory {
                 source.getLastName(),
                 source.getBirthDate(),
                 source.getImageUrl(),
-                createdByAdmin
+                createdByAdmin,
+                source.getGender() == null ? EGender.NONE : source.getGender()
         ));
     }
 }

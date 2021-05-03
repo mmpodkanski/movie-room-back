@@ -14,12 +14,14 @@ import io.github.mmpodkanski.user.UserFacade;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class MovieFacade {
     private final MovieRepository movieRepository;
+    private final MovieQueryRepository movieQueryRepository;
     private final UserFacade userFacade;
     private final CategoryFacade categoryFacade;
     private final ActorFacade actorFacade;
@@ -31,6 +33,7 @@ public class MovieFacade {
 
     MovieFacade(
             final MovieRepository movieRepository,
+            final MovieQueryRepository movieQueryRepository,
             final UserFacade userFacade,
             final CategoryFacade categoryFacade,
             final ActorFacade actorFacade,
@@ -41,6 +44,7 @@ public class MovieFacade {
             final DomainEventPublisher publisher
     ) {
         this.movieRepository = movieRepository;
+        this.movieQueryRepository = movieQueryRepository;
         this.userFacade = userFacade;
         this.categoryFacade = categoryFacade;
         this.actorFacade = actorFacade;
@@ -58,11 +62,11 @@ public class MovieFacade {
         return userFacade.existsByFavourite(username, toDto(movie));
     }
 
-    public MovieResponseDto createMovie(
+    MovieResponseDto createMovie(
             MovieRequestDto newMovie,
             String username
     ) {
-        if (movieRepository.existsByTitle(newMovie.getTitle())) {
+        if (movieQueryRepository.existsByTitle(newMovie.getTitle())) {
             throw new ApiBadRequestException("Movie with that title already exists!");
         }
         boolean createdByAdmin = userFacade.checkIfAdmin(username);
@@ -92,14 +96,12 @@ public class MovieFacade {
 
     void updateMovie(
             MovieRequestDto requestMovie,
-            int movieId,
-            String username
+            int movieId
     ) {
         var movieToUpdate = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
-        boolean createdByAdmin = userFacade.checkIfAdmin(username);
-        var actorsToSave = actorFacade.addSimpleActors(requestMovie.getActors(), createdByAdmin);
+        var actorsToSave = actorFacade.addSimpleActors(requestMovie.getActors(), true);
 
         movieToUpdate.update(
                 requestMovie.getTitle(),
@@ -115,12 +117,15 @@ public class MovieFacade {
         movieRepository.save(movieToUpdate);
     }
 
-//    @Transactional
     public void changeStatusOfMovie(int id) {
+        var indexSet = new HashSet<Integer>();
         var movie = movieRepository.findById(id)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
         movie.toggleStatus();
+        movie.getSnapshot().getActors().forEach(actor -> indexSet.add(actor.getId()));
+
+        actorFacade.acceptActorsById(indexSet);
         movieRepository.save(movie);
     }
 
@@ -198,9 +203,7 @@ public class MovieFacade {
             Set<SimpleActor> actorsToSave
     ) {
         var createdAt = LocalDateTime.now();
-        ECategory category = categoryFacade.checkCategory(movieModel.getCategory());
-
-        return movieFactory.from(movieModel, createdAt, createdByAdmin, category, actorsToSave);
+        return movieFactory.from(movieModel, createdAt, createdByAdmin, actorsToSave);
     }
 
     private MovieResponseDto toDto(Movie movie) {

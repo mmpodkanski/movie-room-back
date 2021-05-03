@@ -8,5 +8,5 @@ interface ActorRepository {
 
     Actor save(Actor entity);
 
-    void delete(Actor entity);
+    void deleteById(int id);
 }

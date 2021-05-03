@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Service
 class MovieFactory {
 
-    Movie from(MovieRequestDto source, LocalDateTime createdAt, boolean createdByAdmin, ECategory category, Set<SimpleActor> actors) {
+    Movie from(MovieRequestDto source, LocalDateTime createdAt, boolean createdByAdmin, Set<SimpleActor> actors) {
         return Movie.restore(new MovieSnapshot(
                 source.getId(),
                 source.getTitle(),
@@ -19,7 +19,7 @@ class MovieFactory {
                 source.getWriter(),
                 source.getDescription(),
                 source.getReleaseDate(),
-                category,
+                ECategory.valueOf(source.getCategory()),
                 actors.stream().map(SimpleActor::getSnapshot).collect(Collectors.toSet()),
                 null,
                 0,
@@ -30,37 +30,4 @@ class MovieFactory {
 
         ));
     }
-//    MovieResponseDto toDto(Movie source) {
-//        var actors = source.getActors()
-//                .stream()
-//                .map(actor -> new ActorSimpleDto(actor.getId(), actor.getFirstName(), actor.getLastName()))
-//                .sorted(Comparator.comparing(ActorSimpleDto::getFirstName))
-//                .collect(Collectors.toList());
-//
-//        var comments = source.getComments()
-//                .stream()
-//                .map(comment -> new CommentResponseDto(
-//                        comment.getId(),
-//                        comment.getCreatedAt(),
-//                        comment.getTitle(),
-//                        comment.getDescription()
-//                ))
-//                .sorted(Comparator.comparing(Comment::getCreatedAt))
-//                .collect(Collectors.toList());
-//
-//        return MovieResponseDto.create(
-//                source.getId(),
-//                source.getTitle(),
-//                source.getDescription(),
-//                source.getDirector(),
-//                source.getProducer(),
-//                source.getCategory().name(),
-//                source.getReleaseDate(),
-//                actors,
-//                comments,
-//                source.isAcceptedByAdmin(),
-//                source.getImgLogoUrl(),
-//                source.getImgBackUrl()
-//        );
-//    }
 }

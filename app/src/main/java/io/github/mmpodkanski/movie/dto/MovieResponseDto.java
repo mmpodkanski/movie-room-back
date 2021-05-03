@@ -1,5 +1,6 @@
 package io.github.mmpodkanski.movie.dto;
 
+import io.github.mmpodkanski.actor.dto.ActorDto;
 import io.github.mmpodkanski.actor.dto.ActorSimpleResponseDto;
 import io.github.mmpodkanski.movie.ECategory;
 
@@ -66,7 +67,21 @@ public interface MovieResponseDto {
         private final String imgLogoUrl;
         private final String imgBackUrl;
 
-        DeserializationImpl(int id, String title, String description, String director, String writer, ECategory category, String releaseDate, int stars, List<ActorSimpleResponseDto> actors, List<CommentResponseDto> comments, boolean acceptedByAdmin, String imgLogoUrl, String imgBackUrl) {
+        DeserializationImpl(
+                final int id,
+                final String title,
+                final String description,
+                final String director,
+                final String writer,
+                final ECategory category,
+                final String releaseDate,
+                final int stars,
+                final List<ActorSimpleResponseDto> actors,
+                final List<CommentResponseDto> comments,
+                final boolean acceptedByAdmin,
+                final String imgLogoUrl,
+                final String imgBackUrl
+        ) {
             this.id = id;
             this.title = title;
             this.description = description;

@@ -26,6 +26,10 @@ public class MovieRequestDto {
     private String imgLogoUrl;
     private String imgBackUrl;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

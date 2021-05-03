@@ -26,11 +26,6 @@ class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public boolean existsByTitle(final String title) {
-        return sqlRepository.existsByTitle(title);
-    }
-
-    @Override
     public Optional<Movie> findById(final int id) {
         return sqlRepository.findById(id).map(Movie::restore);
     }

@@ -7,6 +7,10 @@ import java.util.Optional;
 
 public interface MovieQueryRepository {
 
+    boolean existsByTitle(String title);
+
+    boolean existsById(int id);
+
     List<MovieResponseDto> findMoviesByAcceptedByAdminTrue();
 
     List<MovieResponseDto> findMoviesByAcceptedByAdminFalse();

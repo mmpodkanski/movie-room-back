@@ -8,7 +8,8 @@ class Actor {
                 snapshot.getLastName(),
                 snapshot.getBirthDate(),
                 snapshot.getImageUrl(),
-                snapshot.isAcceptedByAdmin()
+                snapshot.isAcceptedByAdmin(),
+                snapshot.getGender()
         );
     }
 
@@ -18,6 +19,7 @@ class Actor {
     private String birthDate = "Not updated";
     private String imageUrl;
     private boolean acceptedByAdmin;
+    private EGender gender;
 
     protected Actor() {
     }
@@ -28,7 +30,8 @@ class Actor {
             final String lastName,
             final String birthDate,
             final String imageUrl,
-            final boolean acceptedByAdmin
+            final boolean acceptedByAdmin,
+            final EGender gender
     ) {
         this.id = id;
         this.firstName = firstName;
@@ -36,6 +39,7 @@ class Actor {
         this.birthDate = birthDate;
         this.imageUrl = imageUrl;
         this.acceptedByAdmin = acceptedByAdmin;
+        this.gender = gender;
     }
 
 
@@ -46,7 +50,8 @@ class Actor {
                 lastName,
                 birthDate,
                 imageUrl,
-                acceptedByAdmin
+                acceptedByAdmin,
+                gender
         );
     }
 
@@ -54,5 +59,9 @@ class Actor {
         this.firstName = firstName;
         this.lastName = lastName;
         this.acceptedByAdmin = createdByAdmin;
+    }
+
+    void setAcceptedByAdminToTrue() {
+        this.acceptedByAdmin = true;
     }
 }

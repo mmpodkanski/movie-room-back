@@ -7,6 +7,8 @@ import java.util.Optional;
 
 interface ActorQueryRepository {
 
+    boolean existsActorById(int actorId);
+
     boolean existsActorByFirstNameAndLastName(String firstName, String lastName);
 
     List<ActorDto> findAllBy();
@@ -14,7 +16,4 @@ interface ActorQueryRepository {
     Optional<ActorSnapshot> findByFirstNameAndLastName(String firstName, String lastName);
 
     Optional<ActorDto> findDtoById(int id);
-
-
-
 }

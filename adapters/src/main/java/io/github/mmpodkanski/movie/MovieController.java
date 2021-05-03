@@ -35,12 +35,11 @@ class MovieController {
     }
 
 
-    // TODO: REMOVE IT IN FUTURE!
     @GetMapping("/check-fav/{id}")
     ResponseEntity<Boolean> existsUserFavourite(
             @PathVariable("id") int movieId
     ) {
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        var currentUser = getAuth();
 
         var result = movieFacade.checkIfUserAlreadyAddedFav(movieId, currentUser.getName());
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -108,7 +107,7 @@ class MovieController {
             @RequestBody MovieRequestDto movieRequestDto
     ) {
         logger.warn("Adding a new movie!");
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        var currentUser = getAuth();
         var result = movieFacade.createMovie(movieRequestDto, currentUser.getName());
 
         return new ResponseEntity<>(result, HttpStatus.CREATED);
@@ -129,7 +128,7 @@ class MovieController {
     ResponseEntity<Void> addToFavourites(
             @PathVariable("id") int movieId
     ) {
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        var currentUser = getAuth();
 
         logger.info("User(name): " + currentUser.getName() + " adding movie(id): " + movieId + " to favourites");
         movieFacade.giveStar(currentUser.getName(), movieId);
@@ -140,24 +139,24 @@ class MovieController {
     ResponseEntity<Void> removeFromFavourites(
             @PathVariable("id") int movieId
     ) {
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        var currentUser = getAuth();
 
         logger.info("User(id): " + currentUser.getName() + " removing movie(id): " + movieId + " from favourites");
         movieFacade.removeStar(currentUser.getName(), movieId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}")
-    ResponseEntity<MovieRequestDto> updateMovie(
+    ResponseEntity<MovieResponseDto> updateMovie(
             @PathVariable int id,
             @RequestBody @Valid MovieRequestDto movieRequestDto
     ) {
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-
         logger.warn("[ADMIN] Updating movie with id: " + id);
-        movieFacade.updateMovie(movieRequestDto, id, currentUser.getName());
+        movieFacade.updateMovie(movieRequestDto, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    @PatchMapping("/{id}/actors/add")
@@ -169,7 +168,6 @@ class MovieController {
 //        movieService.insertActorToMovie(names, id);
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> removeMovie(@PathVariable int id) {
@@ -192,4 +190,8 @@ class MovieController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
+    private Authentication getAuth() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
 }

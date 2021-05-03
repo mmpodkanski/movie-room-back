@@ -9,7 +9,7 @@ interface SqlActorRepository extends Repository<ActorSnapshot, Integer> {
 
     <S extends ActorSnapshot> S save(S entity);
 
-    void delete(ActorSnapshot entity);
+    void deleteById(int id);
 }
 
 interface SqlActorQueryRepository extends ActorQueryRepository, Repository<ActorSnapshot, Integer> {
@@ -34,7 +34,7 @@ class ActorRepositoryImpl implements ActorRepository {
     }
 
     @Override
-    public void delete(final Actor entity) {
-        sqlActorRepository.delete(entity.getSnapshot());
+    public void deleteById(final int id) {
+        sqlActorRepository.deleteById(id);
     }
 }

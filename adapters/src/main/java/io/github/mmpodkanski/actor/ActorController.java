@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/actors")
+@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600)
 class ActorController {
     private final Logger logger = LoggerFactory.getLogger(ActorController.class);
     private final ActorFacade actorFacade;
@@ -38,32 +40,42 @@ class ActorController {
 
     @GetMapping("/{id}")
     ResponseEntity<ActorDto> getActor(@PathVariable int id) {
+        logger.info("Displaying an actor with id: " + id);
         var actor = queryRepository.findDtoById(id)
                 .orElseThrow(() -> new ApiNotFoundException("Actor with that id not exists!"));
         return new ResponseEntity<>(actor, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     ResponseEntity<ActorDto> addActor(
-            @RequestBody @Valid ActorDto actorDto
+            @RequestBody ActorDto actorDto
     ) {
         logger.warn("Adding a new actor!");
-
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-
         var result = actorFacade.addActor(actorDto, currentUser.getName());
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-//    @PutMapping("/{id}")
-//    ResponseEntity<ActorDto> updateActor(
-//            @RequestBody @Valid ActorDto actorDto,
-//            @PathVariable int id
-//    ) {
-//        logger.warn("Updating an actor with id: " + actorDto.getId());
-//        actorFacade.updateActor(id, actorDto);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/{id}")
+    ResponseEntity<ActorDto> updateActor(
+            @RequestBody ActorDto actorDto,
+            @PathVariable int id
+    ) {
+        logger.warn("Updating an actor with id: " + actorDto.getId());
+        var result = actorFacade.updateActor(id, actorDto);
+        return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deleteActor(@PathVariable int id) {
+        logger.warn("Removing an actor with id: " + id);
+        actorFacade.removeActorById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
 
 }

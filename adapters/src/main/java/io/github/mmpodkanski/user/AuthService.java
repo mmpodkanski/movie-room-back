@@ -61,7 +61,6 @@ class AuthService {
                 )
         );
 
-        System.out.println(auth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtAccessToken = jwtUtils.generateJwtToken(auth);
 
@@ -74,7 +73,6 @@ class AuthService {
                 jwtAccessToken,
                 user.getSnapshot().getUsername(),
                 user.getSnapshot().getEmail(),
-//                user.getSnapshot().getRole().toString());
                 role);
     }
 }

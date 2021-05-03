@@ -7,6 +7,7 @@ class ActorSnapshot {
     private String birthDate;
     private String imageUrl;
     private boolean acceptedByAdmin;
+    private EGender gender;
 
     public ActorSnapshot() {
     }
@@ -17,7 +18,8 @@ class ActorSnapshot {
             final String lastName,
             final String birthDate,
             final String imageUrl,
-            final boolean acceptedByAdmin
+            final boolean acceptedByAdmin,
+            final EGender gender
     ) {
         this.id = id;
         this.firstName = firstName;
@@ -25,6 +27,7 @@ class ActorSnapshot {
         this.birthDate = birthDate;
         this.imageUrl = imageUrl;
         this.acceptedByAdmin = acceptedByAdmin;
+        this.gender = gender;
     }
 
     int getId() {
@@ -49,5 +52,9 @@ class ActorSnapshot {
 
     boolean isAcceptedByAdmin() {
         return acceptedByAdmin;
+    }
+
+    EGender getGender() {
+        return gender;
     }
 }
