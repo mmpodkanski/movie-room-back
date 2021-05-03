@@ -1,6 +1,9 @@
 package io.github.mmpodkanski.actor;
 
+import io.github.mmpodkanski.DomainEventPublisher;
 import io.github.mmpodkanski.actor.dto.*;
+import io.github.mmpodkanski.actor.vo.ActorEvent;
+import io.github.mmpodkanski.actor.vo.ActorId;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
 import io.github.mmpodkanski.exception.ApiNotFoundException;
 import io.github.mmpodkanski.user.UserFacade;
@@ -11,51 +14,50 @@ import java.util.stream.Collectors;
 
 @Service
 public class ActorFacade {
-    private final ActorQueryRepository queryRepository;
-    private final ActorRepository repository;
-    private final ActorFactory factory;
+    private final ActorQueryRepository actorQueryRepository;
+    private final ActorRepository actorRepository;
+    private final ActorFactory actorFactory;
     private final UserFacade userFacade;
+    private final DomainEventPublisher publisher;
 
     ActorFacade(
-            final ActorRepository repository,
-            final ActorFactory factory,
-            final ActorQueryRepository queryRepository,
-            final UserFacade userFacade
+            final ActorRepository actorRepository,
+            final ActorFactory actorFactory,
+            final ActorQueryRepository actorQueryRepository,
+            final UserFacade userFacade,
+            final DomainEventPublisher publisher
     ) {
-        this.repository = repository;
-        this.factory = factory;
-        this.queryRepository = queryRepository;
+        this.actorRepository = actorRepository;
+        this.actorFactory = actorFactory;
+        this.actorQueryRepository = actorQueryRepository;
         this.userFacade = userFacade;
+        this.publisher = publisher;
     }
 
     public void acceptActorsById(Set<Integer> setOfIntegers) {
-//        setOfIntegers.forEach(actorId ->
-//                repository.findById(actorId).ifPresent(Actor::setAcceptedByAdminToTrue)
-//        );
-
         setOfIntegers.forEach(actorId ->
-                repository.findById(actorId).ifPresent(actor -> {
+                actorRepository.findById(actorId).ifPresent(actor -> {
                     actor.setAcceptedByAdminToTrue();
-                    repository.save(actor);
+                    actorRepository.save(actor);
                 })
         );
     }
 
     ActorDto addActor(ActorDto newActor, String username) {
-        if (queryRepository.existsActorByFirstNameAndLastName(newActor.getFirstName(), newActor.getLastName())) {
+        if (actorQueryRepository.existsActorByFirstNameAndLastName(newActor.getFirstName(), newActor.getLastName())) {
             throw new ApiBadRequestException("Actor with that name already exists!");
         }
         boolean createdByAdmin = userFacade.checkIfAdmin(username);
 
-        var actor = factory.from(newActor, createdByAdmin);
-        return toDto(repository.save(actor));
+        var actor = actorFactory.from(newActor, createdByAdmin);
+        return toDto(actorRepository.save(actor));
     }
 
     public Set<SimpleActor> addSimpleActors(Set<ActorSimpleRequestDto> actors, boolean createdByAdmin) {
         return actors.stream().map(actorSimpleDto -> {
                     var actor = regexActor(actorSimpleDto);
-                    var snapshot = queryRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName())
-                            .orElseGet(() -> repository.save(new Actor(actor.getFirstName(), actor.getLastName(), createdByAdmin)).getSnapshot());
+                    var snapshot = actorQueryRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName())
+                            .orElseGet(() -> actorRepository.save(new Actor(actor.getFirstName(), actor.getLastName(), createdByAdmin)).getSnapshot());
 
 
                     return SimpleActor.restore(new SimpleActorSnapshot(snapshot.getId(), snapshot.getFirstName(), snapshot.getLastName(), snapshot.getImageUrl()));
@@ -64,7 +66,7 @@ public class ActorFacade {
     }
 
     ActorDto updateActor(int actorId, ActorDto dto) {
-        if (!queryRepository.existsActorById(actorId)) {
+        if (!actorQueryRepository.existsActorById(actorId)) {
             throw new ApiNotFoundException("Actor with that id not exists!");
         }
 
@@ -77,15 +79,24 @@ public class ActorFacade {
                 .withLastName(simpleDto.getLastName())
                 .build();
 
-        var actorToSave = factory.from(toUpdate, true);
+        var actorToSave = actorFactory.from(toUpdate, true);
 
-        return toDto(repository.save(actorToSave));
+        return toDto(actorRepository.save(actorToSave));
 
     }
 
+    void removeActor(int id) {
+        var dto = actorQueryRepository.findDtoById(id)
+                .orElseThrow(() -> new ApiNotFoundException("Actor with that id not exists!"));
 
-    void removeActorById(int id) {
-        repository.deleteById(id);
+        publisher.publish(new ActorEvent(new ActorId(String.valueOf(id)), new ActorEvent.Data(dto.getFirstName(), dto.getLastName(), dto.getImageUrl())));
+
+        removeActorById(id);
+    }
+
+    private void removeActorById(int id) {
+        actorRepository.findById(id)
+                .ifPresent(actorRepository::delete);
     }
 
     private ActorSimpleRequestDto regexActor(ActorSimpleRequestDto actorSimpleRequestDTO) {
@@ -102,7 +113,7 @@ public class ActorFacade {
 
     public ActorSimpleResponseDto toSimpleDto(SimpleActor actor) {
         var snap = actor.getSnapshot();
-        return ActorSimpleResponseDto.create(snap.getId(), snap.getFirstName(), snap.getLastName(), snap.getLastName());
+        return ActorSimpleResponseDto.create(snap.getId(), snap.getFirstName(), snap.getLastName(), snap.getImageUrl());
     }
 
     private ActorDto toDto(Actor actor) {

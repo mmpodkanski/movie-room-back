@@ -9,7 +9,12 @@ public class SimpleActorSnapshot {
     protected SimpleActorSnapshot() {
     }
 
-    public SimpleActorSnapshot(final int id, final String firstName, final String lastName, final String imageUrl) {
+    public SimpleActorSnapshot(
+            final int id,
+            final String firstName,
+            final String lastName,
+            final String imageUrl
+    ) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,5 +36,4 @@ public class SimpleActorSnapshot {
     public String getImageUrl() {
         return imageUrl;
     }
-
 }

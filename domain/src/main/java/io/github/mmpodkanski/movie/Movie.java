@@ -3,6 +3,7 @@ package io.github.mmpodkanski.movie;
 import io.github.mmpodkanski.actor.dto.SimpleActor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -140,5 +141,9 @@ class Movie {
         this.acceptedByAdmin = true;
         this.imgLogoUrl = imgLogoUrl;
         this.imgBackUrl = imgBackUrl;
+    }
+
+    void removeActor(SimpleActor actor) {
+        actors.stream().filter(a1 -> a1.getId() == actor.getSnapshot().getId()).collect(Collectors.toList()).forEach(actors::remove);
     }
 }

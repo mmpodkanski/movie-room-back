@@ -72,7 +72,7 @@ class ActorController {
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteActor(@PathVariable int id) {
         logger.warn("Removing an actor with id: " + id);
-        actorFacade.removeActorById(id);
+        actorFacade.removeActor(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

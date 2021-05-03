@@ -1,6 +1,7 @@
 package io.github.mmpodkanski.actor;
 
 import io.github.mmpodkanski.actor.dto.ActorDto;
+import io.github.mmpodkanski.actor.dto.SimpleActor;
 
 import java.util.List;
 import java.util.Optional;

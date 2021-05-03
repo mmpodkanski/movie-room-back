@@ -1,5 +1,7 @@
 package io.github.mmpodkanski.actor;
 
+import io.github.mmpodkanski.actor.dto.SimpleActor;
+
 import java.util.Optional;
 
 interface ActorRepository {
@@ -8,5 +10,5 @@ interface ActorRepository {
 
     Actor save(Actor entity);
 
-    void deleteById(int id);
+    void delete(Actor entity);
 }

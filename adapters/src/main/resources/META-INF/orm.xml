@@ -56,8 +56,8 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
 
             <many-to-many name="actors" target-entity="io.github.mmpodkanski.actor.dto.SimpleActorSnapshot">
                 <join-table name="MOVIES_ACTORS">
-                    <join-column name="movie_id"/>
-                    <inverse-join-column name="actor_id"  />
+                    <join-column name="movie_id" unique="false" updatable="true"/>
+                    <inverse-join-column name="actor_id" unique="false" updatable="true"/>
                 </join-table>
                 <cascade>
                     <cascade-merge/>
@@ -162,15 +162,19 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
                 <column nullable="false"/>
             </basic>
             <basic name="birthDate">
-                <column nullable="false"/>
+                <column nullable="true"/>
             </basic>
             <basic name="imageUrl">
                 <column nullable="true"/>
             </basic>
             <basic name="acceptedByAdmin">
-                <column/>
+                <column nullable="false" />
             </basic>
-            <many-to-many mapped-by="actors" name="movies" target-entity="io.github.mmpodkanski.movie.MovieSnapshot"/>
+            <basic name="gender">
+                <column nullable="true"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+
         </attributes>
     </entity>
 
@@ -186,7 +190,9 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
             <basic name="lastName">
                 <column nullable="false"/>
             </basic>
-            <many-to-many mapped-by="actors" name="movies" target-entity="io.github.mmpodkanski.movie.MovieSnapshot"/>
+            <basic name="imageUrl">
+                <column nullable="true"/>
+            </basic>
         </attributes>
     </entity>
 

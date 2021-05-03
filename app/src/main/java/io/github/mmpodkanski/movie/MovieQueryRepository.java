@@ -1,5 +1,6 @@
 package io.github.mmpodkanski.movie;
 
+import io.github.mmpodkanski.actor.dto.SimpleActor;
 import io.github.mmpodkanski.movie.dto.MovieResponseDto;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface MovieQueryRepository {
     Optional<MovieResponseDto> findDtoByTitle(String title);
 
     int count();
+
+    List<MovieResponseDto> findAllMoviesByActorsContains(SimpleActor actor);
 }

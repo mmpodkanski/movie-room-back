@@ -10,7 +10,12 @@ public class SimpleActor {
     private final String lastName;
     private final String imageUrl;
 
-    public SimpleActor(final int id, final String firstName, final String lastName, final String imageUrl) {
+    public SimpleActor(
+            final int id,
+            final String firstName,
+            final String lastName,
+            final String imageUrl
+    ) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -3,6 +3,8 @@ package io.github.mmpodkanski.movie;
 import io.github.mmpodkanski.DomainEventPublisher;
 import io.github.mmpodkanski.actor.ActorFacade;
 import io.github.mmpodkanski.actor.dto.SimpleActor;
+import io.github.mmpodkanski.actor.vo.ActorEvent;
+import io.github.mmpodkanski.actor.vo.ActorId;
 import io.github.mmpodkanski.exception.ApiBadRequestException;
 import io.github.mmpodkanski.exception.ApiNotFoundException;
 import io.github.mmpodkanski.movie.dto.CommentRequestDto;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,7 +26,6 @@ public class MovieFacade {
     private final MovieRepository movieRepository;
     private final MovieQueryRepository movieQueryRepository;
     private final UserFacade userFacade;
-    private final CategoryFacade categoryFacade;
     private final ActorFacade actorFacade;
     private final CommentQueryRepository commentQueryRepository;
     private final CommentFactory commentFactory;
@@ -46,13 +48,29 @@ public class MovieFacade {
         this.movieRepository = movieRepository;
         this.movieQueryRepository = movieQueryRepository;
         this.userFacade = userFacade;
-        this.categoryFacade = categoryFacade;
         this.actorFacade = actorFacade;
         this.commentQueryRepository = commentQueryRepository;
         this.commentFactory = commentFactory;
         this.commentRepository = commentRepository;
         this.movieFactory = movieFactory;
         this.publisher = publisher;
+    }
+
+    void handle(ActorEvent event) {
+        event.getId()
+                .map(ActorId::getId)
+                .map(Integer::parseInt)
+                .ifPresent(actorId -> {
+                    var data = event.getData();
+                    var simpleActor = new SimpleActor(
+                            actorId,
+                            data.getFirstName(),
+                            data.getLastName(),
+                            data.getImageUrl()
+                    );
+
+                    deleteActorFromMovie(simpleActor);
+                });
     }
 
     boolean checkIfUserAlreadyAddedFav(int movieId, String username) {
@@ -129,7 +147,6 @@ public class MovieFacade {
         movieRepository.save(movie);
     }
 
-
 //    public void insertActorToMovie(
 //            Set<String> newActors,
 //            int id
@@ -140,6 +157,7 @@ public class MovieFacade {
 //        Set<Actor> actors = actorService.checkActors(newActors);
 //        movie.addActors(actors);
 //        movieRepository.save(movie);
+
 //    }
 
 
@@ -182,13 +200,21 @@ public class MovieFacade {
         );
     }
 
-    // FIXME: CANT DELETE PARENT
     public void deleteMovieById(int movieId) {
         var movieToDelete = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ApiNotFoundException("Movie with that id not exists!"));
 
         userFacade.removeFavouriteFromAllUsers(movieToDelete.getSnapshot().getId());
         movieRepository.delete(movieToDelete);
+    }
+
+    public void deleteActorFromMovie(SimpleActor actor) {
+        var allMovies = movieRepository.findAllMoviesByActorsContains(actor);
+
+        allMovies.forEach(movie -> {
+            movie.removeActor(actor);
+            movieRepository.save(movie);
+        });
     }
 
     void deleteCommentFromMovie(int commentId) {
@@ -224,6 +250,5 @@ public class MovieFacade {
                 snap.getImgBackUrl()
         );
     }
-
 
 }
