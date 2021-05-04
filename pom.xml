@@ -27,6 +27,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
+                    <mainClass>io.github.mmpodkanski.JavaMovieRoomApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
