@@ -14,10 +14,10 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="adapters" target="1.8" />
-      <module name="app" target="1.8" />
-      <module name="domain" target="1.8" />
-      <module name="monolith" target="1.8" />
+      <module name="adapters" target="11" />
+      <module name="app" target="11" />
+      <module name="domain" target="11" />
+      <module name="monolith" target="11" />
       <module name="movieroom" target="1.5" />
     </bytecodeTargetLevel>
   </component>
