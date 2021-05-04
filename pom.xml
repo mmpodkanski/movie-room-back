@@ -7,6 +7,9 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>movie-room-app</name>
     <description>Parent of MovieRoom app.</description>
+    <properties>
+        <start-class>io.github.mmpodkanski.JavaMovieRoomApplication</start-class>
+    </properties>
 
     <packaging>pom</packaging>
 
@@ -16,5 +19,17 @@
         <module>app</module>
         <module>domain</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

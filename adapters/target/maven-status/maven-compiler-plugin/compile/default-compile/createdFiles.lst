@@ -1,7 +1,6 @@
 io\github\mmpodkanski\movie\SqlMovieQueryRepository.class
 io\github\mmpodkanski\actor\SqlActorQueryRepository.class
 io\github\mmpodkanski\actor\SqlActorRepository.class
-io\github\mmpodkanski\movie\MovieWarmup.class
 io\github\mmpodkanski\user\UserEventListener.class
 io\github\mmpodkanski\user\WebSecurityConfig.class
 io\github\mmpodkanski\user\dto\JwtResponse.class
@@ -18,6 +17,7 @@ io\github\mmpodkanski\movie\MovieController.class
 io\github\mmpodkanski\user\AuthTokenFilter.class
 io\github\mmpodkanski\movie\CommentRepositoryImpl.class
 io\github\mmpodkanski\user\SqlUserRepository.class
+io\github\mmpodkanski\movie\MovieEventListener.class
 io\github\mmpodkanski\actor\ActorController.class
 io\github\mmpodkanski\actor\ActorRepositoryImpl.class
 io\github\mmpodkanski\movie\MovieRepositoryImpl.class

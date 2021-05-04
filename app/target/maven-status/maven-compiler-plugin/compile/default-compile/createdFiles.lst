@@ -21,7 +21,6 @@ io\github\mmpodkanski\movie\CategoryFacade.class
 io\github\mmpodkanski\publicAPI\PublicApiFacade.class
 io\github\mmpodkanski\publicAPI\News.class
 io\github\mmpodkanski\user\dto\UserDto.class
-io\github\mmpodkanski\movie\MovieInitializer.class
 io\github\mmpodkanski\actor\dto\ActorSimpleResponseDto.class
 io\github\mmpodkanski\movie\dto\MovieResponseDto$DeserializationImpl.class
 io\github\mmpodkanski\movie\dto\MovieRequestDto.class

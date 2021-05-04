@@ -14,6 +14,7 @@
     <name>monolith</name>
     <description>Monolith Spring app for a MovieRoom project.</description>
 
+
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -35,8 +36,8 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
+
 
     <build>
         <plugins>
@@ -44,9 +45,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>io.github.mmpodkanski.JavaMovieRoomApplication</mainClass>
+                    <skip>true</skip>
                 </configuration>
-                <version>${parent.version}</version>
             </plugin>
 
             <plugin>
@@ -55,8 +55,6 @@
                 <version>2.19.1</version>
             </plugin>
         </plugins>
-
-
     </build>
 
 </project>

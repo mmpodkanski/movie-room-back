@@ -112,7 +112,7 @@ http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
 
 
     <entity class="io.github.mmpodkanski.user.UserSnapshot" access="FIELD">
-        <table name="users"/>
+        <table name="movieroom_users"/>
         <attributes>
             <id name="id">
                 <generated-value strategy="IDENTITY"/>
