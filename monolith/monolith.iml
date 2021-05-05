@@ -15,7 +15,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="entityManagerFactory" />
-          <factory-entry name="monolith" />
+          <factory-entry name="monolith" value="666e2da3-98bf-4365-bada-66ff89352a75" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

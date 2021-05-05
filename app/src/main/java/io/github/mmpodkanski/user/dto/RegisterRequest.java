@@ -18,7 +18,7 @@ public class RegisterRequest {
     @Size(min = 6, max = 20)
     private final String password;
 
-    RegisterRequest(String username, String email, String password) {
+    public RegisterRequest(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;

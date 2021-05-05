@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,7 +36,6 @@ public class MovieFacade {
             final MovieRepository movieRepository,
             final MovieQueryRepository movieQueryRepository,
             final UserFacade userFacade,
-            final CategoryFacade categoryFacade,
             final ActorFacade actorFacade,
             final CommentQueryRepository commentQueryRepository,
             final CommentFactory commentFactory,
