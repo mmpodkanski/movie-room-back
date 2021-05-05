@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/board")
 @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600)
 class AdminBoardController {
     private final Logger logger = LoggerFactory.getLogger(AdminBoardController.class);
     private final MovieQueryRepository movieQueryRepository;

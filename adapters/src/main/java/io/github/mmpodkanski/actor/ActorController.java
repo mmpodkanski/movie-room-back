@@ -17,7 +17,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/actors")
-@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600)
 class ActorController {
     private final Logger logger = LoggerFactory.getLogger(ActorController.class);
     private final ActorFacade actorFacade;

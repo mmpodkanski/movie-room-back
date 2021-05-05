@@ -11,7 +11,6 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8081")
 class PublicApiController {
     private final Logger logger = LoggerFactory.getLogger(PublicApiController.class);
     private final PublicApiFacade facade;
