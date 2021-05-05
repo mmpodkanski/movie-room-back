@@ -7,16 +7,20 @@ import javax.validation.constraints.Size;
 public class RegisterRequest {
     @NotBlank
     @Size(min = 3, max = 20)
-    private final String username;
+    private String username;
 
     @NotBlank
     @Size(max = 30)
     @Email
-    private final String email;
+    private String email;
 
     @NotBlank
     @Size(min = 6, max = 20)
-    private final String password;
+    private String password;
+
+    public RegisterRequest() {
+
+    }
 
     public RegisterRequest(String username, String email, String password) {
         this.username = username;
