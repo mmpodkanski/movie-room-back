@@ -1,6 +1,7 @@
 package io.github.mmpodkanski.user.dto;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 public class LoginRequest {
     @NotBlank
@@ -23,5 +24,18 @@ public class LoginRequest {
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoginRequest that = (LoginRequest) o;
+        return Objects.equals(username, that.username) && Objects.equals(password, that.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password);
     }
 }
