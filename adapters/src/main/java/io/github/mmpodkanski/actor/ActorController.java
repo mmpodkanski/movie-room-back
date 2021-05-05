@@ -17,7 +17,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/actors")
-@CrossOrigin(origins = "https://mmpod-movie-room.herokuapp.com", maxAge = 3600)
 class ActorController {
     private final Logger logger = LoggerFactory.getLogger(ActorController.class);
     private final ActorFacade actorFacade;

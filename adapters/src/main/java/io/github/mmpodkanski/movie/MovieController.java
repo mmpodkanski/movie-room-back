@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/movies")
-@CrossOrigin(origins = "https://mmpod-movie-room.herokuapp.com", maxAge = 3600)
-
 class MovieController {
     private final Logger logger = LoggerFactory.getLogger(MovieController.class);
     private final MovieFacade movieFacade;

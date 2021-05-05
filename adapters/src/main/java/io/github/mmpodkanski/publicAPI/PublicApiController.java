@@ -11,7 +11,6 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "https://mmpod-movie-room.herokuapp.com", maxAge = 3600)
 class PublicApiController {
     private final Logger logger = LoggerFactory.getLogger(PublicApiController.class);
     private final PublicApiFacade facade;
