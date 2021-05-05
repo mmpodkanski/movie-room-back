@@ -11,7 +11,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600)
+@CrossOrigin(origins = "https://mmpod-movie-room.herokuapp.com", maxAge = 3600)
 class AuthController {
     private final AuthService service;
 

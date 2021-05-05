@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/board")
 @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+@CrossOrigin(origins = "https://mmpod-movie-room.herokuapp.com", maxAge = 3600)
 class AdminBoardController {
     private final Logger logger = LoggerFactory.getLogger(AdminBoardController.class);
     private final MovieQueryRepository movieQueryRepository;
