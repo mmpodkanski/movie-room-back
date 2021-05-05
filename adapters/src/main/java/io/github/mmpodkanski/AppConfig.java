@@ -18,4 +18,12 @@ public class AppConfig {
     public String getJwtExpirationMs() {
         return jwtExpirationMs;
     }
+
+    void setJwtSecret(String jwtSecret) {
+        this.jwtSecret = jwtSecret;
+    }
+
+    void setJwtExpirationMs(String jwtExpirationMs) {
+        this.jwtExpirationMs = jwtExpirationMs;
+    }
 }
