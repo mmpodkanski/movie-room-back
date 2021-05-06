@@ -1,5 +1,6 @@
 package io.github.mmpodkanski.actor;
 
+
 class ActorSnapshot {
     private int id;
     private String firstName;
@@ -9,10 +10,10 @@ class ActorSnapshot {
     private boolean acceptedByAdmin;
     private EGender gender;
 
-    public ActorSnapshot() {
+    protected ActorSnapshot() {
     }
 
-    public ActorSnapshot(
+    ActorSnapshot(
             final int id,
             final String firstName,
             final String lastName,

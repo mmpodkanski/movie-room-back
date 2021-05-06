@@ -1,27 +1,32 @@
 package io.github.mmpodkanski.actor.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.mmpodkanski.actor.EGender;
-
-import java.util.Objects;
 
 public class ActorDto {
     static public Builder builder() {
         return new Builder();
     }
 
-    private final int id;
-    private final String firstName;
-    private final String lastName;
-    private final String birthDate;
-    private final String imageUrl;
-    private final EGender gender;
+    private int id;
+    private String firstName;
+    private String lastName;
+    private String birthDate;
+    private String imageUrl;
+    private EGender gender;
 
     public ActorDto(
+            @JsonProperty("id")
             final int id,
+            @JsonProperty("firstName")
             final String firstName,
+            @JsonProperty("lastName")
             final String lastName,
+            @JsonProperty("birthDate")
             final String birthDate,
+            @JsonProperty("imageUrl")
             final String imageUrl,
+            @JsonProperty("gender")
             final EGender gender
     ) {
         this.id = id;
@@ -110,21 +115,4 @@ public class ActorDto {
 
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ActorDto actorDto = (ActorDto) o;
-        return id == actorDto.id &&
-                Objects.equals(firstName, actorDto.firstName) &&
-                Objects.equals(lastName, actorDto.lastName) &&
-                Objects.equals(birthDate, actorDto.birthDate) &&
-                Objects.equals(imageUrl, actorDto.imageUrl) &&
-                Objects.equals(gender, actorDto.gender);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstName, lastName, birthDate, imageUrl, gender);
-    }
 }
