@@ -9,12 +9,12 @@ public class ActorDto {
         return new Builder();
     }
 
-    private final int id;
-    private final String firstName;
-    private final String lastName;
-    private final String birthDate;
-    private final String imageUrl;
-    private final EGender gender;
+    private int id;
+    private String firstName;
+    private String lastName;
+    private String birthDate;
+    private String imageUrl;
+    private EGender gender;
 
     public ActorDto() {
 
