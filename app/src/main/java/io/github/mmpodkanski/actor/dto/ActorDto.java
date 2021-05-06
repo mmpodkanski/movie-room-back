@@ -16,6 +16,10 @@ public class ActorDto {
     private final String imageUrl;
     private final EGender gender;
 
+    public ActorDto() {
+
+    }
+
     public ActorDto(
             final int id,
             final String firstName,
