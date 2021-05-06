@@ -7,11 +7,11 @@ MovieRoom allows you to follow your favourites movies.
 
 > Own movies and actors databases !
 
-Has been used:
+This project uses:
 - Design pattern: **Domain-Driven Design** and **clean-architecture**, which allows to optimalize and in future separate application to microservices,
 - **public api** to display news from around the world,
 - **JPA Projections**,
-- **Events**,
+- **events**,
 - breakdown of the reading methods into **QueryRepository** and **Facades** into writers,
 - **ORM.xml** mapping
 
