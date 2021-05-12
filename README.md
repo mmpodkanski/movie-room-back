@@ -12,7 +12,7 @@ This project uses:
 - **public api** to display news from around the world,
 - **JPA Projections**,
 - **events**,
-- breakdown of the reading methods into **QueryRepository** and **Facades** into writers,
+- breakdown of the reading methods into **QueryRepository** and **Facades** into writers (CQRS),
 - **ORM.xml** mapping
 
 
