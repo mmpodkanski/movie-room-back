@@ -1,19 +1,19 @@
 package io.github.mmpodkanski.user.dto;
 
 public class JwtResponse {
-    private int id;
-    private String token;
-    private String type = "Bearer";
-    private String username;
-    private String email;
-    private String role;
+    private final int id;
+    private final String token;
+    private final String type = "Bearer";
+    private final String username;
+    private final String email;
+    private final String role;
 
     public JwtResponse(
-            int id,
-            String accessToken,
-            String username,
-            String email,
-            String role
+            final int id,
+            final String accessToken,
+            final String username,
+            final String email,
+            final String role
     ) {
         this.id = id;
         this.token = accessToken;

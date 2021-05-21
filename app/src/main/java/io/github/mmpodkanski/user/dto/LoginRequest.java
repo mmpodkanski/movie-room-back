@@ -10,7 +10,7 @@ public class LoginRequest {
     @NotBlank
     private String password;
 
-    public LoginRequest() {
+    protected LoginRequest() {
     }
 
     public LoginRequest(String username, String password) {

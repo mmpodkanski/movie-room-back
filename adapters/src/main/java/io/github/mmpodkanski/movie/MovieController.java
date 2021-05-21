@@ -157,16 +157,6 @@ class MovieController {
     }
 
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @PatchMapping("/{id}/actors/add")
-//    public ResponseEntity<Integer> addActors(
-//            @RequestBody @NotBlank Set<String> names,
-//            @PathVariable int id
-//    ) {
-//        logger.info("[ADMIN] Adding new actors");
-//        movieService.insertActorToMovie(names, id);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> removeMovie(@PathVariable int id) {

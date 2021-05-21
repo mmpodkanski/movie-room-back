@@ -7,34 +7,33 @@ import java.util.Objects;
 
 public class RegisterRequest {
     @NotBlank
-    @Size(min = 3, max = 20)
-    private String username;
-
-    @NotBlank
     @Size(max = 30)
     @Email
     private String email;
 
     @NotBlank
+    @Size(min = 3, max = 20)
+    private String username;
+
+    @NotBlank
     @Size(min = 6, max = 20)
     private String password;
 
-    public RegisterRequest() {
-
+    protected RegisterRequest() {
     }
 
-    public RegisterRequest(String username, String email, String password) {
-        this.username = username;
+    public RegisterRequest(final String email, final String username, final String password) {
         this.email = email;
+        this.username = username;
         this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getPassword() {
