@@ -29,18 +29,25 @@ As user you can:
 
 ## Screenshots
 
+1.
 ![image](https://user-images.githubusercontent.com/75319903/119206014-3f9e4900-ba9a-11eb-875f-bf3710a0e4a2.png)
 
+2.
 ![image](https://user-images.githubusercontent.com/75319903/119206029-4c22a180-ba9a-11eb-959d-b2969d197840.png)
 
+3.
 ![image](https://user-images.githubusercontent.com/75319903/119206049-5c3a8100-ba9a-11eb-8148-177714bf9906.png)
 
+4.
 ![image](https://user-images.githubusercontent.com/75319903/119206078-6bb9ca00-ba9a-11eb-8d62-2fbc9dbf80f3.png)
 
+5.
 ![image](https://user-images.githubusercontent.com/75319903/119206087-74aa9b80-ba9a-11eb-819c-17be6852e3a0.png)
 
+6.
 ![image](https://user-images.githubusercontent.com/75319903/119205961-1ed5f380-ba9a-11eb-89ed-94f77c7e22b1.png)
 
+7.
 ![image](https://user-images.githubusercontent.com/75319903/119206094-7d02d680-ba9a-11eb-8086-021f8a0bd974.png)
 
 
