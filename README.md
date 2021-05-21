@@ -12,7 +12,7 @@ This project uses:
 - **public api** to display news from around the world,
 - **JPA Projections**,
 - **events**,
-- breakdown of the reading methods into **QueryRepository** and **Facades** into writers,
+- breakdown of the reading methods into **QueryRepository** and **Facades** into writers (CQRS),
 - **ORM.xml** mapping
 
 
@@ -29,17 +29,27 @@ As user you can:
 
 ## Screenshots
 
-![image](https://user-images.githubusercontent.com/75319903/116761656-85766d00-aa18-11eb-9453-bda7b9fcbb1b.png)
+1.
+![image](https://user-images.githubusercontent.com/75319903/119206014-3f9e4900-ba9a-11eb-875f-bf3710a0e4a2.png)
 
-![image](https://user-images.githubusercontent.com/75319903/117204403-8c262b00-adf0-11eb-89d9-61d2f9dc6039.png)
+2.
+![image](https://user-images.githubusercontent.com/75319903/119206029-4c22a180-ba9a-11eb-959d-b2969d197840.png)
 
-![image](https://user-images.githubusercontent.com/75319903/116762321-5b25af00-aa1a-11eb-8183-73197e40bf78.png)
+3.
+![image](https://user-images.githubusercontent.com/75319903/119206049-5c3a8100-ba9a-11eb-8148-177714bf9906.png)
 
-![image](https://user-images.githubusercontent.com/75319903/117204344-7ca6e200-adf0-11eb-82e0-87378f32b455.png)
+4.
+![image](https://user-images.githubusercontent.com/75319903/119206078-6bb9ca00-ba9a-11eb-8d62-2fbc9dbf80f3.png)
 
-![image](https://user-images.githubusercontent.com/75319903/116762375-83151280-aa1a-11eb-8d69-bbba7292c16f.png)
+5.
+![image](https://user-images.githubusercontent.com/75319903/119206087-74aa9b80-ba9a-11eb-819c-17be6852e3a0.png)
 
-![image](https://user-images.githubusercontent.com/75319903/117204454-99431a00-adf0-11eb-9ca8-f38c7f8b1b92.png)
+6.
+![image](https://user-images.githubusercontent.com/75319903/119205961-1ed5f380-ba9a-11eb-89ed-94f77c7e22b1.png)
+
+7.
+![image](https://user-images.githubusercontent.com/75319903/119206094-7d02d680-ba9a-11eb-8086-021f8a0bd974.png)
+
 
 ## Code snippet showing DDD and clean-architecture potential (e.g. encapsulation)
 
