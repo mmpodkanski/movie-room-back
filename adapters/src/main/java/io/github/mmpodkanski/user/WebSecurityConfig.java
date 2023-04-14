@@ -73,7 +73,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcCo
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,  "/movies", "/api/news").permitAll()
+                .antMatchers(HttpMethod.GET,  "/movies", "/movies/file", "/api/news").permitAll()
                 .antMatchers(  "/auth/**").permitAll()
                 .anyRequest().authenticated();
 

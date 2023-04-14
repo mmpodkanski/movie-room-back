@@ -14,9 +14,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.opencsv.CSVWriter;
 
 @RestController
 @RequestMapping("/movies")
@@ -48,6 +53,21 @@ class MovieController {
     ResponseEntity<List<MovieResponseDto>> getMovies() {
         var movieList = movieQueryRepository.findMoviesByAcceptedByAdminTrue();
         return new ResponseEntity<>(movieList, HttpStatus.OK);
+    }
+
+    @GetMapping("/file")
+    void downloadMovies(HttpServletResponse response) throws IOException {
+        var movieList = movieQueryRepository.findMoviesByAcceptedByAdminTrue();
+
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"movies.csv\"");
+
+        var writer = new CSVWriter(response.getWriter(), ';', '"', '\\', "\n");
+        writer.writeNext(new String[] { "Title", "Category", "ReleaseDate"}, false);
+        for (var movie : movieList) {
+            writer.writeNext(new String[] { movie.getTitle(), movie.getCategory().toString(), movie.getReleaseDate() }, false);
+        }
+        writer.flush();
     }
 
     @GetMapping(params = "top-rated")
