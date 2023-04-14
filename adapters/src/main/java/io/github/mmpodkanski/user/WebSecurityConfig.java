@@ -59,7 +59,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcCo
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
         corsRegistry.addMapping("/**")
-                .allowedOrigins("https://mmpod-movie-room.herokuapp.com")
+                .allowedOrigins("https://movie-room-pollub-fe.herokuapp.com")
                 .allowedMethods("*")
                 .maxAge(3600L)
                 .allowedHeaders("*")
